@@ -1,8 +1,19 @@
 from django.db import models
 
 # Create your models here.
-class MoistureEvent(models.Model):
+class Moisture_Event(models.Model):
     area_id = models.IntegerField()
-    date = models.DateTimeField()
     moisture = models.FloatField()
-    minimum_moisture
+    min = models.FloatField()
+    max = models.FloatField()
+    date = models.FloatField()
+
+class Weather_Data(models.Model):
+    area_id = models.IntegerField()
+    temperature  = models.FloatField()
+    solar_intensity = models.FloatField()
+    windspeed = models.FloatField()
+    humidity = models.FloatField()
+    air_pressure = models.FloatField()
+    ET = models.FloatField()
+    date = models.DateTimeField()

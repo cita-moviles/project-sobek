@@ -1,20 +1,14 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url, include
+from MoistureLog import views
+from rest_framework.routers import DefaultRouter
 
-# Uncomment the next two lines to enable the admin:
-from django.contrib import admin
-
-admin.autodiscover()
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'Moisture_Event', views.Moisture_Event_ViewSet)
+router.register(r'Weather_Data', views.Weather_Data_ViewSet)
 
 urlpatterns = patterns('',
-                       # Examples:
-                       # url(r'^$', 'Water_Automation.views.home', name='home'),
-                       # url(r'^Water_Automation/', include('Water_Automation.foo.urls')),
+    url(r'^', include(router.urls)),
 
-                       # Uncomment the admin/doc line below to enable admin documentation:
-                       url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-                       # Uncomment the next line to enable the admin:
-                       url(r'^admin/', include(admin.site.urls)),
-
-                       url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 )

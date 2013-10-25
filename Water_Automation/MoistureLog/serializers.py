@@ -9,7 +9,7 @@ class Moisture_Event_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Moisture_Event
-        fields = ('url', 'area_id', 'moisture', 'min' , 'max', 'date')
+        fields = ('url', 'area_id', 'moisture', 'min', 'max', 'date', 'height')
 
 
 class Weather_Data_Serializer(serializers.HyperlinkedModelSerializer):
@@ -17,24 +17,5 @@ class Weather_Data_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Weather_Data
-        fields = ('url', 'area_id', 'temperature', 'solar_intensity', 'windspeed', 'humidity', 'air_pressure', 'ET', 'date')
-
-'''
- = models.FloatField()
-    date
-class SnippetSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.Field(source='owner.username')
-    highlight = serializers.HyperlinkedIdentityField(view_name='snippet-highlight', format='html')
-
-    class Meta:
-        model = Snippet
-        fields = ('url', 'highlight', 'owner',
-                  'title', 'code', 'linenos', 'language', 'style')
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    snippets = serializers.HyperlinkedRelatedField(many=True, view_name='snippet-detail')
-
-    class Meta:
-        model = User
-        fields = ('url', 'username', 'snippets')'''
+        fields = ('url', 'area_id', 'temperature', 'solar_intensity', 'windspeed', 'humidity',
+                  'air_pressure', 'ET', 'date')

@@ -7,6 +7,7 @@ class Moisture_Event(models.Model):
     min = models.FloatField()
     max = models.FloatField()
     date = models.DateTimeField()
+    height = models.IntegerField()
 
     def save(self, *args, **kwargs):
         super(Moisture_Event, self).save(*args, **kwargs)

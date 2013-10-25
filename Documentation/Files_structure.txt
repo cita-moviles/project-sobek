@@ -1,0 +1,6 @@
+=Moisture LOG=
+area_id, moisture, min, max, date
+
+=Weather data=
+
+area_id, temperature, solar_intensity, windspeed, humidity, air_pressure, ET, date

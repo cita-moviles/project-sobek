@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
+from django.views.generic import TemplateView
+
 
 
 class Moisture_Event_ViewSet(viewsets.ModelViewSet):
@@ -26,3 +28,7 @@ def api_root(request, format=None):
         'moisture': reverse('moisture-list', request=request, format=format),
         'weather': reverse('weather-list', request=request, format=format)
     })
+
+
+class IndexView(TemplateView):
+    template_name = 'index.html'

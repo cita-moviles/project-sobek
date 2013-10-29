@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proyecto Sobek</title>
+
+    <script src="{{ STATIC_URL }}Chart.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <meta name = "viewport" content = "initial-scale = 1, user-scalable = no">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+    <style>
+        body{
+            background-color: #D1F0FF;
+            font-family: Roboto;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        canvas{
+        }
+        footer{
+            text-align: center;
+            margin: 0px;
+            font-size: small;
+            bottom: 0px;
+        }
+
+        .rainy-weather {
+            margin: 2em auto;
+            margin-left: 0px;
+            width: 175px;
+            position: relative;
+            z-index: -3;
+            -webkit-animation: move 20s infinite linear;
+            -moz-animation: move 20s infinite linear;
+            -ms-animation: move 20s infinite linear;
+        }
+
+        .cloud-main {
+              width: 175px;
+              height: 65px;
+              background: #f2f2f2;
+              border-radius: 50em;
+              position: absolute;
+              z-index: -2;
+              top: 25px;
+              box-shadow: 0 3px 5px rgba(0,0,0, 0.3);
+              background: linear-gradient(#F2F2F2 70%, #E5E5E5);
+        }
+
+        .cloud-center {
+              width: 90px;
+              height: 90px;
+              margin: 0 auto;
+              background: #F2F2F2;
+              position: absolute;
+              border-radius: 50em;
+              top: -15px;
+              right: 25px;
+              z-index: -1;
+        }
+
+        .cloud-left {
+              width: 65px;
+              height: 65px;
+              margin: 0 auto;
+              background: #F2F2F2;
+              position: absolute;
+              border-radius: 50em;
+              top: 0;
+              right: 80px;
+              z-index: -1;
+        }
+        @-webkit-keyframes move {
+          0% {left: 0px;}
+          49% {left: 940px; opacity: 1;}
+          50% {left: 940px; opacity: 0;}
+          51% {left: -940px; opacity: 0;}
+          52% {left: -940px; opacity: 1;}
+          100% {left: 0px;}
+        }
+
+        @-webkit-keyframes backup {
+          0% {left: -940px;}
+          100% {left: 940px;}
+
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <h1>Proyecto Sobek</h1>
+        <div class="rainy-weather">
+            <div class="cloud-main"></div>
+            <div class="cloud-center"></div>
+            <div class="cloud-left"></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Moisture Data</h2>
+        <canvas id="moisture_canvas" height="250" width="1000"></canvas>
+        <h2>Weather Data</h2>
+        <canvas id="weather_canvas" height="250" width="1000"></canvas>
+    </section>
+    <footer>
+        © CITA 2013
+    </footer>
+
+	<script>
+        //http://127.0.0.1:8000/Moisture_Event/?format=json
+
+        $.ajax({
+            url: "/Moisture_Event/",
+            data: {
+            },
+            success: function( data ) {
+
+                time_array =[];
+                moisture_array=[];
+                min_array=[];
+                max_array=[];
+
+                $.each(data, function( index, value ) {
+                    time_array.push(value.date);
+                    moisture_array.push(value.moisture);
+                    min_array.push(value.min);
+                    max_array.push(value.max);
+                });
+
+                var lineChartData = {
+                    labels : time_array,
+                    datasets : [
+                        {
+                            fillColor : "rgba(204,0,0,0.5)",
+                            strokeColor : "rgba(204,0,0,1)",
+                            pointColor : "rgba(204,0,0,1)",
+                            pointStrokeColor : "#fff",
+                            data : max_array
+                        },
+                        {
+                            fillColor : "rgba(220,220,220,0.5)",
+                            strokeColor : "rgba(220,220,220,1)",
+                            pointColor : "rgba(220,220,220,1)",
+                            pointStrokeColor : "#fff",
+                            data : moisture_array
+                        },
+                        {
+                            fillColor : "rgba(151,187,205,0.5)",
+                            strokeColor : "rgba(151,187,205,1)",
+                            pointColor : "rgba(151,187,205,1)",
+                            pointStrokeColor : "#fff",
+                            data : min_array
+                        }
+                    ]
+
+                }
+
+                var moisture_lineChart = new Chart(document.getElementById("moisture_canvas").getContext("2d")).Line(lineChartData);
+            }
+        });
+
+        $.ajax({
+            url: "/Weather_Data/",
+            data: {
+            },
+            success: function( data ) {
+
+                time_array = [];
+                temperature_array = [];
+                solar_array = [];
+                windspeed_array = [];
+                humidity_array = [];
+                airpressure_array = [];
+                et_array = [];
+
+                $.each(data, function( index, value ) {
+                    time_array.push(value.date);
+                    temperature_array.push(value.temperature);
+                    solar_array.push(value.solar_intensity);
+                    windspeed_array.push(value.windspeed);
+                    humidity_array.push(value.humidity);
+                    airpressure_array.push(value.air_pressure);
+                    et_array.push(value.ET);
+                });
+
+                var lineChartData = {
+                    labels : time_array,
+                    datasets : [
+                        {
+                            fillColor : "rgba(204,0,0,0.5)",
+                            strokeColor : "rgba(204,0,0,1)",
+                            pointColor : "rgba(204,0,0,1)",
+                            pointStrokeColor : "#fff",
+                            data : temperature_array
+                        },
+                        {
+                            fillColor : "rgba(220,220,220,0.5)",
+                            strokeColor : "rgba(220,220,220,1)",
+                            pointColor : "rgba(220,220,220,1)",
+                            pointStrokeColor : "#fff",
+                            data : solar_array
+                        },
+                        {
+                            fillColor : "rgba(151,187,205,0.5)",
+                            strokeColor : "rgba(151,187,205,1)",
+                            pointColor : "rgba(151,187,205,1)",
+                            pointStrokeColor : "#fff",
+                            data : windspeed_array
+                        },
+                        {
+                            fillColor : "rgba(151,187,205,0.5)",
+                            strokeColor : "rgba(151,187,205,1)",
+                            pointColor : "rgba(151,187,205,1)",
+                            pointStrokeColor : "#fff",
+                            data : humidity_array
+                        },
+                        {
+                            fillColor : "rgba(151,187,205,0.5)",
+                            strokeColor : "rgba(151,187,205,1)",
+                            pointColor : "rgba(151,187,205,1)",
+                            pointStrokeColor : "#fff",
+                            data : airpressure_array
+                        },
+                        {
+                            fillColor : "rgba(151,187,205,0.5)",
+                            strokeColor : "rgba(151,187,205,1)",
+                            pointColor : "rgba(151,187,205,1)",
+                            pointStrokeColor : "#fff",
+                            data : et_array
+                        }
+                    ]
+
+                }
+
+                var weather_lineChart = new Chart(document.getElementById("weather_canvas").getContext("2d")).Line(lineChartData);
+            }
+        });
+
+	</script>
+</body>
+</html>

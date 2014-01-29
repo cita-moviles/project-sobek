@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stations - Proyect Sobek</title>
+    {%  include 'includeScripts.html' %}
+
+    <script>
+
+        $(function() {
+            $( "#from" ).datepicker({
+                defaultDate: "-2w",
+                maxDate: "0",
+                changeMonth: true,
+                numberOfMonths: 3,
+                onClose: function( selectedDate ) {
+                    $( "#to" ).datepicker( "option", "minDate", selectedDate );
+                }
+            });
+            $( "#to" ).datepicker({
+                defaultDate: "0",
+                maxDate: "0",
+                changeMonth: true,
+                numberOfMonths: 3,
+                onClose: function( selectedDate ) {
+                    $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+                }
+            });
+
+            getStations('station');
+        });
+    </script>
+</head>
+<body>
+
+    {%  include 'nav.html' %}
+
+    <section>
+        <h1>Weather Stations</h1>
+        <p>
+            Select the Weather Station you wish to graph:
+        </p>
+        <label>Weather Station</label>
+        <select id="station"></select>
+        <p>Select the range of dates you wish to graph:</p>
+
+        <label for="from">From</label>
+        <input type="text" id="from" name="from">
+        <label for="to">to</label>
+        <input type="text" id="to" name="to">
+
+        <button onclick="">Graph</button>
+
+        <canvas id="weather_canvas" height="250" width="1000"></canvas>
+    </section>
+
+    {%  include 'footer' %}
+
+</body>
+</html>

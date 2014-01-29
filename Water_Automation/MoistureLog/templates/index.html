@@ -97,8 +97,16 @@
     </section>
 
     <section>
-        <h2>Moisture Data</h2>
-        <canvas id="moisture_canvas" height="250" width="1000"></canvas>
+        <h2>Actuator State</h2>
+        <canvas id="actuator_canvas" height="250" width="1000"></canvas>
+        <h2>Height 1 Moisture</h2>
+        <canvas id="moisture1_canvas" height="250" width="1000"></canvas>
+        <h2>Height 2 Moisture</h2>
+        <canvas id="moisture2_canvas" height="250" width="1000"></canvas>
+        <h2>Height 3 Moisture</h2>
+        <canvas id="moisture3_canvas" height="250" width="1000"></canvas>
+        <!--<h2>Moisture Data</h2>
+        <canvas id="moisture_canvas" height="250" width="1000"></canvas>-->
         <h2>Weather Data</h2>
         <canvas id="weather_canvas" height="250" width="1000"></canvas>
     </section>
@@ -119,15 +127,42 @@
                 moisture_array=[];
                 min_array=[];
                 max_array=[];
+                actuator_array = [];
+                height_array = [];
+
+                moisture1_array = [];
+                moisture2_array = [];
+                moisture3_array = [];
+
+                time1_array = [];
+                time2_array = [];
+                time3_array = [];
 
                 $.each(data, function( index, value ) {
                     time_array.push(value.date);
                     moisture_array.push(value.moisture);
                     min_array.push(value.min);
                     max_array.push(value.max);
+                    actuator_array.push(value.actuator_state);
+                    height_array.push(value.height);
+
+                    switch (value.height){
+                        case 1:
+                            moisture1_array.push(value.moisture);
+                            time1_array.push(value.date);
+                            break;
+                        case 2:
+                            moisture2_array.push(value.moisture);
+                            time2_array.push(value.date);
+                            break;
+                        case 3:
+                            moisture3_array.push(value.moisture);
+                            time3_array.push(value.date);
+                            break;
+                    }
                 });
 
-                var lineChartData = {
+                /*var lineChartData = {
                     labels : time_array,
                     datasets : [
                         {
@@ -155,7 +190,85 @@
 
                 }
 
-                var moisture_lineChart = new Chart(document.getElementById("moisture_canvas").getContext("2d")).Line(lineChartData);
+                var lineChartData = {
+                    labels : time_array,
+                    datasets : [
+                        {
+                            fillColor : "rgba(204,0,0,0.5)",
+                            strokeColor : "rgba(204,0,0,1)",
+                            pointColor : "rgba(204,0,0,1)",
+                            pointStrokeColor : "#fff",
+                            data : height_array
+                        },
+                        {
+                            fillColor : "rgba(220,220,220,0.5)",
+                            strokeColor : "rgba(220,220,220,1)",
+                            pointColor : "rgba(220,220,220,1)",
+                            pointStrokeColor : "#fff",
+                            data : moisture_array
+                        }
+                    ]
+                }*/
+
+
+                var height1Chart = {
+                    labels : time1_array,
+                    datasets : [
+                        {
+                            fillColor : "rgba(204,0,0,0.5)",
+                            strokeColor : "rgba(204,0,0,1)",
+                            pointColor : "rgba(204,0,0,1)",
+                            pointStrokeColor : "#fff",
+                            data : moisture1_array
+                        }
+                    ]
+                }
+
+                var height2Chart = {
+                    labels : time2_array,
+                    datasets : [
+                        {
+                            fillColor : "rgba(204,0,0,0.5)",
+                            strokeColor : "rgba(204,0,0,1)",
+                            pointColor : "rgba(204,0,0,1)",
+                            pointStrokeColor : "#fff",
+                            data : moisture2_array
+                        }
+                    ]
+                }
+
+                var height3Chart = {
+                    labels : time3_array,
+                    datasets : [
+                        {
+                            fillColor : "rgba(204,0,0,0.5)",
+                            strokeColor : "rgba(204,0,0,1)",
+                            pointColor : "rgba(204,0,0,1)",
+                            pointStrokeColor : "#fff",
+                            data : moisture3_array
+                        }
+                    ]
+                }
+
+                var actuatorChartData = {
+                    labels : time_array,
+                    datasets : [
+                        {
+                            fillColor : "rgba(151,187,205,0.5)",
+                            strokeColor : "rgba(151,187,205,1)",
+                            pointColor : "rgba(151,187,205,1)",
+                            pointStrokeColor : "#fff",
+                            data : actuator_array
+                        }
+                    ]
+
+                }
+
+                //var moisture_lineChart = new Chart(document.getElementById("moisture_canvas").getContext("2d")).Line(lineChartData);
+                var moisture1_lineChart = new Chart(document.getElementById("moisture1_canvas").getContext("2d")).Line(height1Chart);
+                var moisture2_lineChart = new Chart(document.getElementById("moisture2_canvas").getContext("2d")).Line(height2Chart);
+                var moisture3_lineChart = new Chart(document.getElementById("moisture3_canvas").getContext("2d")).Line(height3Chart);
+                var actuator_lineChart = new Chart(document.getElementById("actuator_canvas").getContext("2d")).Line(actuatorChartData);
             }
         });
 

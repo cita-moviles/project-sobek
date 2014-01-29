@@ -9,7 +9,7 @@ class Moisture_Event_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Moisture_Event
-        fields = ('url', 'area_id', 'moisture', 'min', 'max', 'date', 'height')
+        fields = ('url', 'area_id', 'height', 'moisture', 'min', 'max', 'actuator_state', 'date')
 
 
 class Weather_Data_Serializer(serializers.HyperlinkedModelSerializer):

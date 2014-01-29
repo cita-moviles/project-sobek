@@ -1,9 +1,10 @@
 from django.db import models
 
+
 # Create your models here.
 class Crop(models.Model):
     crop_id = models.IntegerField(primary_key=True)
-    crom_name = models.CharField(max_length=50)
+    crop_name = models.CharField(max_length=50)
     crop_description = models.TextField(max_length=200)
     crop_ev = models.FloatField()
 
@@ -60,8 +61,8 @@ class Sensor(models.Model):
     sensor_y_position = models.IntegerField()
     fk_area = models.ForeignKey('Crop_Area')
 
-#Logs
 
+#Logs
 class Sensor_Log(models.Model):
     log_number = models.AutoField(primary_key=True)
     log_timestamp = models.DateTimeField(auto_now=True)

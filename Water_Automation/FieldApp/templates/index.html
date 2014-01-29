@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proyecto Sobek</title>
+
+    <meta name = "viewport" content = "initial-scale = 1, user-scalable = no">
+
+    {%  include 'includeScripts.html' %}
+
+    <style>
+        body{
+            background-color: #D1F0FF;
+            font-family: Roboto;
+            /* max-width: 1000px;*/
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    {%  include 'nav.html' %}
+
+    <section>
+        <h1>Weather Automation System</h1>
+        <div class="rainy-weather">
+            <div class="cloud-main"></div>
+            <div class="cloud-center"></div>
+            <div class="cloud-left"></div>
+        </div>
+    </section>
+
+    <section>
+        <article>
+            <h2>API</h2>
+            <ul>
+                <li><a href="/Farm_Field/">Fields</a></li>
+                <li><a href="/Valve/">Valves</a></li>
+                <li><a href="/Crop/">Crops</a></li>
+                <li><a href="/Crop_Area/">Areas</a></li>
+                <li><a href="/Weather_Station/">Stations</a></li>
+                <li><a href="/Sensor/">Sensors</a></li>
+            </ul>
+        </article>
+        <article>
+            <h2>Logs</h2>
+            <ul>
+                <li><a href="/Crop_Area_Log/">Area Log</a></li>
+                <li><a href="/Sensor_Log/">Sensor Log</a></li>
+                <li><a href="/Valve_Log/">Valve Log</a></li>
+                <li><a href="/Station_Log/">Station Log</a></li>
+            </ul>
+        </article>
+        <!--<h2>Graphs</h2>
+
+        <h2>Actuator State</h2>
+        <canvas id="actuator_canvas" height="250" width="1000"></canvas>
+        <h2>Height 1 Moisture</h2>
+        <canvas id="moisture1_canvas" height="250" width="1000"></canvas>
+        <h2>Height 2 Moisture</h2>
+        <canvas id="moisture2_canvas" height="250" width="1000"></canvas>
+        <h2>Height 3 Moisture</h2>
+        <canvas id="moisture3_canvas" height="250" width="1000"></canvas>
+        <h2>Moisture Data</h2>
+        <canvas id="moisture_canvas" height="250" width="1000"></canvas>
+        <h2>Weather Data</h2>
+        <canvas id="weather_canvas" height="250" width="1000"></canvas>-->
+    </section>
+
+
+    {%  include 'footer' %}
+
+	<script>
+        //http://127.0.0.1:8000/Moisture_Event/?format=json
+	</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Areas - Proyect Sobek</title>
+    {%  include 'includeScripts.html' %}
+    <script>
+        $(function() {
+            $( "#from" ).datepicker({
+                defaultDate: "-2w",
+                maxDate: "0",
+                changeMonth: true,
+                numberOfMonths: 3,
+                onClose: function( selectedDate ) {
+                    $( "#to" ).datepicker( "option", "minDate", selectedDate );
+                }
+            });
+            $( "#to" ).datepicker({
+                defaultDate: "0",
+                maxDate: "0",
+                changeMonth: true,
+                numberOfMonths: 3,
+                onClose: function( selectedDate ) {
+                    $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+                }
+            });
+            getAreas('areas');
+        });
+
+
+        function getAreasEv(){
+            $.ajax({
+                url: "/Crop_Area_Log/",
+                data: { area_id : $('#areas').val() },
+                success:function(data){
+                    time_array =[];
+                    ev_array = [];
+                    $.each(data, function( index, value ) {
+
+                        time_array.push(value.log_timestamp);
+                        ev_array.push(value.area_ev);
+                    });
+
+                    var evChart = {
+                        labels : time_array,
+                        datasets : [
+                            {
+                                fillColor : "rgba(204,0,0,0.5)",
+                                strokeColor : "rgba(204,0,0,1)",
+                                pointColor : "rgba(204,0,0,1)",
+                                pointStrokeColor : "#fff",
+                                data : ev_array
+                            }
+                        ]
+                    }
+                    var weather_lineChart = new Chart(document.getElementById("weather_canvas").getContext("2d")).Line(evChart);
+                }
+            });
+        }
+  </script>
+</head>
+<body>
+    {%  include 'nav.html' %}
+    <section>
+        <h1>Areas</h1>
+        <p>
+            Select the Area you wish to graph:
+        </p>
+        <label >Area</label>
+        <select id="areas"></select>
+        <p>Select the range of dates you wish to graph:</p>
+
+        <label for="from">From</label>
+        <input type="text" id="from" name="from">
+        <label for="to">to</label>
+        <input type="text" id="to" name="to">
+
+        <button onclick="getAreasEv()">Graph</button>
+
+        <canvas id="weather_canvas" height="250" width="1000"></canvas>
+    </section>
+    {%  include 'footer' %}
+</body>
+</html>

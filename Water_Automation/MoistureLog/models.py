@@ -3,11 +3,12 @@ from django.db import models
 
 class Moisture_Event(models.Model):
     area_id = models.IntegerField()
+    height = models.IntegerField()
     moisture = models.FloatField()
     min = models.FloatField()
     max = models.FloatField()
+    actuator_state = models.IntegerField()
     date = models.DateTimeField()
-    height = models.IntegerField()
 
     def save(self, *args, **kwargs):
         super(Moisture_Event, self).save(*args, **kwargs)

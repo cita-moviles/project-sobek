@@ -23,12 +23,6 @@ class Crop_ViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
-class Field_ViewSet(viewsets.ModelViewSet):
-    queryset = Farm_Field.objects.all()
-    serializer_class = Farm_Field_Serializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-
 class Area_ViewSet(viewsets.ModelViewSet):
     queryset = Crop_Area.objects.all()
     serializer_class = Area_Serializer
@@ -47,11 +41,18 @@ class Station_ViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
+"""
+"""
 class Sensor_ViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = Sensor_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+
+class Field_ViewSet(viewsets.ModelViewSet):
+    queryset = Farm_Field.objects.all()
+    serializer_class = Farm_Field_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 #Insert into LOGS
 
@@ -64,58 +65,122 @@ class Area_Log_ViewSet(viewsets.ModelViewSet):
 
 
 #Filters
+class FieldFilter(django_filters.FilterSet):
+    class Meta:
+        model = Farm_Field
+        fields = ['field_id', 'field_name', 'field_description']
+
+
+class SensorFilter(django_filters.FilterSet):
+    class Meta:
+        model = Sensor
+        fields = ['sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
+                  'fk_area']
+
+
 class AreaFilter(django_filters.FilterSet):
+    class Meta:
+        model = Crop_Area
+        fields = ['area_id', 'area_name', 'fk_farm_field', 'fk_crop']
+
+
+class StationFilter(django_filters.FilterSet):
+    class Meta:
+        model = Weather_Station
+        fields = ['station_id', 'station_status', 'station_relative_humidity',
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'fk_farm_field']
+
+
+#LogFilters
+class AreaLogFilter(django_filters.FilterSet):
+    year = django_filters.CharFilter(name='log_timestamp', lookup_type='startswith')
+    max_ev = django_filters.NumberFilter(name='area_ev', lookup_type='lte')
+    max_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='gte')
+
     class Meta:
         model = Crop_Area_Log
         fields = ['area_id', 'log_timestamp', 'area_ev']
 
 
-class StationFilter(django_filters.FilterSet):
+class StationLogFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='gte')
+
     class Meta:
         model = Weather_Station_Log
         fields = ['station_id', 'station_status', 'station_relative_humidity',
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation']
 
 
-class SensorFilter(django_filters.FilterSet):
+class SensorLogFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='gte')
+
     class Meta:
         model = Sensor_Log
         fields = ['sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2',
                   'sensor_hl3', 'sensor_temperature']
 
 
-class ValveFilter(django_filters.FilterSet):
+class ValveLogFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='gte')
+
     class Meta:
         model = Valve_Log
         fields = ['valve_id', 'valve_status', 'valve_flow', 'valve_pressure', 'valve_limit']
 
 
+#Viewsets
+class FieldSearch(generics.ListCreateAPIView):
+    queryset = Farm_Field.objects.all()
+    serializer_class = Farm_Field_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = FieldFilter
+
+
+class SensorSearch(generics.ListCreateAPIView):
+    queryset = Sensor.objects.all()
+    serializer_class = Sensor_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = SensorFilter
+
+
+class AreaSearch(generics.ListCreateAPIView):
+    queryset = Crop_Area.objects.all()
+    serializer_class = Area_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = AreaFilter
+
+
+#LogsViewsets
 class Area_Log_ViewSet(generics.ListCreateAPIView):
     queryset = Crop_Area_Log.objects.all()
     serializer_class = Area_Log_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    filter_class = AreaFilter
+    filter_class = AreaLogFilter
 
 
 class Station_Log_ViewSet(generics.ListCreateAPIView):
     queryset = Weather_Station_Log.objects.all()
     serializer_class = Weather_Station_Log_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    filter_class = StationFilter
+    filter_class = StationLogFilter
 
 
 class Sensor_Log_ViewSet(generics.ListCreateAPIView):
     queryset = Sensor_Log.objects.all()
     serializer_class = Sensor_Log_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    filter_class = SensorFilter
+    filter_class = SensorLogFilter
 
 
 class Valve_Log_ViewSet(generics.ListCreateAPIView):
     queryset = Valve_Log.objects.all()
     serializer_class = Valve_Log_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    filter_class = ValveFilter
+    filter_class = ValveLogFilter
 
 
 @api_view(('GET',))

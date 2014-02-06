@@ -7,6 +7,7 @@
 
         $(function() {
             $( "#from" ).datepicker({
+                dateFormat: 'yy-mm-dd',
                 defaultDate: "-2w",
                 maxDate: "0",
                 changeMonth: true,
@@ -16,6 +17,7 @@
                 }
             });
             $( "#to" ).datepicker({
+                dateFormat: 'yy-mm-dd',
                 defaultDate: "0",
                 maxDate: "0",
                 changeMonth: true,
@@ -27,6 +29,79 @@
 
             getValves('valve');
         });
+
+        function getValveLog(){
+            if ( ( $('#from').val() === "") || ( $('#to').val() === "" ) ){
+                alert('You must select a date Range to proceed');
+                return;
+            }
+            $.ajax({
+                url: "/Valve_Log/",
+                data: {
+                    valve_id : $('#valve').val(),
+                    min_date: $('#from').val() + ' 00:00:00',
+                    max_date: $('#to').val() + ' 23:59:59'
+                },
+                success:function(data){
+                    time_array =[];
+                    vs_array = [];
+                    vf_array = [];
+                    vp_array = [];
+
+                    $.each(data, function( index, value ) {
+
+                        time_array.push(value.log_timestamp);
+                        vs_array.push(value.valve_status);
+                        vf_array.push(value.valve_flow);
+                        vp_array.push(value.valve_pressure);
+                    });
+
+                    var vsChart = {
+                        labels : time_array,
+                        datasets : [
+                            {
+                                fillColor : "rgba(204,0,0,0.5)",
+                                strokeColor : "rgba(204,0,0,1)",
+                                pointColor : "rgba(204,0,0,1)",
+                                pointStrokeColor : "#fff",
+                                data : vs_array
+                            }
+                        ]
+                    }
+
+                    var vfChart = {
+                        labels : time_array,
+                        datasets : [
+                            {
+                                fillColor : "rgba(204,0,0,0.5)",
+                                strokeColor : "rgba(204,0,0,1)",
+                                pointColor : "rgba(204,0,0,1)",
+                                pointStrokeColor : "#fff",
+                                data : vf_array
+                            }
+                        ]
+                    }
+
+                    var vpChart = {
+                        labels : time_array,
+                        datasets : [
+                            {
+                                fillColor : "rgba(204,0,0,0.5)",
+                                strokeColor : "rgba(204,0,0,1)",
+                                pointColor : "rgba(204,0,0,1)",
+                                pointStrokeColor : "#fff",
+                                data : vp_array
+                            }
+                        ]
+                    }
+                    var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Bar(vsChart);
+                    var weather_lineChart2 = new Chart($("#weather_canvas2").get(0).getContext("2d")).Line(vfChart);
+                    var weather_lineChart3 = new Chart($("#weather_canvas3").get(0).getContext("2d")).Line(vpChart);
+
+                    showTag('graphs');
+                }
+            });
+        }
 
     </script>
 </head>
@@ -48,9 +123,18 @@
         <label for="to">to</label>
         <input type="text" id="to" name="to">
 
-        <button onclick="">Graph</button>
+        <button onclick="getValveLog();">Graph</button>
+        <button onclick="hideTag('graphs');">Clean</button>
 
+    </section>
+    <section id="graphs" style="display: none;">
+        <h2>Status</h2>
         <canvas id="weather_canvas" height="250" width="1000"></canvas>
+        <h2>Flow</h2>
+        <canvas id="weather_canvas2" height="250" width="1000"></canvas>
+        <h2>Pressure</h2>
+        <canvas id="weather_canvas3" height="250" width="1000"></canvas>
+
     </section>
 
     {%  include 'footer' %}

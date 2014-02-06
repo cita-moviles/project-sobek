@@ -7,6 +7,7 @@
 
         $(function() {
             $( "#from" ).datepicker({
+                dateFormat: 'yy-mm-dd',
                 defaultDate: "-2w",
                 maxDate: "0",
                 changeMonth: true,
@@ -16,6 +17,7 @@
                 }
             });
             $( "#to" ).datepicker({
+                dateFormat: 'yy-mm-dd',
                 defaultDate: "0",
                 maxDate: "0",
                 changeMonth: true,
@@ -25,8 +27,91 @@
                 }
             });
 
-            getSensors('sensor');
+            getFields('field');
         });
+
+        function getSensorsLog(){
+
+            sensor_id = $('#sensor').val() ;
+            if (sensor_id === null){
+                hideTag('graphs');
+                alert('No sensor has been selected');
+                return;
+            }
+            if ( ( $('#from').val() === "") || ( $('#to').val() === "" ) ){
+                alert('You must select a date Range to proceed');
+                return;
+            }
+
+            $.ajax({
+                url: "/Sensor_Log/",
+                data: {
+                    sensor_id : sensor_id,
+                    min_date: $('#from').val() + ' 00:00:00',
+                    max_date: $('#to').val() + ' 23:59:59'
+                },
+                success:function(data){
+                    time_array =[];
+                    hl1_array = [];
+                    hl2_array = [];
+                    hl3_array = [];
+                    temperature_array = [];
+
+                    $.each(data, function( index, value ) {
+
+                        time_array.push(value.log_timestamp);
+                        hl1_array.push(value.sensor_hl1);
+                        hl2_array.push(value.sensor_hl2);
+                        hl3_array.push(value.sensor_hl3);
+                        temperature_array.push(value.sensor_temperature);
+                    });
+
+                    var evChart = {
+                        labels : time_array,
+                        datasets: [
+                            {
+                                fillColor : "rgba(204,0,0,0.5)",
+                                strokeColor : "rgba(204,0,0,1)",
+                                pointColor : "rgba(204,0,0,1)",
+                                pointStrokeColor : "#fff",
+                                data : hl3_array
+                            },
+                            {
+                                fillColor : "rgba(204,204,0,0.8)",
+                                strokeColor : "rgba(0,204,0,1)",
+                                pointColor : "rgba(0,204,0,1)",
+                                pointStrokeColor : "#fff",
+                                data : hl2_array
+                            },
+                            {
+                                fillColor : "rgba(220,220,220,0.5)",
+                                strokeColor : "rgba(220,220,220,1)",
+                                pointColor : "rgba(220,220,220,1)",
+                                pointStrokeColor : "#fff",
+                                data : hl1_array
+                            }
+                        ]
+                    }
+
+                    var tempChart = {
+                        labels : time_array,
+                        datasets: [
+                            {
+                                fillColor : "rgba(20,20,20,0.5)",
+                                strokeColor : "rgba(20,20,20,1)",
+                                pointColor : "rgba(20,20,20,1)",
+                                pointStrokeColor : "#fff",
+                                data : temperature_array
+                            }
+                        ]
+                    }
+                    var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Line(evChart);
+                    var weather_lineChart2 = new Chart($("#weather_canvas2").get(0).getContext("2d")).Line(tempChart);
+
+                    showTag('graphs');
+                }
+            });
+        }
 
     </script>
 </head>
@@ -39,6 +124,10 @@
         <p>
             Select the Sensor you wish to graph:
         </p>
+        <label>Field</label>
+        <select id="field" onchange="getAreas('area', 'field');"></select>
+        <label>Area</label>
+        <select id="area" onchange="getSensors('sensor', 'area');"></select>
         <label>Sensor</label>
         <select id="sensor"></select>
         <p>Select the range of dates you wish to graph:</p>
@@ -48,9 +137,16 @@
         <label for="to">to</label>
         <input type="text" id="to" name="to">
 
-        <button onclick="">Graph</button>
+        <button onclick="getSensorsLog();">Graph</button>
+        <button onclick="hideTag('graphs');">Clean</button>
 
+    </section>
+    <section id="graphs" style="display: none;">
+        <h2>Humidity</h2>
         <canvas id="weather_canvas" height="250" width="1000"></canvas>
+        <h2>Temperature</h2>
+        <canvas id="weather_canvas2" height="250" width="1000"></canvas>
+
     </section>
 
     {%  include 'footer' %}

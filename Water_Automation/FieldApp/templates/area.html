@@ -6,6 +6,7 @@
     <script>
         $(function() {
             $( "#from" ).datepicker({
+                dateFormat: 'yy-mm-dd',
                 defaultDate: "-2w",
                 maxDate: "0",
                 changeMonth: true,
@@ -15,6 +16,7 @@
                 }
             });
             $( "#to" ).datepicker({
+                dateFormat: 'yy-mm-dd',
                 defaultDate: "0",
                 maxDate: "0",
                 changeMonth: true,
@@ -23,14 +25,29 @@
                     $( "#from" ).datepicker( "option", "maxDate", selectedDate );
                 }
             });
-            getAreas('areas');
+
+            getFields('field');
         });
 
 
-        function getAreasEv(){
+        function getAreaLog(){
+            area_id = $('#area').val();
+            if (area_id == null){
+                hideTag('graphs');
+                alert('No area has been selected');
+                return;
+            }
+            if ( ( $('#from').val() === "") || ( $('#to').val() === "" ) ){
+                alert('You must select a date Range to proceed');
+                return;
+            }
             $.ajax({
                 url: "/Crop_Area_Log/",
-                data: { area_id : $('#areas').val() },
+                data: {
+                    area_id : area_id,
+                    min_date: $('#from').val() + ' 00:00:00',
+                    max_date: $('#to').val() + ' 23:59:59'
+                },
                 success:function(data){
                     time_array =[];
                     ev_array = [];
@@ -52,7 +69,8 @@
                             }
                         ]
                     }
-                    var weather_lineChart = new Chart(document.getElementById("weather_canvas").getContext("2d")).Line(evChart);
+                    var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Line(evChart);
+                    showTag('graphs');
                 }
             });
         }
@@ -65,8 +83,10 @@
         <p>
             Select the Area you wish to graph:
         </p>
+        <label>Field</label>
+        <select id="field" onchange="getAreas('area', 'field');"></select>
         <label >Area</label>
-        <select id="areas"></select>
+        <select id="area"></select>
         <p>Select the range of dates you wish to graph:</p>
 
         <label for="from">From</label>
@@ -74,9 +94,13 @@
         <label for="to">to</label>
         <input type="text" id="to" name="to">
 
-        <button onclick="getAreasEv()">Graph</button>
-
+        <button onclick="getAreaLog()">Graph</button>
+        <button onclick="hideTag('graphs');">Clean</button>
+    </section>
+    <section id="graphs" style="display: none;">
+        <h2>Evotranspiration</h2>
         <canvas id="weather_canvas" height="250" width="1000"></canvas>
+
     </section>
     {%  include 'footer' %}
 </body>

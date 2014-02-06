@@ -5,6 +5,14 @@ function navigate(adress){
     window.location.replace(adress);
 }
 
+function hideTag(container){
+    $('#' + container).css('display','none')
+}
+
+function showTag(container){
+    $('#' + container).css('display','block')
+}
+
 function getAreas(select_id){
     $.ajax({
         url: "/Crop_Area/",
@@ -17,6 +25,42 @@ function getAreas(select_id){
             });
 
             $('#'+select_id).html(options);
+        }
+    });
+}
+
+function getAreas(select_id, search_id){
+    $.ajax({
+        url: "/Area_Search/",
+        data: {fk_farm_field: $('#' + search_id).val() },
+        success:function(data){
+            options = "";
+
+            $.each(data, function( index, value ) {
+                options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
+            });
+
+            $('#'+select_id).html(options);
+
+            getSensors('sensor',select_id);
+        }
+    });
+}
+
+function getFields(select_id){
+    $.ajax({
+        url: "/Farm_Field/",
+        data: { },
+        success:function(data){
+            options = "";
+
+            $.each(data, function( index, value ) {
+                options += '<option value="' + value.field_id + '">' + value.field_name + '</option>';
+            });
+
+            $('#'+select_id).html(options);
+
+            getAreas('area', select_id);
         }
     });
 }
@@ -41,6 +85,28 @@ function getSensors(select_id){
     $.ajax({
         url: "/Sensor/",
         data: { },
+        success:function(data){
+            options = "";
+
+            $.each(data, function( index, value ) {
+                options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
+            });
+
+            $('#'+select_id).html(options);
+        }
+    });
+}
+
+function getSensors(select_id, search_id){
+    area = $('#'+ search_id).val();
+
+    if (area === null){
+        $('#'+select_id).html("");
+        return
+    }
+    $.ajax({
+        url: "/Sensor_Search/",
+        data: { fk_area: area},
         success:function(data){
             options = "";
 

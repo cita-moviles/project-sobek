@@ -1,9 +1,7 @@
 __author__ = 'admin'
 
 import json
-import requests
-from base64 import b64encode
-
+import urllib2, base64
 
 class Sensor:
     def __init__(self, message):
@@ -25,12 +23,15 @@ class Sensor:
         Pos[-1] = # end of message
         """
 
-        self.id = int(message[3:7])
-        self.status = int(message[7:9])
-        self.hl1 = float(message[9:11] + "." + message[11])
-        self.hl2 = float(message[12:14] + "." + message[14])
-        self.hl3 = float(message[15:17] + "." + message[17])
-        self.temp = float(message[18:21] + "." + message[21])
+        self.sensor_id = int(message[3:7])
+        self.sensor_status = int(message[7:9])
+        self.sensor_hl1 = float(message[9:11] + "." + message[11])
+        self.sensor_hl2 = float(message[12:14] + "." + message[14])
+        self.sensor_hl3 = float(message[15:17] + "." + message[17])
+        self.sensor_temperature = float(message[18:21] + "." + message[21])
+        self.sensor_x_position = 0
+        self.sensor_y_position = 0
+        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
 
 
     def to_json(self):
@@ -38,15 +39,12 @@ class Sensor:
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        ip_address = "http://riego.chi.itesm.mx"
-
-        url_event = ip_address + "/Sensor/" + str(self.id) + "/"
-        userAndPass = b64encode(b"admin:admin").decode('ascii')
-        print userAndPass
-        headers = {'Content-type': 'application/json', 'Authorization': 'Basic %s' % userAndPass}
-
-        req = requests.put(url_event, data=self.to_json(), headers=headers)
-        pass
+        request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/"+str(self.sensor_id)+"/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'PUT'
+        print self.to_json()
+        result = urllib2.urlopen(request, self.to_json())
 
 
 class Valve:
@@ -61,10 +59,13 @@ class Valve:
         Pos[21:26] = Limit
         Pos[-1] = # end of message
         """
-        self.id = int(message[3:7])
-        self.status = int(message[7:9])
-        self.flow = int(message[9:14])
-        self.pressure = int(message[14:19])
+        self.valve_id = int(message[3:7])
+        self.valve_status = int(message[7:9])
+        self.valve_flow = int(message[9:14])
+        self.valve_pressure = int(message[14:19])
+        self.valve_limit = 0
+        self.valve_ideal = 0
+        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
         #self.limit = int(message[21:26])
 
     def to_json(self):
@@ -72,7 +73,12 @@ class Valve:
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        #TODO: create http request for the server.
+        request = urllib2.Request("http://riego.chi.itesm.mx/Valve/"+str(self.valve_id)+"/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'PUT'
+        print self.to_json()
+        result = urllib2.urlopen(request, self.to_json())
 
         pass
 
@@ -87,15 +93,24 @@ class Crop_Area:
         Pos[9] = Decimals EV
         Pos[-1] = #End of message
         """
-        self.id = int(message[3:7])
-        self.ev = float(message[7:9] + "." + message[9])
+        self.area_id = int(message[3:7])
+        self.area_ev = float(message[7:9] + "." + message[9])
+        self.area_x_position = 0
+        self.area_x_position = 0
+        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
+        self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        #TODO: create http request for the server.
+        request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/"+str(self.area_id)+"/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'PUT'
+        print self.to_json()
+        result = urllib2.urlopen(request, self.to_json())
         pass
 
 
@@ -116,20 +131,26 @@ class Weather_Station:
         Pos[27] = EV Decimals
         Pos[-1] = #End of message
         """
-        self.id = int(message[3:7])
-        self.status = int(message[7:9])
-        self.humidity = float(message[9:11] + '.' + message[11])
-        self.temperature = float(message[12:15] + '.' + message[15])
-        self.wind_speed = int(message[16:19])
-        self.solar_radiation = int(message[19:23])
+        self.station_id = int(message[3:7])
+        self.station_status = int(message[7:9])
+        self.station_relative_humidity = float(message[9:11] + '.' + message[11])
+        self.station_temperature = float(message[12:15] + '.' + message[15])
+        self.station_wind_speed = int(message[16:19])
+        self.station_solar_radiation = int(message[19:23])
         #self.ev = float(message[23:25] + '.' + message[25])
+        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        #TODO: create http request for the server.
+        request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/"+str(self.area_id)+"/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'PUT'
+        print self.to_json()
+        result = urllib2.urlopen(request, self.to_json())
         pass
 
 

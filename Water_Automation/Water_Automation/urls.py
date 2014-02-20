@@ -4,6 +4,9 @@ from rest_framework.routers import DefaultRouter
 from MoistureLog import views
 from FieldApp import views
 
+from django.contrib import admin
+admin.autodiscover()
+
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'Crop', views.Crop_ViewSet)
@@ -34,5 +37,6 @@ urlpatterns = patterns(
     url(r'^sensor.html', TemplateView.as_view(template_name="sensor.html")),
     url(r'^valve.html', TemplateView.as_view(template_name="valve.html")),
     url(r'^station.html', TemplateView.as_view(template_name="station.html")),
-    url(r'^area.html', TemplateView.as_view(template_name="area.html"))
+    url(r'^area.html', TemplateView.as_view(template_name="area.html")),
+    url(r'^admin/', include(admin.site.urls))
 )

@@ -31,7 +31,7 @@ class clientObject(object):
         self.address = clientInfo[1]
 
     def update(self, message):
-        self.sock.send("Testamundo.\r\n".encode())
+        self.sock.send("OK")
         MessageProcessor.process_message(message)
 
 

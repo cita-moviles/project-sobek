@@ -179,5 +179,5 @@ class MessageProcessor:
             print station.to_json()
 
         else:
-            print "keep alive"
+            print "Nothing cool"
 

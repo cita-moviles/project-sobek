@@ -5,6 +5,8 @@ import threading
 import struct
 import string
 from models import MessageProcessor
+from socket import error as SocketError
+import errno
 
 
 class clientThread(threading.Thread):
@@ -19,16 +21,23 @@ class clientThread(threading.Thread):
         print("Beginning client thread loop. . .")
         while self.running:
             for client in self.clientList:
-                message = client.sock.recv(self.server.BUFFSIZE)
-                if message != None and message != "":
-                    #respond to messages
-                    client.update(message)
+                try:
+                    message = client.sock.recv(self.server.BUFFSIZE)
+                    if message != None and message != "":
+                        #respond to messages
+                        client.update(message)
+                except SocketError as e:
+                    print "ERROR " + str(e.errno)
+                    if e.errno != errno.ECONNRESET:
+                        raise  # Not error we are looking for
+                    pass
 
 
 class clientObject(object):
     def __init__(self, clientInfo):
         self.sock = clientInfo[0]
         self.address = clientInfo[1]
+        self.timeout = 900
 
     def update(self, message):
         self.sock.send("OK")

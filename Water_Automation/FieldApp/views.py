@@ -41,8 +41,6 @@ class Station_ViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
-"""
-"""
 class Sensor_ViewSet(viewsets.ModelViewSet):
     queryset = Sensor.objects.all()
     serializer_class = Sensor_Serializer
@@ -54,41 +52,34 @@ class Field_ViewSet(viewsets.ModelViewSet):
     serializer_class = Farm_Field_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-#Insert into LOGS
-
-"""
-class Area_Log_ViewSet(viewsets.ModelViewSet):
-    queryset = Crop_Area_Log.objects.all()
-    serializer_class = Area_Log_Serializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-"""
-
 
 #Filters
 class FieldFilter(django_filters.FilterSet):
     class Meta:
         model = Farm_Field
-        fields = ['field_id', 'field_name', 'field_description']
+        fields = ['field_id', 'field_name', 'field_description', 'field_IMEI', 'field_signal', 'field_latitude',
+                  'field_longitude', 'field_user_define1', 'field_user_define2']
 
 
 class SensorFilter(django_filters.FilterSet):
     class Meta:
         model = Sensor
         fields = ['sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
-                  'fk_area']
+                  'sensor_user_define1', 'sensor_user_define2', 'fk_area']
 
 
 class AreaFilter(django_filters.FilterSet):
     class Meta:
         model = Crop_Area
-        fields = ['area_id', 'area_name', 'fk_farm_field', 'fk_crop']
+        fields = ['area_id', 'area_name', 'area_user_define1', 'area_user_define2', 'fk_farm_field', 'fk_crop']
 
 
 class StationFilter(django_filters.FilterSet):
     class Meta:
         model = Weather_Station
         fields = ['station_id', 'station_status', 'station_relative_humidity',
-                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'fk_farm_field']
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_user_define1',
+                  'station_user_define2', 'fk_farm_field']
 
 
 #LogFilters

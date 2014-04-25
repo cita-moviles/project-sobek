@@ -2,6 +2,7 @@ __author__ = 'admin'
 
 import json
 import urllib2, base64
+import writeToFile
 
 class Sensor:
     def __init__(self, message):
@@ -31,8 +32,11 @@ class Sensor:
         self.sensor_temperature = float(message[18:21] + "." + message[21])
         self.sensor_x_position = 0
         self.sensor_y_position = 0
-        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
+        comma = message.index(",")
+        terminator = message.index("#")
 
+        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
+        
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -68,6 +72,7 @@ class Valve:
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
         #self.limit = int(message[21:26])
 
+
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
@@ -99,6 +104,7 @@ class Crop_Area:
         self.area_x_position = 0
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
         self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
+
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -140,6 +146,7 @@ class Weather_Station:
         #self.ev = float(message[23:25] + '.' + message[25])
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
 
+
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
@@ -160,6 +167,7 @@ class MessageProcessor:
 
     @staticmethod
     def process_message(message):
+        writeToFile(message)
 
         if message[1:3] == "10":
             sensor = Sensor(message)

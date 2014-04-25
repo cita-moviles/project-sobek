@@ -4,6 +4,7 @@ import json
 import urllib2, base64
 import writeToFile
 
+
 class Sensor:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
@@ -33,17 +34,25 @@ class Sensor:
         self.sensor_x_position = 0
         self.sensor_y_position = 0
         comma = message.index(",")
-        terminator = message.index("#")
-
+        if comma == 22:
+            self.user_define1 = ''
+            self.user_define2 = ''
+        else:
+            self.user_define1 = message[22: comma]
+            terminator = message.index("#")
+            if (comma + 1) == terminator:
+                self.user_define2 = ''
+            else:
+                self.user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
-        
+
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/"+str(self.sensor_id)+"/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/" + str(self.sensor_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'
@@ -69,6 +78,17 @@ class Valve:
         self.valve_pressure = int(message[14:19])
         self.valve_limit = 0
         self.valve_ideal = 0
+        comma = message.index(",")
+        if comma == 19:
+            self.user_define1 = ''
+            self.user_define2 = ''
+        else:
+            self.user_define1 = message[19: comma]
+            terminator = message.index("#")
+            if (comma + 1) == terminator:
+                self.user_define2 = ''
+            else:
+                self.user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
         #self.limit = int(message[21:26])
 
@@ -78,7 +98,7 @@ class Valve:
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Valve/"+str(self.valve_id)+"/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'
@@ -102,6 +122,17 @@ class Crop_Area:
         self.area_ev = float(message[7:9] + "." + message[9])
         self.area_x_position = 0
         self.area_x_position = 0
+        comma = message.index(",")
+        if comma == 10:
+            self.user_define1 = ''
+            self.user_define2 = ''
+        else:
+            self.user_define1 = message[10: comma]
+            terminator = message.index("#")
+            if (comma + 1) == terminator:
+                self.user_define2 = ''
+            else:
+                self.user_define2 = message[comma + 1: terminator]
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
         self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
 
@@ -111,7 +142,7 @@ class Crop_Area:
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/"+str(self.area_id)+"/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/" + str(self.area_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'
@@ -144,6 +175,17 @@ class Weather_Station:
         self.station_wind_speed = int(message[16:19])
         self.station_solar_radiation = int(message[19:23])
         #self.ev = float(message[23:25] + '.' + message[25])
+        comma = message.index(",")
+        if comma == 23:
+            self.user_define1 = ''
+            self.user_define2 = ''
+        else:
+            self.user_define1 = message[23: comma]
+            terminator = message.index("#")
+            if (comma + 1) == terminator:
+                self.user_define2 = ''
+            else:
+                self.user_define2 = message[comma + 1: terminator]
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
 
 
@@ -152,7 +194,7 @@ class Weather_Station:
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/"+str(self.area_id)+"/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/" + str(self.area_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'

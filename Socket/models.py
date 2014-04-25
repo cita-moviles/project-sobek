@@ -2,7 +2,6 @@ __author__ = 'admin'
 
 import json
 import urllib2, base64
-import writeToFile
 
 
 class Sensor:
@@ -213,22 +212,22 @@ class MessageProcessor:
                sensor = Sensor (message)
                print sensor.to_json ()
                #sensor.upload_to_server()
-               writeToFile (sensor.to_json ())
+
 
           elif message[1:3] == "20":
                valve = Valve (message)
                print valve.to_json ()
-               writeToFile (str(valve.to_json ()))
+
 
           elif message[1:3] == "30":
                area = Crop_Area (message)
                print area.to_json ()
-               writeToFile (area.to_json)
+
 
           elif message[1:3] == "40":
                station = Weather_Station (message)
                print station.to_json ()
-               writeToFile (station.to_json ())
+               
 
           else:
                print "Nothing cool"

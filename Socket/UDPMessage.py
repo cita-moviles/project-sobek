@@ -2,9 +2,9 @@ __author__ = 'luishoracio'
 
 import socket
 
-UDP_IP = "200.34.200.92"
+UDP_IP = "127.0.0.1"
 UDP_PORT = 4580
-MESSAGE = "!200001010123401234,#"
+MESSAGE = "!200 001 010 123 401 234#"
 
 print "UDP target IP:", UDP_IP
 print "UDP target port:", UDP_PORT

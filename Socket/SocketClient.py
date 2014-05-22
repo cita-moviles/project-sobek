@@ -25,7 +25,7 @@ for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):
 if s is None:
     print 'could not open socket'
     sys.exit(1)
-message_list = ["!200001010123401234#", "!10000202053054060-170#"]
+message_list = ["!200001010123401234#", "!100 002 020 530 540 60-170#"]
 
 time.sleep(1)
 

@@ -27,7 +27,7 @@ if s is None:
     sys.exit(1)
 message_list = ["!200001010123401234#", "!10000202053054060-170#"]
 
-time.sleep(1    )
+time.sleep(1)
 
 for message in message_list:
     print message

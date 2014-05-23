@@ -7,22 +7,22 @@ import urllib2, base64
 class Sensor:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
-          Pos[0] = ! Start of message
-          Pos[1:2] = header
-          Pos[3:4] = Area ID
-          Pos[5:6] = Sensor iD
-          Pos[7:8] = Status
-          Pos[9:10] = HL1 integers
-          Pos[11] = HL1 Decimals
-          Pos[12:13] = HL1 integers
-          Pos[14] = HL1 Decimals
-          Pos[15:16] = HL1 integers
-          Pos[17] = HL1 Decimals
-          Pos[18] = Temp Sign
-          Pos[19:20] = Temp integers
-          Pos[21] = Temp Decimals
-          Pos[-1] = # end of message
-          """
+        Pos[0] = ! Start of message
+        Pos[1:2] = header
+        Pos[3:4] = Area ID
+        Pos[5:6] = Sensor iD
+        Pos[7:8] = Status
+        Pos[9:10] = HL1 integers
+        Pos[11] = HL1 Decimals
+        Pos[12:13] = HL1 integers
+        Pos[14] = HL1 Decimals
+        Pos[15:16] = HL1 integers
+        Pos[17] = HL1 Decimals
+        Pos[18] = Temp Sign
+        Pos[19:20] = Temp integers
+        Pos[21] = Temp Decimals
+        Pos[-1] = # end of message
+        """
 
         self.sensor_id = int(message[3:7])
         self.sensor_status = int(message[7:9])
@@ -62,15 +62,15 @@ class Sensor:
 class Valve:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
-          Pos[0] = ! Start of message
-          Pos[1:2] = header
-          Pos[3:7] = Valve ID
-          Pos[7:9] = Status
-          Pos[9:15] = Flow
-          Pos[15:21] = Pressure
-          Pos[21:26] = Limit
-          Pos[-1] = # end of message
-          """
+        Pos[0] = ! Start of message
+        Pos[1:2] = header
+        Pos[3:7] = Valve ID
+        Pos[7:9] = Status
+        Pos[9:15] = Flow
+        Pos[15:21] = Pressure
+        Pos[21:26] = Limit
+        Pos[-1] = # end of message
+        """
         self.valve_id = int(message[3:7])
         self.valve_status = int(message[7:9])
         self.valve_flow = int(message[9:14])
@@ -210,6 +210,7 @@ class MessageProcessor:
     def process_message(message):
         msglist = message.split('#')
         for msg in msglist:
+            print(msg)
 
             if msg[1:3] == "10":
                 sensor = Sensor(msg + "#")
@@ -229,4 +230,3 @@ class MessageProcessor:
 
             else:
                 print "Nothing cool"
-

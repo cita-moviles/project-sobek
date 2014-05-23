@@ -31,7 +31,7 @@ def sobek_server (address):
 
           #TODO: fix issues with missing comma
           FileWriter.writeToFile (msg)
-          #MessageProcessor.process_message(msg)
+          MessageProcessor.process_message(msg)
 
 
 if __name__ == '__main__':

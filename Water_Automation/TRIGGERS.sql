@@ -77,6 +77,7 @@ BEGIN
     (log_timestamp, field_id_id, field_imei, field_signal, field_latitude, field_longitude, field_user_define1, field_user_define2)
   VALUES
     (now(), NEW.field_id, NEW.field_imei, NEW.field_signal, NEW.field_latitude, NEW.field_longitude, NEW.field_user_define1, NEW.field_user_define2);
+  RETURN new;
 END;
 $fai_field$ LANGUAGE plpgsql;
 

@@ -34,15 +34,15 @@ class Sensor:
         self.sensor_y_position = 0
         comma = message.index(',')
         if comma == 22:
-            self.user_define1 = ''
-            self.user_define2 = ''
+            self.sensor_user_define1 = ''
+            self.sensor_user_define2 = ''
         else:
-            self.user_define1 = message[22: comma]
+            self.sensor_user_define1 = message[22: comma]
             terminator = message.index('#')
             if (comma + 1) == terminator:
-                self.user_define2 = ''
+                self.sensor_user_define2 = ''
             else:
-                self.user_define2 = message[comma + 1: terminator]
+                self.sensor_user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
 
 
@@ -79,15 +79,15 @@ class Valve:
         self.valve_ideal = 0
         comma = message.index(',')
         if (comma is not None) and comma == 19:
-            self.user_define1 = ''
-            self.user_define2 = ''
+            self.valve_user_define1 = ''
+            self.valve_user_define2 = ''
         else:
-            self.user_define1 = message[19: comma]
+            self.valve_user_define1 = message[19: comma]
             terminator = message.index("#")
             if (comma + 1) == terminator:
-                self.user_define2 = ''
+                self.valve_user_define2 = ''
             else:
-                self.user_define2 = message[comma + 1: terminator]
+                self.valve_user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
         #self.limit = int(message[21:26])
 
@@ -123,15 +123,15 @@ class Crop_Area:
         self.area_x_position = 0
         comma = message.index(",")
         if comma == 10:
-            self.user_define1 = ''
-            self.user_define2 = ''
+            self.area_user_define1 = ''
+            self.area_user_define2 = ''
         else:
-            self.user_define1 = message[10: comma]
+            self.area_user_define1 = message[10: comma]
             terminator = message.index("#")
             if (comma + 1) == terminator:
-                self.user_define2 = ''
+                self.area_user_define2 = ''
             else:
-                self.user_define2 = message[comma + 1: terminator]
+                self.area_user_define2 = message[comma + 1: terminator]
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
         self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
 
@@ -176,15 +176,15 @@ class Weather_Station:
         #self.ev = float(message[23:25] + '.' + message[25])
         comma = message.index(",")
         if comma == 23:
-            self.user_define1 = ''
-            self.user_define2 = ''
+            self.station_user_define1 = '0'
+            self.station_user_define2 = '0'
         else:
-            self.user_define1 = message[23: comma]
+            self.station_user_define1 = message[23: comma]
             terminator = message.index("#")
             if (comma + 1) == terminator:
-                self.user_define2 = ''
+                self.station_user_define2 = '0'
             else:
-                self.user_define2 = message[comma + 1: terminator]
+                self.station_user_define2 = message[comma + 1: terminator]
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
 
 
@@ -210,23 +210,27 @@ class MessageProcessor:
     def process_message(message):
         msglist = message.split('#')
         for msg in msglist:
-            print(msg)
+            print("------" + msg + "-------")
 
             if msg[1:3] == "10":
                 sensor = Sensor(msg + "#")
-                print sensor.to_json()
+                #print sensor.to_json()
+                sensor.upload_to_server()
 
             elif msg[1:3] == "20":
                 valve = Valve(msg + "#")
-                print valve.to_json()
+                #print valve.to_json()
+                valve.upload_to_server()
 
             elif msg[1:3] == "30":
                 area = Crop_Area(msg + "#")
-                print area.to_json()
+                #print area.to_json()
+                area.upload_to_server()
 
             elif msg[1:3] == "40":
                 station = Weather_Station(msg + "#")
-                print station.to_json()
+                #print station.to_json()
+                station.upload_to_server()
 
             else:
                 print "Nothing cool"

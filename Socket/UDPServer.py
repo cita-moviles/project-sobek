@@ -7,9 +7,9 @@ import sys
 PORT = 4580
 
 
-def sobek_server (address):
+def sobek_server(address):
     try:
-        sock = socket (AF_INET, SOCK_DGRAM)
+        sock = socket(AF_INET, SOCK_DGRAM)
         print 'Socket created'
     except socket.error, msg:
         print 'Failed to create socket. Error Code : ' + str (msg[0]) + ' Message ' + msg[1]
@@ -27,8 +27,7 @@ def sobek_server (address):
 
         print('Got message from', addr)
 
-        sock.sendto ('OK', addr)
-
+        sock.sendto('OK', addr)
 
         FileWriter.writeToFile(msg)
         MessageProcessor.process_message(msg)

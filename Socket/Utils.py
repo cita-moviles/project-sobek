@@ -6,7 +6,7 @@ import os
 class FileWriter:
      date = None
 
-     def setDate (exactTime):
+     def setDate(exactTime):
           global date
           date = exactTime
 
@@ -15,13 +15,13 @@ class FileWriter:
           return date
 
      @staticmethod
-     def writeToFile (dataToWrite):
+     def writeToFile(dataToWrite):
           if os.path.exists (os.path.abspath ('dataLog.txt')):
-               with open ('dataLog.txt', 'a+') as file:
-                    file.write (strftime ("%Y-%m-%d %H:%M") + "," + dataToWrite + '\n')
+               with open('dataLog.txt', 'a+') as file:
+                    file.write(strftime ("%Y-%m-%d %H:%M") + "," + dataToWrite + '\n')
           else:
                print('Log file created')
-               with open ("dataLog.txt", 'w') as file:
+               with open("dataLog.txt", 'w') as file:
                     file.write (strftime ("%Y-%m-%d %H:%M") + "," + dataToWrite + '\n')
 
           print("Data written successfully")

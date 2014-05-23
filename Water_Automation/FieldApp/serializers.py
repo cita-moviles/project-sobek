@@ -19,7 +19,7 @@ class Farm_Field_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Farm_Field
-        fields = ('field_id', 'field_name', 'field_description', 'field_IMEI', 'field_signal', 'field_latitude',
+        fields = ('field_id', 'field_name', 'field_description', 'field_imei', 'field_signal', 'field_latitude',
                   'field_longitude', 'field_user_define1', 'field_user_define2')
 
 
@@ -73,7 +73,7 @@ class FarmField_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Farm_Field_Log
-        fields = ('log_number', 'log_timestamp', 'field_id', 'field_IMEI', 'field_signal', 'field_user_define1',
+        fields = ('log_number', 'log_timestamp', 'field_id', 'field_imei', 'field_signal', 'field_user_define1',
                   'field_user_define2')
 
 

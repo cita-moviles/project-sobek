@@ -74,9 +74,9 @@ CREATE TRIGGER tai_station
 CREATE OR REPLACE FUNCTION fai_field() RETURNS TRIGGER AS $fai_field$
 BEGIN
   INSERT INTO "FieldApp_farm_field_log"
-    (log_timestamp, field_id_id, field_IMEI, field_signal, field_latitude, field_longitude, field_user_define1, field_user_define2)
+    (log_timestamp, field_id_id, field_imei, field_signal, field_latitude, field_longitude, field_user_define1, field_user_define2)
   VALUES
-    (now(), NEW.field_id, NEW.field_IMEI, NEW.field_signal, NEW.field_latitude, NEW.field_longitude, NEW.field_user_define1, NEW.field_user_define2);
+    (now(), NEW.field_id, NEW.field_imei, NEW.field_signal, NEW.field_latitude, NEW.field_longitude, NEW.field_user_define1, NEW.field_user_define2);
 END;
 $fai_field$ LANGUAGE plpgsql;
 

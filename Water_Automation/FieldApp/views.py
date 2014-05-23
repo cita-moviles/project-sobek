@@ -57,7 +57,7 @@ class Field_ViewSet(viewsets.ModelViewSet):
 class FieldFilter(django_filters.FilterSet):
     class Meta:
         model = Farm_Field
-        fields = ['field_id', 'field_name', 'field_description', 'field_IMEI', 'field_signal', 'field_latitude',
+        fields = ['field_id', 'field_name', 'field_description', 'field_imei', 'field_signal', 'field_latitude',
                   'field_longitude', 'field_user_define1', 'field_user_define2']
 
 

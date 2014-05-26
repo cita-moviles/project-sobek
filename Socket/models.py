@@ -34,13 +34,13 @@ class Sensor:
         self.sensor_y_position = 0
         comma = message.index(',')
         if comma == 22:
-            self.sensor_user_define1 = ''
-            self.sensor_user_define2 = ''
+            self.sensor_user_define1 = '0'
+            self.sensor_user_define2 = '0'
         else:
             self.sensor_user_define1 = message[22: comma]
             terminator = message.index('#')
             if (comma + 1) == terminator:
-                self.sensor_user_define2 = ''
+                self.sensor_user_define2 = '0'
             else:
                 self.sensor_user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
@@ -72,6 +72,7 @@ class Valve:
         Pos[-1] = # end of message
         """
         self.valve_id = int(message[3:7])
+        self.valve_name = " "
         self.valve_status = int(message[7:9])
         self.valve_flow = int(message[9:14])
         self.valve_pressure = int(message[14:19])
@@ -168,6 +169,7 @@ class Weather_Station:
           Pos[-1] = #End of message
           """
         self.station_id = int(message[3:7])
+        self.station_name = " "
         self.station_status = int(message[7:9])
         self.station_relative_humidity = float(message[9:11] + '.' + message[11])
         self.station_temperature = float(message[12:15] + '.' + message[15])
@@ -193,7 +195,7 @@ class Weather_Station:
                           sort_keys=True, indent=4)
 
     def upload_to_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/" + str(self.area_id) + "/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/" + str(self.station_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'

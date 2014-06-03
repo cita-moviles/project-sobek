@@ -13,7 +13,7 @@ def sobek_server(address):
         print 'Socket created'
     except socket.error, msg:
         print 'Failed to create socket. Error Code : ' + str (msg[0]) + ' Message ' + msg[1]
-        sys.exit ()
+        sys.exit()
 
     sock.bind (address)
     print('Connected to port ' + str (PORT))
@@ -27,7 +27,7 @@ def sobek_server(address):
 
         print('Got message from', addr)
 
-        sock.sendto('OK', addr)
+        sock.sendto('ROK', addr)
 
         FileWriter.writeToFile(msg)
         MessageProcessor.process_message(msg)

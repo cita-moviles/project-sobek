@@ -48,7 +48,8 @@
                 data: {
                     sensor_id : sensor_id,
                     min_date: $('#from').val() + ' 00:00:00',
-                    max_date: $('#to').val() + ' 23:59:59'
+                    max_date: $('#to').val() + ' 23:59:59',
+                    ordering: "-log_timestamp"
                 },
                 success:function(data){
                     time_array =[];
@@ -56,6 +57,7 @@
                     hl2_array = [];
                     hl3_array = [];
                     temperature_array = [];
+                    data.reverse();
 
                     $.each(data, function( index, value ) {
 
@@ -142,7 +144,7 @@
 
     </section>
     <section id="graphs" style="display: none;">
-        <h2>Humidity</h2>
+        <h2>Soil Moisture</h2>
         <canvas id="weather_canvas" height="250" width="1000"></canvas>
         <h2>Temperature</h2>
         <canvas id="weather_canvas2" height="250" width="1000"></canvas>

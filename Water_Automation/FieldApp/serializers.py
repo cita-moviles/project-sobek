@@ -101,7 +101,6 @@ class Sensor_Log_Serializer(serializers.HyperlinkedModelSerializer):
         model = Sensor_Log
         fields = ('log_number', 'log_timestamp', 'sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2',
                   'sensor_hl3', 'sensor_temperature','sensor_user_define1', 'sensor_user_define2')
-        order_by = '-log_number'
 
 
 class Valve_Log_Serializer(serializers.HyperlinkedModelSerializer):

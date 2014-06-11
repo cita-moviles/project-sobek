@@ -112,8 +112,6 @@ class SensorLogFilter(django_filters.FilterSet):
         model = Sensor_Log
         fields = ['sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2',
                   'sensor_hl3', 'sensor_temperature']
-        order_by = '-log_number'
-        # ordering_fields = ('log_number', 'log_timestamp')
 
 
 class ValveLogFilter(django_filters.FilterSet):

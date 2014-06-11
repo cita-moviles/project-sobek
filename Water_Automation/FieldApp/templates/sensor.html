@@ -30,6 +30,12 @@
             getFields('field');
         });
 
+        function getSensorGraph(time){
+            $('#to').datepicker( "option", "defaultDate", "Today");
+            $('#from').datepicker( "option", "defaultDate", -time);
+            getSensorsLog();
+        }
+
         function getSensorsLog(){
 
             sensor_id = $('#sensor').val() ;
@@ -139,6 +145,10 @@
         <label for="to">to</label>
         <input type="text" id="to" name="to">
 
+        <button onclick="getSensorGraph(1);">24h</button>
+        <button onclick="getSensorGraph(7);">7</button>
+        <button onclick="getSensorGraph(15);">15</button>
+        <button onclick="getSensorGraph(30);">30</button>
         <button onclick="getSensorsLog();">Graph</button>
         <button onclick="hideTag('graphs');">Clean</button>
 

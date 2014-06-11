@@ -31,8 +31,8 @@
         });
 
         function getSensorGraph(time){
-            $('#to').datepicker( "option", "defaultDate", "Today");
-            $('#from').datepicker( "option", "defaultDate", -time);
+            $('#to').datepicker( "setDate", "Today");
+            $('#from').datepicker( "setDate", -time);
             getSensorsLog();
         }
 

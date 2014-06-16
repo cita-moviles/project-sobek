@@ -11,10 +11,10 @@ from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from django.views.generic import TemplateView
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Weather_Station, Sensor, Crop_Area_Log, \
-    Sensor_Log, Weather_Station_Log, Valve_Log
+    Sensor_Log, Weather_Station_Log, Valve_Log, Farm_Field_Log
 from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Serializer, \
     Valve_Serializer, Station_Serializer, Sensor_Serializer, Area_Log_Serializer, Weather_Station_Log_Serializer, \
-    Valve_Log_Serializer, Sensor_Log_Serializer
+    Valve_Log_Serializer, Sensor_Log_Serializer, Farm_Field_Log_Serializer
 
 
 class Crop_ViewSet(viewsets.ModelViewSet):
@@ -58,27 +58,29 @@ class FieldFilter(django_filters.FilterSet):
     class Meta:
         model = Farm_Field
         fields = ['field_id', 'field_name', 'field_description', 'field_imei', 'field_signal', 'field_latitude',
-                  'field_longitude', 'field_user_define1', 'field_user_define2']
+                  'field_longitude', 'field_date_received', 'field_user_define1', 'field_user_define2']
 
 
 class SensorFilter(django_filters.FilterSet):
     class Meta:
         model = Sensor
         fields = ['sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
-                  'sensor_user_define1', 'sensor_user_define2', 'fk_area']
+                  'sensor_date_received', 'sensor_user_define1', 'sensor_user_define2', 'fk_area']
 
 
 class AreaFilter(django_filters.FilterSet):
     class Meta:
         model = Crop_Area
-        fields = ['area_id', 'area_name', 'area_user_define1', 'area_user_define2', 'fk_farm_field', 'fk_crop']
+        fields = ['area_id', 'area_name', 'area_date_received', 'area_user_define1', 'area_user_define2',
+                  'fk_farm_field', 'fk_crop']
 
 
 class StationFilter(django_filters.FilterSet):
     class Meta:
         model = Weather_Station
         fields = ['station_id', 'station_status', 'station_relative_humidity',
-                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_user_define1',
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation',
+                  'station_date_received', 'station_user_define1',
                   'station_user_define2', 'fk_farm_field']
 
 
@@ -91,7 +93,7 @@ class AreaLogFilter(django_filters.FilterSet):
 
     class Meta:
         model = Crop_Area_Log
-        fields = ['area_id', 'log_timestamp', 'area_ev']
+        fields = ['area_id', 'log_timestamp', 'area_ev', 'area_date_received']
 
 
 class StationLogFilter(django_filters.FilterSet):
@@ -101,7 +103,8 @@ class StationLogFilter(django_filters.FilterSet):
     class Meta:
         model = Weather_Station_Log
         fields = ['station_id', 'station_status', 'station_relative_humidity',
-                  'station_temperature', 'station_wind_speed', 'station_solar_radiation']
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation',
+                  'station_date_received']
 
 
 class SensorLogFilter(django_filters.FilterSet):
@@ -111,7 +114,7 @@ class SensorLogFilter(django_filters.FilterSet):
     class Meta:
         model = Sensor_Log
         fields = ['sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2',
-                  'sensor_hl3', 'sensor_temperature']
+                  'sensor_hl3', 'sensor_temperature', 'sensor_date_received']
 
 
 class ValveLogFilter(django_filters.FilterSet):
@@ -120,7 +123,17 @@ class ValveLogFilter(django_filters.FilterSet):
 
     class Meta:
         model = Valve_Log
-        fields = ['valve_id', 'valve_status', 'valve_flow', 'valve_pressure', 'valve_limit']
+        fields = ['valve_id', 'valve_status', 'valve_flow', 'valve_pressure',
+                  'valve_limit', 'valve_date_received']
+
+
+class FarmFieldLogFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='log_timestamp', lookup_type='gte')
+
+    class Meta:
+        model = Farm_Field_Log
+        fields = ['farm_field_id', 'farm_field_date_received']
 
 
 #Viewsets
@@ -172,6 +185,13 @@ class Valve_Log_ViewSet(generics.ListCreateAPIView):
     serializer_class = Valve_Log_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = ValveLogFilter
+
+
+class Farm_Field_Log_ViewSet(generics.ListCreateAPIView):
+    queryset = Farm_Field_Log.objects.all()
+    serializer_class = Farm_Field_Log_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = FarmFieldLogFilter
 
 
 @api_view(('GET',))

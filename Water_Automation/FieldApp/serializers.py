@@ -68,7 +68,7 @@ class Sensor_Serializer(serializers.HyperlinkedModelSerializer):
 
 
 #LOGS
-class FarmField_Log_Serializer(serializers.HyperlinkedModelSerializer):
+class Farm_Field_Log_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='area-log-detail')
 
     class Meta:

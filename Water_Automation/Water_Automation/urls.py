@@ -33,6 +33,8 @@ urlpatterns = patterns(
     url(r'^Sensor_Log/', views.Sensor_Log_ViewSet.as_view(model='Sensor_Log')),
     url(r'^Valve_Log/', views.Valve_Log_ViewSet.as_view(model='Valve_Log')),
     url(r'^Station_Log/', views.Station_Log_ViewSet.as_view(model='Weather_Station_Log')),
+    url(r'^Farm_Field_Log/', views.Farm_Field_Log_ViewSet.as_view(model='Farm_Field_Log')),
+
     url(r'^index.html', TemplateView.as_view(template_name="index.html")),
     url(r'^sensor.html', TemplateView.as_view(template_name="sensor.html")),
     url(r'^valve.html', TemplateView.as_view(template_name="valve.html")),

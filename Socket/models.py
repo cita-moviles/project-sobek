@@ -1,7 +1,15 @@
 __author__ = 'admin'
 
 import json
-import urllib2, base64
+import urllib2
+import datetime
+
+currentDate = None
+
+
+def instanciate_date():
+    global currentDate
+    currentDate = datetime.datetime.today()
 
 
 class Sensor:
@@ -44,6 +52,8 @@ class Sensor:
             else:
                 self.sensor_user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
+        global currentDate
+        self.date_received = str(currentDate)
 
 
     def to_json(self):
@@ -90,6 +100,8 @@ class Valve:
             else:
                 self.valve_user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
+        global currentDate
+        self.date_received = str(currentDate)
         #self.limit = int(message[21:26])
 
 
@@ -135,6 +147,8 @@ class Crop_Area:
                 self.area_user_define2 = message[comma + 1: terminator]
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
         self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
+        global currentDate
+        self.date_received = str(currentDate)
 
 
     def to_json(self):
@@ -188,6 +202,8 @@ class Weather_Station:
             else:
                 self.station_user_define2 = message[comma + 1: terminator]
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
+        global currentDate
+        self.date_received = str(currentDate)
 
 
     def to_json(self):
@@ -228,15 +244,18 @@ class Farm_Field:
 
         comma = message.index(",")
         if comma == 46:
-            self.field_user_define1 = '0'
-            self.field_user_define2 = '0'
+            self.field_user_define1 = ' '
+            self.field_user_define2 = ' '
         else:
             self.field_user_define1 = message[46: comma]
             terminator = message.index("#")
             if (comma + 1) == terminator:
-                self.field_user_define2 = '0'
+                self.field_user_define2 = ' '
             else:
                 self.field_user_define2 = message[comma + 1: terminator]
+        global currentDate
+        currentDate = "20" + message[46:48] + "-" + message[49:51] + "-" + message[52:54] + " " + self.field_user_define2
+        self.date_received = str(currentDate)
 
 
     def to_json(self):
@@ -259,6 +278,12 @@ class MessageProcessor:
 
     @staticmethod
     def process_message(message):
+        global currentDate
+        if currentDate is None:
+            instanciate_date()
+
+        print currentDate
+
         msglist = message.split('#')
         for msg in msglist:
             try:

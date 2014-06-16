@@ -7,9 +7,9 @@ class Crop(models.Model):
     crop_name = models.CharField(max_length=50)
     crop_description = models.TextField(max_length=200)
     crop_ev = models.FloatField()
-    crop_date_received = models.DateTimeField()
-    crop_user_define1 = models.TextField(max_length=250)
-    crop_user_define2 = models.TextField(max_length=250)
+    crop_date_received = models.DateTimeField(null=True, blank=True)
+    crop_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    crop_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
 
 class Farm_Field(models.Model):
@@ -20,9 +20,9 @@ class Farm_Field(models.Model):
     field_signal = models.FloatField()
     field_latitude = models.FloatField()
     field_longitude = models.FloatField()
-    field_date_received = models.DateTimeField()
-    field_user_define1 = models.TextField(max_length=250)
-    field_user_define2 = models.TextField(max_length=250)
+    field_date_received = models.DateTimeField(null=True, blank=True)
+    field_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    field_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
 
 class Crop_Area(models.Model):
@@ -32,9 +32,9 @@ class Crop_Area(models.Model):
     area_ev = models.FloatField()
     area_x_position = models.IntegerField()
     area_y_position = models.IntegerField()
-    area_date_received = models.DateTimeField()
-    area_user_define1 = models.TextField(max_length=250)
-    area_user_define2 = models.TextField(max_length=250)
+    area_date_received = models.DateTimeField(null=True, blank=True)
+    area_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    area_user_define2 = models.TextField(max_length=250, null=True, blank=True)
     fk_farm_field = models.ForeignKey('Farm_Field')
     fk_crop = models.ForeignKey('Crop')
 
@@ -47,9 +47,9 @@ class Valve(models.Model):
     valve_pressure = models.FloatField()
     valve_limit = models.FloatField()
     valve_ideal = models.FloatField()
-    valve_date_received = models.DateTimeField()
-    valve_user_define1 = models.TextField(max_length=250)
-    valve_user_define2 = models.TextField(max_length=250)
+    valve_date_received = models.DateTimeField(null=True, blank=True)
+    valve_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    valve_user_define2 = models.TextField(max_length=250, null=True, blank=True)
     fk_area = models.ForeignKey('Crop_Area')
 
 
@@ -61,9 +61,9 @@ class Weather_Station(models.Model):
     station_temperature = models.FloatField()
     station_wind_speed = models.FloatField()
     station_solar_radiation = models.FloatField()
-    station_date_received = models.DateTimeField()
-    station_user_define1 = models.TextField(max_length=250)
-    station_user_define2 = models.TextField(max_length=250)
+    station_date_received = models.DateTimeField(null=True, blank=True)
+    station_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    station_user_define2 = models.TextField(max_length=250, null=True, blank=True)
     fk_farm_field = models.ForeignKey('Farm_Field')
 
 
@@ -76,9 +76,9 @@ class Sensor(models.Model):
     sensor_temperature = models.FloatField()
     sensor_x_position = models.IntegerField()
     sensor_y_position = models.IntegerField()
-    sensor_date_received = models.DateTimeField()
-    sensor_user_define1 = models.TextField(max_length=250)
-    sensor_user_define2 = models.TextField(max_length=250)
+    sensor_date_received = models.DateTimeField(null=True, blank=True)
+    sensor_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    sensor_user_define2 = models.TextField(max_length=250, null=True, blank=True)
     fk_area = models.ForeignKey('Crop_Area')
 
 

@@ -133,7 +133,7 @@ class FarmFieldLogFilter(django_filters.FilterSet):
 
     class Meta:
         model = Farm_Field_Log
-        fields = ['farm_field_id', 'farm_field_date_received']
+        fields = ['field_id', 'field_date_received']
 
 
 #Viewsets

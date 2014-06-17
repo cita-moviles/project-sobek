@@ -11,7 +11,8 @@ class Crop_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Crop
-        fields = ('crop_id', 'crop_name', 'crop_description', 'crop_ev', 'crop_user_define1', 'crop_user_define2')
+        fields = ('crop_id', 'crop_name', 'crop_description', 'crop_ev', 'crop_date_received',
+                  'crop_user_define1', 'crop_user_define2')
 
 
 class Farm_Field_Serializer(serializers.HyperlinkedModelSerializer):
@@ -19,8 +20,8 @@ class Farm_Field_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Farm_Field
-        fields = ('field_id', 'field_name', 'field_description', 'field_imei', 'field_signal', 'field_latitude',
-                  'field_longitude', 'field_user_define1', 'field_user_define2')
+        fields = ('field_id', 'field_name', 'field_description', 'field_imei', 'field_signal',
+                  'field_latitude', 'field_longitude', 'field_date_received', 'field_user_define1', 'field_user_define2')
 
 
 class Area_Serializer(serializers.HyperlinkedModelSerializer):
@@ -30,7 +31,7 @@ class Area_Serializer(serializers.HyperlinkedModelSerializer):
         model = Crop_Area
         fields = (
             'area_id', 'area_name', 'area_description', 'area_ev', 'area_x_position', 'area_y_position',
-            'area_user_define1', 'area_user_define2', 'fk_farm_field', 'fk_crop')
+            'area_date_received', 'area_user_define1', 'area_user_define2', 'fk_farm_field', 'fk_crop')
 
 
 class Valve_Serializer(serializers.HyperlinkedModelSerializer):
@@ -40,7 +41,7 @@ class Valve_Serializer(serializers.HyperlinkedModelSerializer):
         model = Valve
         fields = (
             'valve_id', 'valve_name', 'valve_status', 'valve_flow', 'valve_pressure', 'valve_limit', 'valve_ideal',
-            'valve_user_define1', 'valve_user_define2', 'fk_area'
+            'valve_date_received', 'valve_user_define1', 'valve_user_define2', 'fk_area'
         )
 
 
@@ -51,8 +52,8 @@ class Station_Serializer(serializers.HyperlinkedModelSerializer):
         model = Weather_Station
         fields = (
             'station_id', 'station_name', 'station_status', 'station_relative_humidity', 'station_temperature',
-            'station_wind_speed', 'station_solar_radiation', 'station_user_define1', 'station_user_define2',
-            'fk_farm_field'
+            'station_wind_speed', 'station_solar_radiation', 'station_date_received',
+            'station_user_define1', 'station_user_define2', 'fk_farm_field'
         )
 
 
@@ -63,7 +64,8 @@ class Sensor_Serializer(serializers.HyperlinkedModelSerializer):
         model = Sensor
         fields = (
             'sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
-            'sensor_x_position', 'sensor_y_position', 'sensor_user_define1', 'sensor_user_define2', 'fk_area'
+            'sensor_x_position', 'sensor_y_position', 'sensor_date_received',
+            'sensor_user_define1', 'sensor_user_define2', 'fk_area'
         )
 
 
@@ -73,8 +75,8 @@ class Farm_Field_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Farm_Field_Log
-        fields = ('log_number', 'log_timestamp', 'field_id', 'field_imei', 'field_signal', 'field_user_define1',
-                  'field_user_define2')
+        fields = ('log_number', 'log_timestamp', 'field_id', 'field_imei', 'field_signal', 'field_date_received',
+                  'field_user_define1', 'field_user_define2')
 
 
 class Area_Log_Serializer(serializers.HyperlinkedModelSerializer):
@@ -82,7 +84,8 @@ class Area_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Crop_Area_Log
-        fields = ('log_number', 'log_timestamp', 'area_id', 'area_ev', 'area_user_define1', 'area_user_define2')
+        fields = ('log_number', 'log_timestamp', 'area_id', 'area_ev', 'area_date_received',
+                  'area_user_define1', 'area_user_define2')
 
 
 class Weather_Station_Log_Serializer(serializers.HyperlinkedModelSerializer):
@@ -91,8 +94,8 @@ class Weather_Station_Log_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Weather_Station_Log
         fields = ('log_number', 'log_timestamp', 'station_id', 'station_status', 'station_relative_humidity',
-                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_user_define1',
-                  'station_user_define2')
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation',
+                  'station_date_received', 'station_user_define1', 'station_user_define2')
 
 class Sensor_Log_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='sensor-log-detail')
@@ -100,7 +103,8 @@ class Sensor_Log_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Sensor_Log
         fields = ('log_number', 'log_timestamp', 'sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2',
-                  'sensor_hl3', 'sensor_temperature','sensor_user_define1', 'sensor_user_define2')
+                  'sensor_hl3', 'sensor_temperature', 'sensor_date_received',
+                  'sensor_user_define1', 'sensor_user_define2')
 
 
 class Valve_Log_Serializer(serializers.HyperlinkedModelSerializer):
@@ -109,4 +113,4 @@ class Valve_Log_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Valve_Log
         fields = ('log_number', 'log_timestamp', 'valve_id', 'valve_status', 'valve_flow', 'valve_pressure',
-                  'valve_limit', 'valve_user_define1', 'valve_user_define2')
+                  'valve_limit', 'valve_date_received', 'valve_user_define1', 'valve_user_define2')

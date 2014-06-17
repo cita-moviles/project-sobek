@@ -255,7 +255,7 @@ class Farm_Field:
                 self.field_user_define2 = message[comma + 1: terminator]
         global currentDate
         currentDate = "20" + message[46:48] + "-" + message[49:51] + "-" + message[52:54] + " " + \
-                      self.field_user_define2 + ".000000-00"
+                      self.field_user_define2 + ".000000+00"
         self.date_received = str(currentDate)
 
 

@@ -53,7 +53,7 @@ class Sensor:
                 self.sensor_user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
         global currentDate
-        self.date_received = str(currentDate)
+        self.sensor_date_received = str(currentDate)
 
 
     def to_json(self):
@@ -101,7 +101,7 @@ class Valve:
                 self.valve_user_define2 = message[comma + 1: terminator]
         self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
         global currentDate
-        self.date_received = str(currentDate)
+        self.valve_date_received = str(currentDate)
         #self.limit = int(message[21:26])
 
 
@@ -148,7 +148,7 @@ class Crop_Area:
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
         self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
         global currentDate
-        self.date_received = str(currentDate)
+        self.area_date_received = str(currentDate)
 
 
     def to_json(self):
@@ -203,7 +203,7 @@ class Weather_Station:
                 self.station_user_define2 = message[comma + 1: terminator]
         self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
         global currentDate
-        self.date_received = str(currentDate)
+        self.station_date_received = str(currentDate)
 
 
     def to_json(self):
@@ -256,7 +256,7 @@ class Farm_Field:
         global currentDate
         currentDate = "20" + message[46:48] + "-" + message[49:51] + "-" + message[52:54] + " " + \
                       self.field_user_define2 + ".000000+00"
-        self.date_received = str(currentDate)
+        self.field_date_received = str(currentDate)
 
 
     def to_json(self):

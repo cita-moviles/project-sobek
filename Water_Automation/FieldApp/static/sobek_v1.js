@@ -137,7 +137,7 @@ function getValves(select_id){
             options = "";
 
             $.each(data, function( index, value ) {
-                options += '<option value="' + value.valve_id + '">' + value.valve_name + '</option>';
+                options += '<option value="' + value.valve_id + '">' + value.valve_id + '</option>';
             });
 
             $('#'+select_id).html(options);
@@ -159,7 +159,7 @@ function getValves(select_id, search_id){
             options = "";
 
             $.each(data, function( index, value ) {
-                options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
+                options += '<option value="' + value.valve_id + '">' + value.valve_id + '</option>';
             });
 
             $('#'+select_id).html(options);

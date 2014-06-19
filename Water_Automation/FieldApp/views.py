@@ -75,6 +75,13 @@ class AreaFilter(django_filters.FilterSet):
                   'fk_farm_field', 'fk_crop']
 
 
+class ValveFilter(django_filters.FilterSet):
+    class Meta:
+        model = Valve
+        fields = ['valve_id', 'valve_name', 'valve_status', 'valve_flow', 'valve_pressure', 'valve_limit',
+                  'valve_ideal', 'valve_date_received', 'valve_user_define1', 'valve_user_define2', 'fk_area']
+
+
 class StationFilter(django_filters.FilterSet):
     class Meta:
         model = Weather_Station
@@ -156,6 +163,20 @@ class AreaSearch(generics.ListCreateAPIView):
     serializer_class = Area_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = AreaFilter
+
+
+class ValveSearch(generics.ListCreateAPIView):
+    queryset = Valve.objects.all()
+    serializer_class = Valve_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = ValveFilter
+
+
+class StationSearch(generics.ListCreateAPIView):
+    queryset = Weather_Station.objects.all()
+    serializer_class = Station_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = StationFilter
 
 
 #LogsViewsets

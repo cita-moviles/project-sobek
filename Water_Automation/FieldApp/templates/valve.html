@@ -27,8 +27,14 @@
                 }
             });
 
-            getValves('valve');
+            getFields('field', 'area', 'valve');
         });
+
+        function getValveGraph(time){
+            $('#to').datepicker( "setDate", "Today");
+            $('#from').datepicker( "setDate", -time);
+            getValveLog();
+        }
 
         function getValveLog(){
             if ( ( $('#from').val() === "") || ( $('#to').val() === "" ) ){
@@ -114,6 +120,10 @@
         <p>
             Select the valve you wish to graph:
         </p>
+        <label>Field</label>
+        <select id="field" onchange="getAreas('area', 'field');"></select>
+        <label>Area</label>
+        <select id="area" onchange="getValves('valve', 'area');"></select>
         <label>Valve</label>
         <select id="valve"></select>
         <p>Select the range of dates you wish to graph:</p>
@@ -123,6 +133,11 @@
         <label for="to">to</label>
         <input type="text" id="to" name="to">
 
+
+        <button onclick="getValveGraph(1);">24h</button>
+        <button onclick="getValveGraph(7);">7</button>
+        <button onclick="getValveGraph(15);">15</button>
+        <button onclick="getValveGraph(30);">30</button>
         <button onclick="getValveLog();">Graph</button>
         <button onclick="hideTag('graphs');">Clean</button>
 

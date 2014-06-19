@@ -27,7 +27,8 @@ urlpatterns = patterns(
     url(r'^Field_Search/', views.FieldSearch.as_view(model='Farm_Field')),
     url(r'^Sensor_Search/', views.SensorSearch.as_view(model='Sensor')),
     url(r'^Area_Search/', views.AreaSearch.as_view(model='Crop_Area')),
-    url(r'^Station_Search/', views.AreaSearch.as_view(model='Weather_Station')),
+    url(r'^Station_Search/', views.StationSearch.as_view(model='Weather_Station')),
+    url(r'^Valve_Search/', views.ValveSearch.as_view(model='Valve')),
 
     url(r'^Crop_Area_Log/', views.Area_Log_ViewSet.as_view(model='Crop_Area_Log')),
     url(r'^Sensor_Log/', views.Sensor_Log_ViewSet.as_view(model='Sensor_Log')),

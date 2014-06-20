@@ -53,6 +53,7 @@
                     vs_array = [];
                     vf_array = [];
                     vp_array = [];
+                    va_array = [];
 
                     $.each(data, function( index, value ) {
 
@@ -60,6 +61,7 @@
                         vs_array.push(value.valve_status);
                         vf_array.push(value.valve_flow);
                         vp_array.push(value.valve_pressure);
+                        va_array.push(value.valve_user_define_1);
                     });
 
                     var vsChart = {
@@ -100,9 +102,23 @@
                             }
                         ]
                     }
+
+                    var vaChart = {
+                        labels : time_array,
+                        datasets : [
+                            {
+                                fillColor : "rgba(204,0,0,0.5)",
+                                strokeColor : "rgba(204,0,0,1)",
+                                pointColor : "rgba(204,0,0,1)",
+                                pointStrokeColor : "#fff",
+                                data : va_array
+                            }
+                        ]
+                    }
                     var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Bar(vsChart);
                     var weather_lineChart2 = new Chart($("#weather_canvas2").get(0).getContext("2d")).Line(vfChart);
                     var weather_lineChart3 = new Chart($("#weather_canvas3").get(0).getContext("2d")).Line(vpChart);
+                    var actuator_lineChart3 = new Chart($("#valve_actuator_graph").get(0).getContext("2d")).Line(vaChart);
 
                     showTag('graphs');
                 }
@@ -143,6 +159,8 @@
 
     </section>
     <section id="graphs" style="display: none;">
+        <h2>Actuator</h2>
+        <canvas id="valve_actuator_graph" height="250" width="1000"></canvas>
         <h2>Status</h2>
         <canvas id="weather_canvas" height="250" width="1000"></canvas>
         <h2>Flow</h2>

@@ -18,11 +18,52 @@
         <label>Area</label>
         <select id="area" onchange="getValves('valve', 'area');"></select>
         <label>Valve</label>
-        <select id="valve" onchange="getConfigurations();"></select>
+        <select id="valve"></select>
+
+        <button onclick="getConfigurations()">Get Configuration</button>
+    </section>
+
+    <section>
+        <label>Operation Mode</label>
+        <select id="operationMode" onchange="loadOperationMode();">
+            <option value="1">Manual</option>
+            <option value="2">Automatic</option>
+            <!--<option value="3">Timer</option>-->
+        </select>
+    </section>
+
+    <section id="opManual" class="operationModes">
+        <label>ON</label>
+        <input type="radio" name="rOpMan" id="rOpManON" value="1"/>
+        <label>OFF</label>
+        <input type="radio" name="rOpMan" id="rOpManOFF" value="0"/>
+
+        <button onclick="saveOpMan">Save</button>
+    </section>
+
+    <section id="opAutomatic" class="operationModes">
+
+        <label>Minimum Humidity</label>
+        <input type="text" id="maxHum"/>
+        <label>Maximum Humidity</label>
+        <input type="text" id="minHum" />
+
+        <button onclick="saveOpAut">Save</button>
 
     </section>
 
+    <section id="opTimer" class="operationModes">
+        <button onclick="saveOpTim">Save</button>
+    </section>
+
+    <style>
+        .operationModes{
+            display: none;
+        }
+    </style>
+
     <script>
+        var strConfig;
 
         $(function() {
             getFields('field', 'area', 'valve');
@@ -30,6 +71,46 @@
 
         function getConfigurations(){
             alert($('#valve').val());
+        }
+
+        function loadOperationMode(){
+            $('.operationModes').css('display','none');
+            switch ( $('#operationMode').val() ){
+                case 1:
+                    $('#opManual').css('display', 'block');
+                    break;
+                case 2:
+                    $('#opAutomatic').css('display', 'block');
+                    break;
+                case 3:
+                    $('#opTimer').css('display', 'block');
+                    break;
+            }
+        }
+
+        function saveOpMan(){
+            strConfig = "1-";
+            console.log($('input[name=rOpMan]:radio:checked').val(0))
+            //strConfig += $('input[name=rOpMan]:radio:checked').val(0);
+            //alert ("You didn't select an operation");
+
+            strConfig += "#";
+            alert(strConfig);
+        }
+
+        function saveOpAut(){
+            strConfig = "2-";
+            strConfig += $('#maxHum').val();
+            strConfig += "/";
+            strConfig += $('#minHum').val();
+            strConfig += "#";
+            alert(strConfig);
+        }
+
+        function saveOpTim(){
+            strConfig = "3-";
+            strConfig += "#";
+            alert(strConfig);
         }
     </script>
 </body>

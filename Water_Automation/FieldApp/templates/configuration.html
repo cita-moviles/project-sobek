@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Configuration - Proyect Sobek</title>
+    {%  include 'includeScripts.html' %}
+
+</head>
+<body>
+
+    {%  include 'nav.html' %}
+    <section>
+        <h1>Configuration</h1>
+        <p>Select the valve to configure</p>
+
+        <label>Field</label>
+        <select id="field" onchange="getAreas('area', 'field');"></select>
+        <label>Area</label>
+        <select id="area" onchange="getValves('valve', 'area');"></select>
+        <label>Valve</label>
+        <select id="valve" onchange="getConfigurations();"></select>
+
+    </section>
+
+    <script>
+
+        $(function() {
+            getFields('field', 'area', 'valve');
+        });
+
+        function getConfigurations(){
+            alert($('#valve').val());
+        }
+    </script>
+</body>
+</html>

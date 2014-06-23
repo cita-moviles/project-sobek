@@ -3,6 +3,7 @@ __author__ = 'admin'
 import json
 import urllib2
 import datetime
+import pytz
 
 currentDate = None
 
@@ -254,8 +255,9 @@ class Farm_Field:
             else:
                 self.field_user_define2 = message[comma + 1: terminator]
         global currentDate
+        strTimezoneDiff = datetime.datetime.now(pytz.timezone('America/Chihuahua')).strftime('%z')
         currentDate = "20" + message[46:48] + "-" + message[49:51] + "-" + message[52:54] + "T" + \
-                      self.field_user_define2 + ".000000+0000"
+                      self.field_user_define2 + ".000000" + strTimezoneDiff
         self.field_date_received = str(currentDate)
 
 

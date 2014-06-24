@@ -34,26 +34,26 @@
 
     <section id="opManual" class="operationModes">
         <label>ON</label>
-        <input type="radio" name="rOpMan" id="rOpManON" value="1"/>
+        <input type="radio" name="rOpMan" id="rOpManON" value="1" selected/>
         <label>OFF</label>
         <input type="radio" name="rOpMan" id="rOpManOFF" value="0"/>
 
-        <button onclick="saveOpMan">Save</button>
+        <button onclick="saveOpMan();">Save</button>
     </section>
 
     <section id="opAutomatic" class="operationModes">
 
         <label>Minimum Humidity</label>
-        <input type="text" id="maxHum"/>
+        <input type="number" id="maxHum" max="100" min="0" step="0.1"/>
         <label>Maximum Humidity</label>
-        <input type="text" id="minHum" />
+        <input type="number" id="minHum" max="100" min="0" step="0.1"/>
 
-        <button onclick="saveOpAut">Save</button>
+        <button onclick="saveOpAut();">Save</button>
 
     </section>
 
     <section id="opTimer" class="operationModes">
-        <button onclick="saveOpTim">Save</button>
+        <button onclick="saveOpTim();">Save</button>
     </section>
 
     <style>
@@ -76,13 +76,13 @@
         function loadOperationMode(){
             $('.operationModes').css('display','none');
             switch ( $('#operationMode').val() ){
-                case 1:
+                case "1":
                     $('#opManual').css('display', 'block');
                     break;
-                case 2:
+                case "2":
                     $('#opAutomatic').css('display', 'block');
                     break;
-                case 3:
+                case "3":
                     $('#opTimer').css('display', 'block');
                     break;
             }

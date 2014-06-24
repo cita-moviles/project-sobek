@@ -35,7 +35,7 @@ class Valve_ViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
-class Valve_Configuration_ViewSet(viewsets.ModelViewSet):
+class ValveConfiguration_ViewSet(viewsets.ModelViewSet):
     queryset = Valve_Configuration.objects.all()
     serializer_class = Valve_Configuration_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -86,6 +86,12 @@ class ValveFilter(django_filters.FilterSet):
         model = Valve
         fields = ['valve_id', 'valve_name', 'valve_status', 'valve_flow', 'valve_pressure', 'valve_limit',
                   'valve_ideal', 'valve_date_received', 'valve_user_define1', 'valve_user_define2', 'fk_area']
+
+
+class ValveConfigurationFilter(django_filters.FilterSet):
+    class Meta:
+        model = Valve_Configuration
+        fields = ['fk_valve', 'valve_configuration']
 
 
 class ValveConfigurationFilter(django_filters.FilterSet):
@@ -184,6 +190,13 @@ class ValveSearch(generics.ListCreateAPIView):
     filter_class = ValveFilter
 
 
+class ValveConfigurationSearch(generics.ListCreateAPIView):
+    queryset = Valve_Configuration.objects.all()
+    serializer_class = Valve_Configuration_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = ValveConfigurationFilter
+
+
 class StationSearch(generics.ListCreateAPIView):
     queryset = Weather_Station.objects.all()
     serializer_class = Station_Serializer
@@ -234,7 +247,7 @@ def api_root(request, format=None):
         'field': reverse('field-list', request=request, format=format),
         'area': reverse('area-list', request=request, format=format),
         'valve': reverse('valve-list', request=request, format=format),
-        'valveConfiguration': reverse('valve-configuration-list', request=request, format=format),
+        'valveconfiguration': reverse('valveconfiguration-list', request=request, format=format),
         'station': reverse('station-list', request=request, format=format),
         'sensor': reverse('sensor-list', request=request, format=format),
         'area-log': reverse('area-log-list', request=request, format=format)

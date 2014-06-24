@@ -44,9 +44,9 @@
     <section id="opAutomatic" class="operationModes">
 
         <label>Minimum Humidity</label>
-        <input type="number" id="maxHum" max="100" min="0" step="0.1"/>
+        <input type="number" id="maxHum" max="100" min="0" step="0.1" class="inpHumidity" value="0"/>
         <label>Maximum Humidity</label>
-        <input type="number" id="minHum" max="100" min="0" step="0.1"/>
+        <input type="number" id="minHum" max="100" min="0" step="0.1" class="inpHumidity" value="0"/>
 
         <button onclick="saveOpAut();">Save</button>
 
@@ -59,6 +59,9 @@
     <style>
         #opModeSelect, .operationModes{
             display: none;
+        }
+        .inpHumidity{
+            width: 50px;
         }
     </style>
 
@@ -94,13 +97,21 @@
             }
         }
 
-        function saveOpMan(){
+        function saveOpMan() {
             strConfig = "1-";
-            console.log($('input[name=rOpMan]:radio:checked').val(0))
-            //strConfig += $('input[name=rOpMan]:radio:checked').val(0);
-            //alert ("You didn't select an operation");
-
-            strConfig += "#";
+            console.log($('input[name=rOpMan]:radio:checked').val(0));
+            switch ($('input[name=rOpMan]:radio:checked').attr('id')) {
+                case 'rOpManON':
+                    strConfig += '1#';
+                    break;
+                case 'rOpManOFF':
+                    strConfig += '0#';
+                    break;
+                default:
+                    alert("You didn't select an operation");
+                    return;
+                    break;
+            }
             alert(strConfig);
         }
 

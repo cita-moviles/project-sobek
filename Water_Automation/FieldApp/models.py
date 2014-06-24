@@ -53,6 +53,11 @@ class Valve(models.Model):
     fk_area = models.ForeignKey('Crop_Area')
 
 
+class Valve_Configuration(models.Model):
+    fk_valve = models.ForeignKey('Valve')
+    valve_configuration = models.TextField(max_length=250, null=True, blank=True)
+
+
 class Weather_Station(models.Model):
     station_id = models.IntegerField(primary_key=True)
     station_name = models.CharField(max_length=50)

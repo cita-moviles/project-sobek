@@ -2,8 +2,8 @@ __author__ = 'admin'
 import django_filters
 from django.forms import widgets
 from rest_framework import serializers
-from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Weather_Station, Sensor, Crop_Area_Log, \
-    Weather_Station_Log, Sensor_Log, Valve_Log, Farm_Field_Log
+from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Valve_Configuration, Weather_Station, Sensor, \
+    Crop_Area_Log, Weather_Station_Log, Sensor_Log, Valve_Log, Farm_Field_Log
 
 
 class Crop_Serializer(serializers.HyperlinkedModelSerializer):
@@ -39,6 +39,17 @@ class Valve_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Valve
+        fields = (
+            'valve_id', 'valve_name', 'valve_status', 'valve_flow', 'valve_pressure', 'valve_limit', 'valve_ideal',
+            'valve_date_received', 'valve_user_define1', 'valve_user_define2', 'fk_area'
+        )
+
+
+class Valve_Configuration_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='valve-detail')
+
+    class Meta:
+        model = Valve_Configuration
         fields = (
             'valve_id', 'valve_name', 'valve_status', 'valve_flow', 'valve_pressure', 'valve_limit', 'valve_ideal',
             'valve_date_received', 'valve_user_define1', 'valve_user_define2', 'fk_area'

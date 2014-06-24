@@ -18,12 +18,12 @@
         <label>Area</label>
         <select id="area" onchange="getValves('valve', 'area');"></select>
         <label>Valve</label>
-        <select id="valve"></select>
+        <select id="valve" onchange="hideOperations();"></select>
 
         <button onclick="getConfigurations()">Get Configuration</button>
     </section>
 
-    <section>
+    <section id="opModeSelect">
         <label>Operation Mode</label>
         <select id="operationMode" onchange="loadOperationMode();">
             <option value="1">Manual</option>
@@ -57,7 +57,7 @@
     </section>
 
     <style>
-        .operationModes{
+        #opModeSelect, .operationModes{
             display: none;
         }
     </style>
@@ -70,7 +70,13 @@
         });
 
         function getConfigurations(){
-            alert($('#valve').val());
+            //alert($('#valve').val());
+            $('#opModeSelect').css('display','block');
+        }
+
+        function hideOperations(){
+            $('#opModeSelect').css('display','none');
+            $('.operationModes').css('display','none');
         }
 
         function loadOperationMode(){

@@ -15,6 +15,7 @@ router.register(r'Crop_Area', views.Area_ViewSet)
 router.register(r'Valve', views.Valve_ViewSet)
 router.register(r'Weather_Station', views.Station_ViewSet)
 router.register(r'Sensor', views.Sensor_ViewSet)
+router.register(r'Valve_Configuration', views.Valve_Configuration_ViewSet)
 
 # router.register(r'Moisture_Event', views.Moisture_Event_ViewSet)
 # router.register(r'Weather_Data', views.Weather_Data_ViewSet)

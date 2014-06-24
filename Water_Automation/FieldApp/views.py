@@ -1,4 +1,3 @@
-# Create your views here.
 import django_filters
 from django.contrib.auth.models import User
 from rest_framework import filters
@@ -35,7 +34,7 @@ class Valve_ViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
-class ValveConfiguration_ViewSet(viewsets.ModelViewSet):
+class Valve_Configuration_ViewSet(viewsets.ModelViewSet):
     queryset = Valve_Configuration.objects.all()
     serializer_class = Valve_Configuration_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
@@ -247,7 +246,6 @@ def api_root(request, format=None):
         'field': reverse('field-list', request=request, format=format),
         'area': reverse('area-list', request=request, format=format),
         'valve': reverse('valve-list', request=request, format=format),
-        'valveconfiguration': reverse('valveconfiguration-list', request=request, format=format),
         'station': reverse('station-list', request=request, format=format),
         'sensor': reverse('sensor-list', request=request, format=format),
         'area-log': reverse('area-log-list', request=request, format=format)

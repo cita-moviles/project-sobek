@@ -87,12 +87,6 @@ class ValveFilter(django_filters.FilterSet):
 class ValveConfigurationFilter(django_filters.FilterSet):
     class Meta:
         model = Valve_Configuration
-        fields = ['fk_valve', 'valve_configuration']
-
-
-class ValveConfigurationFilter(django_filters.FilterSet):
-    class Meta:
-        model = Valve_Configuration
         fields = ['valve_id', 'valve_configuration']
 
 

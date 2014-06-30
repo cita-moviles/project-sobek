@@ -1,7 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
 class Crop(models.Model):
     crop_id = models.IntegerField(primary_key=True)
     crop_name = models.CharField(max_length=50)
@@ -54,7 +53,7 @@ class Valve(models.Model):
 
 
 class Valve_Configuration(models.Model):
-    valve = models.ForeignKey(Valve)
+    valve_id = models.ForeignKey(Valve, primary_key=True)
     valve_configuration = models.TextField(max_length=250, null=True, blank=True)
 
 

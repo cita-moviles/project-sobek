@@ -53,7 +53,7 @@ class Valve(models.Model):
 
 
 class Valve_Configuration(models.Model):
-    valve_id = models.ForeignKey('Valve', primary_key=True)
+    valve_id = models.OneToOneField('Valve', primary_key=True)
     valve_configuration = models.TextField(max_length=250, null=True, blank=True)
 
 

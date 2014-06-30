@@ -1,7 +1,4 @@
 import django_filters
-from django.contrib.auth.models import User
-from rest_framework import filters
-from rest_framework import renderers
 from rest_framework import permissions
 from rest_framework import generics
 from rest_framework.response import Response
@@ -96,7 +93,7 @@ class ValveConfigurationFilter(django_filters.FilterSet):
 class ValveConfigurationFilter(django_filters.FilterSet):
     class Meta:
         model = Valve_Configuration
-        fields = ['fk_valve', 'valve_configuration']
+        fields = ['valve_id', 'valve_configuration']
 
 
 class StationFilter(django_filters.FilterSet):
@@ -250,6 +247,7 @@ def api_root(request, format=None):
         'sensor': reverse('sensor-list', request=request, format=format),
         'area-log': reverse('area-log-list', request=request, format=format)
     })
+
 
 class IndexView(TemplateView):
     template_name = 'index.html'

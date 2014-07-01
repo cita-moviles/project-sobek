@@ -44,7 +44,7 @@ class Valve_Serializer(serializers.HyperlinkedModelSerializer):
 
 
 class Valve_Configuration_Serializer(serializers.ModelSerializer):
-    FieldApp = serializers.PrimaryKeyRelatedField  #, view_name='valve-configuration-detail')
+    FieldApp = serializers.PrimaryKeyRelatedField()  #, view_name='valve-configuration-detail')
 
     class Meta:
         model = Valve_Configuration

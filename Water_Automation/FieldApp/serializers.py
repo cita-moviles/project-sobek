@@ -43,13 +43,13 @@ class Valve_Serializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class Valve_Configuration_Serializer(serializers.ModelSerializer):
-    FieldApp = serializers.PrimaryKeyRelatedField()  #, view_name='valve-configuration-detail')
+class Valve_Configuration_Serializer(serializers.ModelSerializer):  # HyperlinkedModelSerializer):
+    FieldApp = serializers.SlugRelatedField(slug_field='fk_valve_id')  # (many=False, view_name='valve-configuration-detail')
 
     class Meta:
         model = Valve_Configuration
         fields = (
-            'valve_id', 'valve_configuration'
+            'fk_valve_id', 'valve_configuration'
         )
 
 
@@ -104,6 +104,7 @@ class Weather_Station_Log_Serializer(serializers.HyperlinkedModelSerializer):
         fields = ('log_number', 'log_timestamp', 'station_id', 'station_status', 'station_relative_humidity',
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                   'station_date_received', 'station_user_define1', 'station_user_define2')
+
 
 class Sensor_Log_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='sensor-log-detail')

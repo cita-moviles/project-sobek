@@ -87,7 +87,7 @@ class ValveFilter(django_filters.FilterSet):
 class ValveConfigurationFilter(django_filters.FilterSet):
     class Meta:
         model = Valve_Configuration
-        fields = ['valve_id', 'valve_configuration']
+        fields = ['fk_valve_id', 'valve_configuration']
 
 
 class StationFilter(django_filters.FilterSet):
@@ -239,7 +239,8 @@ def api_root(request, format=None):
         'valve': reverse('valve-list', request=request, format=format),
         'station': reverse('station-list', request=request, format=format),
         'sensor': reverse('sensor-list', request=request, format=format),
-        'area-log': reverse('area-log-list', request=request, format=format)
+        'area-log': reverse('area-log-list', request=request, format=format),
+        'valve-configuration': reverse('valve-configuration-list', request=request, format=format)
     })
 
 

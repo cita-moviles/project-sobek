@@ -106,11 +106,11 @@ class StationAdmin(admin.ModelAdmin):
 
 class ConfigAdmin(admin.ModelAdmin):
     fields = [
-        'fk_valve',
+        'fk_valve_id',
         'valve_configuration'
     ]
 
-    list_display = ('fk_valve',)
+    list_display = ('fk_valve_id',)
 
 
 # Register all the models for admin

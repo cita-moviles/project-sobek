@@ -104,25 +104,14 @@ class StationAdmin(admin.ModelAdmin):
     list_display = ('station_id', 'station_name', 'fk_farm_field')
 
 
-<<<<<<< HEAD
-class ConfigurationAdmin(admin.ModelAdmin):
-    fields = [
-        'fk_valve_id',
-        'valve_configuration'
-    ]
-
-    list_display = ('fk_valve_id', 'valve_configuration')
-=======
 class ConfigAdmin(admin.ModelAdmin):
     fields = [
-
         'fk_valve',
         'valve_configuration'
-
     ]
 
     list_display = ('fk_valve',)
->>>>>>> 8bec434f6abae04e571655d914cd27bf35c04b92
+
 
 # Register all the models for admin
 admin.site.register(Crop, CropAdmin)
@@ -131,8 +120,4 @@ admin.site.register(Farm_Field, FieldAdmin)
 admin.site.register(Sensor, SensorAdmin)
 admin.site.register(Valve, ValveAdmin)
 admin.site.register(Weather_Station, StationAdmin)
-<<<<<<< HEAD
-admin.site.register(Valve_Configuration, ConfigurationAdmin)
-=======
 admin.site.register(Valve_Configuration, ConfigAdmin)
->>>>>>> 8bec434f6abae04e571655d914cd27bf35c04b92

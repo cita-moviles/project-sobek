@@ -39,5 +39,6 @@ urlpatterns = patterns(
     url(r'^station.html', TemplateView.as_view(template_name="station.html")),
     url(r'^area.html', TemplateView.as_view(template_name="area.html")),
     url(r'^configuration.html', TemplateView.as_view(template_name="configuration.html")),
+    url(r'^chart.html', TemplateView.as_view(template_name="testChartGoogle.html")),
     url(r'^admin/', include(admin.site.urls))
 )

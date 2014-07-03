@@ -4,7 +4,8 @@
     <title>Sensors - Proyect Sobek</title>
     {%  include 'includeScripts.html' %}
     <script>
-
+        google.load("visualization", "1", {packages: ["corechart"]});
+        
         $(function() {
             $( "#from" ).datepicker({
                 dateFormat: 'yy-mm-dd',

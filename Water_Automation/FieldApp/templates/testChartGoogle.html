@@ -1,63 +1,69 @@
 <html>
-    <head>
-        <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-        <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-        <!--<script src="{{ STATIC_URL }}jquerycross.js"></script>-->
+<head>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <!--<script src="{{ STATIC_URL }}jquerycross.js"></script>-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
+        google.load("visualization", "1", {packages: ["corechart"]});
 
-      google.setOnLoadCallback(drawChart);
+        google.setOnLoadCallback(drawChart);
 
-      function drawChart() {
-          sensor_id = 1;
+        function drawChart() {
+            sensor_id = 1;
 
-          $.ajax({
+            $.ajax({
                 url: "/Sensor_Log/",
                 data: {
-                    sensor_id : sensor_id,
+                    sensor_id: sensor_id,
                     min_date: $('#from').val() + ' 00:00:00',
                     max_date: $('#to').val() + ' 23:59:59',
                     ordering: "-log_timestamp"
                 },
                 dataType: "json",
-                success:function(data2){
+                success: function (data2) {
                     jsonCallback(data2);
                 },
-                error: function(data){
+                error: function (data) {
                     console.log('error');
                     console.log(data);
                 }
-          });
+            });
 
-      }
-        function jsonCallback(data2){
-            alert(data2.Message);
-            console.log(data2);
-            var data = google.visualization.arrayToDataTable([
-                      ['Year', 'Sales', 'Expenses'],
-                      ['2004',  1000,      400],
-                      ['2005',  1170,      460],
-                      ['2006',  660,       1120],
-                      ['2007',  1030,      540]
-                    ]);
+        }
+        function jsonCallback(json) {
+            console.log(json);
 
-                var options = {
-                  title: 'Soil Moisture'
-                };
+            moisture_array = [];
+            moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
 
-                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-                chart.draw(data, options);
+            $.each(json, function (index, value) {
+                temp_array = [];
+                temp_array.push(value.sensor_date_received);
+                temp_array.push(value.sensor_hl1);
+                temp_array.push(value.sensor_hl2);
+                temp_array.push(value.sensor_hl3);
+                moisture_array.push(temp_array);
+            });
+            
+            var data = google.visualization.arrayToDataTable(moisture_array);
+
+            var options = {
+                title: 'Soil Moisture'
+            };
+
+            var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
         }
     </script>
-  </head>
-  <body>
+</head>
+<body>
 
-    <label for="from">From</label>
-    <input type="text" id="from" name="from" value="2014-06-20">
-    <label for="to">to</label>
-    <input type="text" id="to" name="to" value="2014-06-26">
-    <button onclick="drawChart();">Datos</button>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
-  </body>
+<label for="from">From</label>
+<input type="text" id="from" name="from" value="2014-06-20">
+<label for="to">to</label>
+<input type="text" id="to" name="to" value="2014-06-26">
+<button onclick="drawChart();">Datos</button>
+<div id="chart_div" style="width: 900px; height: 500px;"></div>
+</body>
 </html>

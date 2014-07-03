@@ -1,7 +1,6 @@
 from django.db import models
 
 
-# Create your models here.
 class Crop(models.Model):
     crop_id = models.IntegerField(primary_key=True)
     crop_name = models.CharField(max_length=50)
@@ -54,7 +53,7 @@ class Valve(models.Model):
 
 
 class Valve_Configuration(models.Model):
-    fk_valve = models.ForeignKey('Valve')
+    fk_valve_id = models.ForeignKey('Valve', primary_key=True)
     valve_configuration = models.TextField(max_length=250, null=True, blank=True)
 
 
@@ -98,8 +97,8 @@ class Sensor_Log(models.Model):
     sensor_hl3 = models.FloatField()
     sensor_temperature = models.FloatField()
     sensor_date_received = models.DateTimeField()
-    sensor_user_define1 = models.TextField(max_length=250)
-    sensor_user_define2 = models.TextField(max_length=250)
+    sensor_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    sensor_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
 
 class Valve_Log(models.Model):
@@ -111,8 +110,8 @@ class Valve_Log(models.Model):
     valve_pressure = models.FloatField()
     valve_limit = models.FloatField()
     valve_date_received = models.DateTimeField()
-    valve_user_define1 = models.TextField(max_length=250)
-    valve_user_define2 = models.TextField(max_length=250)
+    valve_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    valve_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
 
 class Crop_Area_Log(models.Model):
@@ -121,8 +120,8 @@ class Crop_Area_Log(models.Model):
     area_id = models.ForeignKey('Crop_Area')
     area_ev = models.FloatField()
     area_date_received = models.DateTimeField()
-    area_user_define1 = models.TextField(max_length=250)
-    area_user_define2 = models.TextField(max_length=250)
+    area_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    area_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
 
 class Weather_Station_Log(models.Model):
@@ -135,8 +134,8 @@ class Weather_Station_Log(models.Model):
     station_wind_speed = models.FloatField()
     station_solar_radiation = models.FloatField()
     station_date_received = models.DateTimeField()
-    station_user_define1 = models.TextField(max_length=250)
-    station_user_define2 = models.TextField(max_length=250)
+    station_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    station_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
 
 class Farm_Field_Log(models.Model):
@@ -148,5 +147,5 @@ class Farm_Field_Log(models.Model):
     field_latitude = models.FloatField()
     field_longitude = models.FloatField()
     field_date_received = models.DateTimeField()
-    field_user_define1 = models.TextField(max_length=250)
-    field_user_define2 = models.TextField(max_length=250)
+    field_user_define1 = models.TextField(max_length=250, null=True, blank=True)
+    field_user_define2 = models.TextField(max_length=250, null=True, blank=True)

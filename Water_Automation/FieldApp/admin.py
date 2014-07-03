@@ -3,7 +3,7 @@ __author__ = 'Enrique Ramirez'
 from django.contrib import admin
 from models import Crop, Crop_Area, Farm_Field, Sensor, Valve, Weather_Station, Valve_Configuration
 
-#TODO: Change the Class name object to id or object name on list
+# TODO: Change the Class name object to id or object name on list
 
 class CropAdmin(admin.ModelAdmin):
     # Configure which parameters to display and configure on the admin screen
@@ -79,6 +79,8 @@ class ValveAdmin(admin.ModelAdmin):
         'valve_name',
         'valve_limit',
         'valve_ideal',
+        'valve_status',
+        'valve_flow',
         'valve_user_define1',
         'valve_user_define2',
         'fk_area',
@@ -102,6 +104,7 @@ class StationAdmin(admin.ModelAdmin):
     list_display = ('station_id', 'station_name', 'fk_farm_field')
 
 
+<<<<<<< HEAD
 class ConfigurationAdmin(admin.ModelAdmin):
     fields = [
         'fk_valve_id',
@@ -109,6 +112,17 @@ class ConfigurationAdmin(admin.ModelAdmin):
     ]
 
     list_display = ('fk_valve_id', 'valve_configuration')
+=======
+class ConfigAdmin(admin.ModelAdmin):
+    fields = [
+
+        'fk_valve',
+        'valve_configuration'
+
+    ]
+
+    list_display = ('fk_valve',)
+>>>>>>> 8bec434f6abae04e571655d914cd27bf35c04b92
 
 # Register all the models for admin
 admin.site.register(Crop, CropAdmin)
@@ -117,4 +131,8 @@ admin.site.register(Farm_Field, FieldAdmin)
 admin.site.register(Sensor, SensorAdmin)
 admin.site.register(Valve, ValveAdmin)
 admin.site.register(Weather_Station, StationAdmin)
+<<<<<<< HEAD
 admin.site.register(Valve_Configuration, ConfigurationAdmin)
+=======
+admin.site.register(Valve_Configuration, ConfigAdmin)
+>>>>>>> 8bec434f6abae04e571655d914cd27bf35c04b92

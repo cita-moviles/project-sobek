@@ -4,6 +4,7 @@
     <title>Valves - Proyect Sobek</title>
     {%  include 'includeScripts.html' %}
     <script>
+        google.load("visualization", "1", {packages: ["corechart"]});
 
         $(function() {
             $( "#from" ).datepicker({
@@ -49,76 +50,45 @@
                     max_date: $('#to').val() + ' 23:59:59'
                 },
                 success:function(data){
-                    time_array =[];
-                    vs_array = [];
-                    vf_array = [];
-                    vp_array = [];
-                    va_array = [];
+
+                    var valve_actuator_array = [['Time', 'Actuator', 'Status']];
+                    var valve_flow_array = [['Time', 'Flow']];
+                    var valve_pressure_array = [['Time', 'Pressure']];
 
                     $.each(data, function( index, value ) {
+                        var temp_array = [];
+                        temp_array.push(value.sensor_date_received);
+                        temp_array.push(value.valve_user_define_1);
+                        temp_array.push(value.valve_status);
+                        valve_actuator_array.push(temp_array);
 
-                        time_array.push(value.log_timestamp);
-                        vs_array.push(value.valve_status);
-                        vf_array.push(value.valve_flow);
-                        vp_array.push(value.valve_pressure);
-                        va_array.push(value.valve_user_define_1);
+                        temp_array = [];
+                        temp_array.push(value.sensor_date_received);
+                        temp_array.push(value.valve_flow);
+                        valve_flow_array.push(temp_array);
+
+                        temp_array = [];
+                        temp_array.push(value.sensor_date_received);
+                        temp_array.push(value.valve_pressure);
+                        valve_pressure_array.push(temp_array);
                     });
 
-                    var vsChart = {
-                        labels : time_array,
-                        datasets : [
-                            {
-                                fillColor : "rgba(204,0,0,0.5)",
-                                strokeColor : "rgba(204,0,0,1)",
-                                pointColor : "rgba(204,0,0,1)",
-                                pointStrokeColor : "#fff",
-                                data : vs_array
-                            }
-                        ]
-                    }
+                    var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
+                    var data_flow = google.visualization.arrayToDataTable(valve_actuator_array);
+                    var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
 
-                    var vfChart = {
-                        labels : time_array,
-                        datasets : [
-                            {
-                                fillColor : "rgba(204,0,0,0.5)",
-                                strokeColor : "rgba(204,0,0,1)",
-                                pointColor : "rgba(204,0,0,1)",
-                                pointStrokeColor : "#fff",
-                                data : vf_array
-                            }
-                        ]
-                    }
+                    var options_actuator = {title: 'Actuator & Status'};
+                    var options_flow = {title: 'Flow'};
+                    var options_pressure = {title: 'Pressure'};
 
-                    var vpChart = {
-                        labels : time_array,
-                        datasets : [
-                            {
-                                fillColor : "rgba(204,0,0,0.5)",
-                                strokeColor : "rgba(204,0,0,1)",
-                                pointColor : "rgba(204,0,0,1)",
-                                pointStrokeColor : "#fff",
-                                data : vp_array
-                            }
-                        ]
-                    }
+                    var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
+                    chart_actuator.draw(data_actuator, options_actuator);
 
-                    var vaChart = {
-                        labels : time_array,
-                        datasets : [
-                            {
-                                fillColor : "rgba(204,0,0,0.5)",
-                                strokeColor : "rgba(204,0,0,1)",
-                                pointColor : "rgba(204,0,0,1)",
-                                pointStrokeColor : "#fff",
-                                data : va_array
-                            }
-                        ]
-                    }
-                    var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Bar(vsChart);
-                    var weather_lineChart2 = new Chart($("#weather_canvas2").get(0).getContext("2d")).Line(vfChart);
-                    var weather_lineChart3 = new Chart($("#weather_canvas3").get(0).getContext("2d")).Line(vpChart);
-                    var actuator_lineChart3 = new Chart($("#valve_actuator_graph").get(0).getContext("2d")).Line(vaChart);
+                    var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
+                    chart_flow.draw(data_flow, options_flow);
+
+                    var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
+                    chart_pressure.draw(data_pressure, options_pressure);
 
                     showTag('graphs');
                 }
@@ -159,14 +129,10 @@
 
     </section>
     <section id="graphs" style="display: none;">
-        <h2>Actuator</h2>
-        <canvas id="valve_actuator_graph" height="250" width="1000"></canvas>
-        <h2>Status</h2>
-        <canvas id="weather_canvas" height="250" width="1000"></canvas>
-        <h2>Flow</h2>
-        <canvas id="weather_canvas2" height="250" width="1000"></canvas>
-        <h2>Pressure</h2>
-        <canvas id="weather_canvas3" height="250" width="1000"></canvas>
+
+        <div id="valve_actuator_graph" height="400" width="1000"></div>
+        <div id="valve_flow_graph" height="400" width="1000"></div>
+        <canvas id="valve_pressure_graph" height="400" width="1000"></canvas>
 
     </section>
 

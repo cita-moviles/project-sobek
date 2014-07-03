@@ -57,18 +57,18 @@
 
                     $.each(data, function( index, value ) {
                         var temp_array = [];
-                        temp_array.push(value.sensor_date_received);
+                        temp_array.push(value.valve_date_received);
                         temp_array.push(parseInt(value.valve_user_define_1));
                         temp_array.push(parseInt(value.valve_status));
                         valve_actuator_array.push(temp_array);
 
                         temp_array = [];
-                        temp_array.push(value.sensor_date_received);
+                        temp_array.push(value.valve_date_received);
                         temp_array.push(value.valve_flow);
                         valve_flow_array.push(temp_array);
 
                         temp_array = [];
-                        temp_array.push(value.sensor_date_received);
+                        temp_array.push(value.valve_date_received);
                         temp_array.push(value.valve_pressure);
                         valve_pressure_array.push(temp_array);
                     });

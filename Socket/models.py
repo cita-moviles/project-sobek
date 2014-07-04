@@ -136,7 +136,8 @@ class Valve:
                 valve_cfg += 'ROK'
                 print "No configuration pending"
             else:
-                valve_cfg += "CFG" + str(self.valve_id).zfill(3) + str(self.valve_user_define2) + "#"
+                #str(self.valve_user_define2)
+                valve_cfg += "CFG" + str(self.valve_id).zfill(4) + str(result2['valve_configuration']) + "#"
                 print "Sending pending configuration"
 
         except urllib2.HTTPError, ex:

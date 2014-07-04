@@ -4,6 +4,7 @@ import json
 import urllib2
 import datetime
 import pytz
+import logging
 
 currentDate = None
 
@@ -104,7 +105,7 @@ class Valve:
         global currentDate
         self.valve_date_received = str(currentDate)
         #self.limit = int(message[21:26])
-
+        self.valve_configuration = self.get_from_server()
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -116,9 +117,32 @@ class Valve:
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'
         print self.to_json()
-        result = urllib2.urlopen(request, self.to_json())
-
+        #result = urllib2.urlopen(request, self.to_json())
         pass
+
+    def get_from_server(self):
+        valve_cfg = ''
+        request = urllib2.Request("http://riego.chi.itesm.mx/Valve_Configuration/" + str(self.valve_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'GET'
+
+        try:
+            result = urllib2.urlopen(request)
+            result2 = json.load(result)
+            print result2['valve_configuration']
+            print self.valve_user_define2
+            if result2['valve_configuration'] == self.valve_user_define2:
+                valve_cfg += 'ROK'
+                print "No configuration pending"
+            else:
+                valve_cfg += "CFG" + self.valve_id.zfill(3) +  str(self.valve_user_define2) + "#"
+                print "Sending pending configuration"
+
+        except urllib2.HTTPError, ex:
+            #logging.exception("Something awful happened!")
+            print('Valve configuration not found ' + str(self.valve_id))
+        return valve_cfg
 
 
 class Crop_Area:
@@ -146,7 +170,7 @@ class Crop_Area:
                 self.area_user_define2 = ' '
             else:
                 self.area_user_define2 = message[comma + 1: terminator]
-        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
+        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/" + str(int(message[3:5])) + "/"
         self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
         global currentDate
         self.area_date_received = str(currentDate)
@@ -282,12 +306,14 @@ class MessageProcessor:
     @staticmethod
     def process_message(message):
         global currentDate
+
         if currentDate is None:
             instanciate_date()
 
         print currentDate
-
+        valve_configuration = "ROK"
         msglist = message.split('#')
+
         for msg in msglist:
             try:
                 print("------" + msg + "-------")
@@ -304,6 +330,7 @@ class MessageProcessor:
                     valve = Valve(msg + "#")
                     #print valve.to_json()
                     valve.upload_to_server()
+                    valve_configuration = valve.valve_configuration
 
                 elif msg[1:3] == "30":
                     area = Crop_Area(msg + "#")
@@ -326,5 +353,8 @@ class MessageProcessor:
             except ValueError:
                 print('Non-numeric data: ' + msg)
 
-            except:
+            except Exception, ex:
+                logging.exception("Something awful happened!")
                 print('Unexpected error: ' + msg)
+
+        return valve_configuration

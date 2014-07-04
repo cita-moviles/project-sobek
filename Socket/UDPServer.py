@@ -27,10 +27,12 @@ def sobek_server(address):
 
         print('Got message from', addr)
 
-        sock.sendto('ROK', addr)
-
         FileWriter.writeToFile(msg)
-        MessageProcessor.process_message(msg)
+        return_value = MessageProcessor.process_message(msg)
+
+        print return_value
+
+        sock.sendto(return_value, addr)
 
 
 if __name__ == '__main__':

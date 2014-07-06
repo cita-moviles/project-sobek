@@ -60,7 +60,7 @@ class Valve_Configuration(models.Model):
 class Weather_Station(models.Model):
     station_id = models.IntegerField(primary_key=True)
     station_name = models.CharField(max_length=50)
-    station_status = models.SmallIntegerField(max_length=2)
+    station_status = models.SmallIntegerField(max_length=2, default=0)
     station_relative_humidity = models.FloatField(null=True, blank=True)
     station_temperature = models.FloatField(null=True, blank=True)
     station_wind_speed = models.FloatField(null=True, blank=True)

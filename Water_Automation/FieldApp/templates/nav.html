@@ -1,8 +1,25 @@
-<nav>
-    <a href="index.html" class="stylizedButton">Home</a> -
-    <a href="sensor.html" class="stylizedButton">Sensors</a> -
-    <a href="valve.html" class="stylizedButton">Valves</a> -
-    <a href="area.html" class="stylizedButton">Areas</a> -
-    <a href="station.html" class="stylizedButton">Weather Stations</a> -
-    <a href="configuration.html" class="stylizedButton">Valve Configuration</a>
+{#<ul class="top-bar">#}
+{#  <li class="active"><a href="#">Nav Item 1</a></li>#}
+
+
+<nav class="top-bar sticky" data-topbar data-options="sticky_on: large">
+    <ul class="title-area">
+        <li class="name">
+            <h1><a href="#">Water Automation System</a></h1>
+        </li>
+        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+    </ul>
+
+    <section class="top-bar-section">
+        <!-- Left Nav Section -->
+        <ul class="left">
+            <li><a href="index.html" class="stylizedButton">Home</a></li>
+            <li><a href="sensor.html" class="stylizedButton">Sensors</a></li>
+            <li><a href="valve.html" class="stylizedButton">Valves</a></li>
+            <li><a href="area.html" class="stylizedButton">Areas</a></li>
+            <li><a href="station.html" class="stylizedButton">Weather Stations</a></li>
+            <li><a href="configuration.html" class="stylizedButton">Valve Configuration</a></li>
+        </ul>
+    </section>
 </nav>

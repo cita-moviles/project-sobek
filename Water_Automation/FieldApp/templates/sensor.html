@@ -2,110 +2,20 @@
 <html>
 <head>
     <title>Sensors - Proyect Sobek</title>
-    {%  include 'includeScripts.html' %}
-    <script>
-        google.load("visualization", "1", {packages: ["corechart"]});
-
-        $(function() {
-            $( "#from" ).datepicker({
-                dateFormat: 'yy-mm-dd',
-                defaultDate: "-2w",
-                maxDate: "0",
-                changeMonth: true,
-                numberOfMonths: 3,
-                onClose: function( selectedDate ) {
-                    $( "#to" ).datepicker( "option", "minDate", selectedDate );
-                }
-            });
-            $( "#to" ).datepicker({
-                dateFormat: 'yy-mm-dd',
-                defaultDate: "0",
-                maxDate: "0",
-                changeMonth: true,
-                numberOfMonths: 3,
-                onClose: function( selectedDate ) {
-                    $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-                }
-            });
-
-            getFields('field', 'area', 'sensor');
-        });
-
-        function getSensorGraph(time){
-            $('#to').datepicker( "setDate", "Today");
-            $('#from').datepicker( "setDate", -time);
-            getSensorsLog();
-        }
-
-        function getSensorsLog(){
-
-            sensor_id = $('#sensor').val() ;
-            if (sensor_id === null){
-                hideTag('graphs');
-                alert('No sensor has been selected');
-                return;
-            }
-            if ( ( $('#from').val() === "") || ( $('#to').val() === "" ) ){
-                alert('You must select a date Range to proceed');
-                return;
-            }
-
-            $.ajax({
-                url: "/Sensor_Log/",
-                data: {
-                    sensor_id : sensor_id,
-                    min_date: $('#from').val() + ' 00:00:00',
-                    max_date: $('#to').val() + ' 23:59:59',
-                    ordering: "-log_timestamp"
-                },
-                success:function(data){
-
-                    moisture_array = [];
-                    moisture_array.push (['Time', 'HL1', 'HL2', 'HL3']);
-
-                    temperature_array = [];
-                    temperature_array.push (['Time', 'Temperature']);
-
-                    $.each(data, function( index, value ) {
-                        temp_array = [];
-                        temp_array.push(value.sensor_date_received);
-                        temp_array.push(value.sensor_hl1);
-                        temp_array.push(value.sensor_hl2);
-                        temp_array.push(value.sensor_hl3);
-                        moisture_array.push(temp_array);
-
-                        temp_array2 = [];
-                        temp_array2.push(value.sensor_date_received);
-                        temp_array2.push(value.sensor_temperature);
-                        temperature_array.push(temp_array2);
-                    });
-
-                    var data_moisture = google.visualization.arrayToDataTable(moisture_array);
-                    var data_temperature = google.visualization.arrayToDataTable(temperature_array);
-
-                    var options_moisture = {title: 'Soil Moisture'};
-                    var options_temperature = {title: 'Temperature'};
-
-
-                    var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
-                    var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));
-
-                    chart_moisture.draw(data_moisture, options_moisture);
-                    chart_temperature.draw(data_temperature, options_temperature);
-
-                    showTag('graphs');
-                }
-            });
-        }
-
-    </script>
+    {% include 'includeScripts.html' %}
 </head>
 <body>
 
-    {%  include 'nav.html' %}
+{% include 'nav.html' %}
 
-    <section>
+<div class="row">
+    <div class="medium-12 columns">
         <h1>Sensors</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="medium-6 card">
         <p>
             Select the Sensor you wish to graph:
         </p>
@@ -115,6 +25,7 @@
         <select id="area" onchange="getSensors('sensor', 'area');"></select>
         <label>Sensor</label>
         <select id="sensor"></select>
+
         <p>Select the range of dates you wish to graph:</p>
 
         <label for="from">From</label>
@@ -128,15 +39,115 @@
         <button onclick="getSensorGraph(30);">30</button>
         <button onclick="getSensorsLog();">Graph</button>
         <button onclick="hideTag('graphs');">Clean</button>
+    </div>
 
-    </section>
-    <section id="graphs" style="display: none;">
-        <div id="moisture_chart" height="400" width="1000"></div>
-        <div id="temperature_chart" height="400" width="1000"></div>
+    <div class="medium-6 card">
+        <section id="graphs">
+            <div id="moisture_chart" height="400" width="1000"></div>
+            <div id="temperature_chart" height="400" width="1000"></div>
 
-    </section>
+        </section>
+    </div>
 
-    {%  include 'footer' %}
+</div>
 
+{% include 'footer.html' %}
+
+<script>
+    google.load("visualization", "1", {packages: ["corechart"]});
+
+    $(function () {
+        $("#from").datepicker({
+            dateFormat: 'yy-mm-dd',
+            defaultDate: "-2w",
+            maxDate: "0",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function (selectedDate) {
+                $("#to").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#to").datepicker({
+            dateFormat: 'yy-mm-dd',
+            defaultDate: "0",
+            maxDate: "0",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function (selectedDate) {
+                $("#from").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+
+        getFields('field', 'area', 'sensor');
+    });
+
+    function getSensorGraph(time) {
+        $('#to').datepicker("setDate", "Today");
+        $('#from').datepicker("setDate", -time);
+        getSensorsLog();
+    }
+
+    function getSensorsLog() {
+
+        sensor_id = $('#sensor').val();
+        if (sensor_id === null) {
+            hideTag('graphs');
+            alert('No sensor has been selected');
+            return;
+        }
+        if (( $('#from').val() === "") || ( $('#to').val() === "" )) {
+            alert('You must select a date Range to proceed');
+            return;
+        }
+
+        $.ajax({
+            url: "/Sensor_Log/",
+            data: {
+                sensor_id: sensor_id,
+                min_date: $('#from').val() + ' 00:00:00',
+                max_date: $('#to').val() + ' 23:59:59',
+                ordering: "-log_timestamp"
+            },
+            success: function (data) {
+
+                moisture_array = [];
+                moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
+
+                temperature_array = [];
+                temperature_array.push(['Time', 'Temperature']);
+
+                $.each(data, function (index, value) {
+                    temp_array = [];
+                    temp_array.push(value.sensor_date_received);
+                    temp_array.push(value.sensor_hl1);
+                    temp_array.push(value.sensor_hl2);
+                    temp_array.push(value.sensor_hl3);
+                    moisture_array.push(temp_array);
+
+                    temp_array2 = [];
+                    temp_array2.push(value.sensor_date_received);
+                    temp_array2.push(value.sensor_temperature);
+                    temperature_array.push(temp_array2);
+                });
+
+                var data_moisture = google.visualization.arrayToDataTable(moisture_array);
+                var data_temperature = google.visualization.arrayToDataTable(temperature_array);
+
+                var options_moisture = {title: 'Soil Moisture'};
+                var options_temperature = {title: 'Temperature'};
+
+
+                var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
+                var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));
+
+                chart_moisture.draw(data_moisture, options_moisture);
+                chart_temperature.draw(data_temperature, options_temperature);
+
+                showTag('graphs');
+            }
+        });
+    }
+
+</script>
 </body>
 </html>

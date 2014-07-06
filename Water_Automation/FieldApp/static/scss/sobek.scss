@@ -1,0 +1,31 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300);
+@import "foundation/settings";
+@import "colors";
+@import "foundation";
+
+$font_family: Roboto;
+$app_background: #f8f8f8;
+$nav_background: #009688;
+$font_condensed: 'Roboto Condensed', sans-serif;
+
+h1, h2, h3 {
+
+  font-family: $font_condensed;
+
+}
+
+.card {
+  background: #FFF center center no-repeat;
+  border-radius: 3px;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
+  padding: 1em;
+  h2 {
+
+    color: $light_blue_700;
+
+  }
+  li {
+    color: $grey_900;
+  }
+}
+

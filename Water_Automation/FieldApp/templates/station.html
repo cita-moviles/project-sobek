@@ -2,132 +2,19 @@
 <html>
 <head>
     <title>Stations - Proyect Sobek</title>
-    {%  include 'includeScripts.html' %}
-
-    <script>
-
-        $(function() {
-            $( "#from" ).datepicker({
-                dateFormat: 'yy-mm-dd',
-                defaultDate: "-2w",
-                maxDate: "0",
-                changeMonth: true,
-                numberOfMonths: 3,
-                onClose: function( selectedDate ) {
-                    $( "#to" ).datepicker( "option", "minDate", selectedDate );
-                }
-            });
-            $( "#to" ).datepicker({
-                dateFormat: 'yy-mm-dd',
-                defaultDate: "0",
-                maxDate: "0",
-                changeMonth: true,
-                numberOfMonths: 3,
-                onClose: function( selectedDate ) {
-                    $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-                }
-            });
-            getFields('field');
-            getStations('station');
-        });
-
-        function getStationLog(){
-            if ( ( $('#from').val() === "") || ( $('#to').val() === "" ) ){
-                alert('You must select a date Range to proceed');
-                return;
-            }
-            $.ajax({
-                url: "/Station_Log/",
-                data: {
-                    station_id : $('#station').val(),
-                    min_date: $('#from').val() + ' 00:00:00',
-                    max_date: $('#to').val() + ' 23:59:59'
-                },
-                success:function(data){
-                    time_array =[];
-                    rh_array = [];
-                    temperature_array = [];
-                    ws_array = [];
-                    sr_array = [];
-
-                    $.each(data, function( index, value ) {
-
-                        time_array.push(value.log_timestamp);
-                        rh_array.push(value.station_relative_humidity);
-                        temperature_array.push(value.station_temperature);
-                        ws_array.push(value.station_wind_speed);
-                        sr_array.push(value.station_solar_radiation);
-                    });
-
-                    var rhChart = {
-                        labels : time_array,
-                        datasets : [
-                            {
-                                fillColor : "rgba(204,0,0,0.5)",
-                                strokeColor : "rgba(204,0,0,1)",
-                                pointColor : "rgba(204,0,0,1)",
-                                pointStrokeColor : "#fff",
-                                data : rh_array
-                            }
-                        ]
-                    }
-
-                    var tempChart = {
-                        labels : time_array,
-                        datasets : [
-                            {
-                                fillColor : "rgba(204,0,0,0.5)",
-                                strokeColor : "rgba(204,0,0,1)",
-                                pointColor : "rgba(204,0,0,1)",
-                                pointStrokeColor : "#fff",
-                                data : temperature_array
-                            }
-                        ]
-                    }
-
-                    var wsChart = {
-                        labels : time_array,
-                        datasets : [
-                            {
-                                fillColor : "rgba(204,0,0,0.5)",
-                                strokeColor : "rgba(204,0,0,1)",
-                                pointColor : "rgba(204,0,0,1)",
-                                pointStrokeColor : "#fff",
-                                data : ws_array
-                            }
-                        ]
-                    }
-
-                    var srChart = {
-                        labels : time_array,
-                        datasets : [
-                            {
-                                fillColor : "rgba(204,0,0,0.5)",
-                                strokeColor : "rgba(204,0,0,1)",
-                                pointColor : "rgba(204,0,0,1)",
-                                pointStrokeColor : "#fff",
-                                data : sr_array
-                            }
-                        ]
-                    }
-
-                    var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Line(rhChart);
-                    var weather_lineChart2 = new Chart($("#weather_canvas2").get(0).getContext("2d")).Line(tempChart);
-                    var weather_lineChart3 = new Chart($("#weather_canvas3").get(0).getContext("2d")).Line(wsChart);
-                    var weather_lineChart4 = new Chart($("#weather_canvas4").get(0).getContext("2d")).Line(srChart);
-
-                    $('#graphs').css('display','block');
-                }
-            });
-        }
-    </script>
+    {% include 'includeScripts.html' %}
 </head>
 <body>
 
-    {%  include 'nav.html' %}
+{% include 'nav.html' %}
 
-    <section>
+<div class="row">
+    <div class="medium-12 columns">
         <h1>Weather Stations</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="medium-6 card">
         <p>
             Select the Weather Station you wish to graph:
         </p>
@@ -135,6 +22,7 @@
         <select id="field" onchange="getAreas('area', 'field');"></select>
         <label>Weather Station</label>
         <select id="station"></select>
+
         <p>Select the range of dates you wish to graph:</p>
 
         <label for="from">From</label>
@@ -144,21 +32,139 @@
 
         <button onclick="getStationLog();">Graph</button>
         <button onclick="hideTag('graphs');">Clean</button>
-    </section>
+    </div>
+    <div class="medium-6 card">
+        <section id="graphs" style="display:none;">
+            <h2>Relative Humidity</h2>
+            <canvas id="weather_canvas" height="250" width="1000"></canvas>
+            <h2>Temperature</h2>
+            <canvas id="weather_canvas2" height="250" width="1000"></canvas>
+            <h2>Wind Speed</h2>
+            <canvas id="weather_canvas3" height="250" width="1000"></canvas>
+            <h2>Solar Radiation</h2>
+            <canvas id="weather_canvas4" height="250" width="1000"></canvas>
 
-    <section id="graphs" style="display:none;">
-        <h2>Relative Humidity</h2>
-        <canvas id="weather_canvas" height="250" width="1000"></canvas>
-        <h2>Temperature</h2>
-        <canvas id="weather_canvas2" height="250" width="1000"></canvas>
-        <h2>Wind Speed</h2>
-        <canvas id="weather_canvas3" height="250" width="1000"></canvas>
-        <h2>Solar Radiation</h2>
-        <canvas id="weather_canvas4" height="250" width="1000"></canvas>
+        </section>
+    </div>
+</div>
+{% include 'footer.html' %}
 
-    </section>
+<script>
 
-    {%  include 'footer' %}
+    $(function () {
+        $("#from").datepicker({
+            dateFormat: 'yy-mm-dd',
+            defaultDate: "-2w",
+            maxDate: "0",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function (selectedDate) {
+                $("#to").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#to").datepicker({
+            dateFormat: 'yy-mm-dd',
+            defaultDate: "0",
+            maxDate: "0",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function (selectedDate) {
+                $("#from").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+        getFields('field');
+        getStations('station');
+    });
 
+    function getStationLog() {
+        if (( $('#from').val() === "") || ( $('#to').val() === "" )) {
+            alert('You must select a date Range to proceed');
+            return;
+        }
+        $.ajax({
+            url: "/Station_Log/",
+            data: {
+                station_id: $('#station').val(),
+                min_date: $('#from').val() + ' 00:00:00',
+                max_date: $('#to').val() + ' 23:59:59'
+            },
+            success: function (data) {
+                time_array = [];
+                rh_array = [];
+                temperature_array = [];
+                ws_array = [];
+                sr_array = [];
+
+                $.each(data, function (index, value) {
+
+                    time_array.push(value.log_timestamp);
+                    rh_array.push(value.station_relative_humidity);
+                    temperature_array.push(value.station_temperature);
+                    ws_array.push(value.station_wind_speed);
+                    sr_array.push(value.station_solar_radiation);
+                });
+
+                var rhChart = {
+                    labels: time_array,
+                    datasets: [
+                        {
+                            fillColor: "rgba(204,0,0,0.5)",
+                            strokeColor: "rgba(204,0,0,1)",
+                            pointColor: "rgba(204,0,0,1)",
+                            pointStrokeColor: "#fff",
+                            data: rh_array
+                        }
+                    ]
+                }
+
+                var tempChart = {
+                    labels: time_array,
+                    datasets: [
+                        {
+                            fillColor: "rgba(204,0,0,0.5)",
+                            strokeColor: "rgba(204,0,0,1)",
+                            pointColor: "rgba(204,0,0,1)",
+                            pointStrokeColor: "#fff",
+                            data: temperature_array
+                        }
+                    ]
+                }
+
+                var wsChart = {
+                    labels: time_array,
+                    datasets: [
+                        {
+                            fillColor: "rgba(204,0,0,0.5)",
+                            strokeColor: "rgba(204,0,0,1)",
+                            pointColor: "rgba(204,0,0,1)",
+                            pointStrokeColor: "#fff",
+                            data: ws_array
+                        }
+                    ]
+                }
+
+                var srChart = {
+                    labels: time_array,
+                    datasets: [
+                        {
+                            fillColor: "rgba(204,0,0,0.5)",
+                            strokeColor: "rgba(204,0,0,1)",
+                            pointColor: "rgba(204,0,0,1)",
+                            pointStrokeColor: "#fff",
+                            data: sr_array
+                        }
+                    ]
+                }
+
+                var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Line(rhChart);
+                var weather_lineChart2 = new Chart($("#weather_canvas2").get(0).getContext("2d")).Line(tempChart);
+                var weather_lineChart3 = new Chart($("#weather_canvas3").get(0).getContext("2d")).Line(wsChart);
+                var weather_lineChart4 = new Chart($("#weather_canvas4").get(0).getContext("2d")).Line(srChart);
+
+                $('#graphs').css('display', 'block');
+            }
+        });
+    }
+</script>
 </body>
 </html>

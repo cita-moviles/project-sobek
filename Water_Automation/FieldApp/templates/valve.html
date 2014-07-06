@@ -2,132 +2,46 @@
 <html>
 <head>
     <title>Valves - Proyect Sobek</title>
-    {%  include 'includeScripts.html' %}
-    <script>
-        google.load("visualization", "1", {packages: ["corechart"]});
-
-        $(function() {
-            $( "#from" ).datepicker({
-                dateFormat: 'yy-mm-dd',
-                defaultDate: "-2w",
-                maxDate: "0",
-                changeMonth: true,
-                numberOfMonths: 3,
-                onClose: function( selectedDate ) {
-                    $( "#to" ).datepicker( "option", "minDate", selectedDate );
-                }
-            });
-            $( "#to" ).datepicker({
-                dateFormat: 'yy-mm-dd',
-                defaultDate: "0",
-                maxDate: "0",
-                changeMonth: true,
-                numberOfMonths: 3,
-                onClose: function( selectedDate ) {
-                    $( "#from" ).datepicker( "option", "maxDate", selectedDate );
-                }
-            });
-
-            getFields('field', 'area', 'valve');
-        });
-
-        function getValveGraph(time){
-            $('#to').datepicker( "setDate", "Today");
-            $('#from').datepicker( "setDate", -time);
-            getValveLog();
-        }
-
-        function getValveLog(){
-            if ( ( $('#from').val() === "") || ( $('#to').val() === "" ) ){
-                alert('You must select a date Range to proceed');
-                return;
-            }
-            $.ajax({
-                url: "/Valve_Log/",
-                data: {
-                    valve_id : $('#valve').val(),
-                    min_date: $('#from').val() + ' 00:00:00',
-                    max_date: $('#to').val() + ' 23:59:59'
-                },
-                success:function(data){
-
-                    var valve_actuator_array = [['Time', 'Actuator', 'Status']];
-                    var valve_flow_array = [['Time', 'Flow']];
-                    var valve_pressure_array = [['Time', 'Pressure']];
-
-                    $.each(data, function( index, value ) {
-                        var temp_array = [];
-                        temp_array.push(value.valve_date_received);
-                        temp_array.push(parseInt(value.valve_user_define_1));
-                        temp_array.push(parseInt(value.valve_status));
-                        valve_actuator_array.push(temp_array);
-
-                        temp_array = [];
-                        temp_array.push(value.valve_date_received);
-                        temp_array.push(value.valve_flow);
-                        valve_flow_array.push(temp_array);
-
-                        temp_array = [];
-                        temp_array.push(value.valve_date_received);
-                        temp_array.push(value.valve_pressure);
-                        valve_pressure_array.push(temp_array);
-                    });
-
-                    var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
-                    var data_flow = google.visualization.arrayToDataTable(valve_actuator_array);
-                    var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
-
-                    var options_actuator = {title: 'Actuator & Status'};
-                    var options_flow = {title: 'Flow'};
-                    var options_pressure = {title: 'Pressure'};
-
-                    var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
-                    chart_actuator.draw(data_actuator, options_actuator);
-
-                    var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
-                    chart_flow.draw(data_flow, options_flow);
-
-                    var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
-                    chart_pressure.draw(data_pressure, options_pressure);
-
-                    showTag('graphs');
-                }
-            });
-        }
-
-    </script>
+    {% include 'includeScripts.html' %}
 </head>
 <body>
 
-    {%  include 'nav.html' %}
+{% include 'nav.html' %}
 
-    <section>
+<div class="row">
+    <div class="medium-12 columns">
         <h1>Valves</h1>
-        <p>
-            Select the valve you wish to graph:
-        </p>
-        <label>Field</label>
-        <select id="field" onchange="getAreas('area', 'field');"></select>
-        <label>Area</label>
-        <select id="area" onchange="getValves('valve', 'area');"></select>
-        <label>Valve</label>
-        <select id="valve"></select>
-        <p>Select the range of dates you wish to graph:</p>
+    </div>
+</div>
+<div class="row">
+    <div class="medium-6 card"
+    <p>
+        Select the valve you wish to graph:
+    </p>
+    <label>Field</label>
+    <select id="field" onchange="getAreas('area', 'field');"></select>
+    <label>Area</label>
+    <select id="area" onchange="getValves('valve', 'area');"></select>
+    <label>Valve</label>
+    <select id="valve"></select>
 
-        <label for="from">From</label>
-        <input type="text" id="from" name="from">
-        <label for="to">to</label>
-        <input type="text" id="to" name="to">
+    <p>Select the range of dates you wish to graph:</p>
+
+    <label for="from">From</label>
+    <input type="text" id="from" name="from">
+    <label for="to">to</label>
+    <input type="text" id="to" name="to">
 
 
-        <button onclick="getValveGraph(1);">24h</button>
-        <button onclick="getValveGraph(7);">7</button>
-        <button onclick="getValveGraph(15);">15</button>
-        <button onclick="getValveGraph(30);">30</button>
-        <button onclick="getValveLog();">Graph</button>
-        <button onclick="hideTag('graphs');">Clean</button>
+    <button onclick="getValveGraph(1);">24h</button>
+    <button onclick="getValveGraph(7);">7</button>
+    <button onclick="getValveGraph(15);">15</button>
+    <button onclick="getValveGraph(30);">30</button>
+    <button onclick="getValveLog();">Graph</button>
+    <button onclick="hideTag('graphs');">Clean</button>
+</div>
 
-    </section>
+<div class="medium-6 card">
     <section id="graphs" style="display: none;">
 
         <div id="valve_actuator_graph" height="400" width="1000"></div>
@@ -135,8 +49,109 @@
         <div id="valve_pressure_graph" height="400" width="1000"></div>
 
     </section>
+    
+</div>
+</div>
+{% include 'footer.html' %}
 
-    {%  include 'footer' %}
+<script>
+    google.load("visualization", "1", {packages: ["corechart"]});
 
+    $(function () {
+        $("#from").datepicker({
+            dateFormat: 'yy-mm-dd',
+            defaultDate: "-2w",
+            maxDate: "0",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function (selectedDate) {
+                $("#to").datepicker("option", "minDate", selectedDate);
+            }
+        });
+        $("#to").datepicker({
+            dateFormat: 'yy-mm-dd',
+            defaultDate: "0",
+            maxDate: "0",
+            changeMonth: true,
+            numberOfMonths: 3,
+            onClose: function (selectedDate) {
+                $("#from").datepicker("option", "maxDate", selectedDate);
+            }
+        });
+
+        getFields('field', 'area', 'valve');
+    });
+
+    function getValveGraph(time) {
+        $('#to').datepicker("setDate", "Today");
+        $('#from').datepicker("setDate", -time);
+        getValveLog();
+    }
+
+    function getValveLog() {
+        if (( $('#from').val() === "") || ( $('#to').val() === "" )) {
+            alert('You must select a date Range to proceed');
+            return;
+        }
+        $.ajax({
+            url: "/Valve_Log/",
+            data: {
+                valve_id: $('#valve').val(),
+                min_date: $('#from').val() + ' 00:00:00',
+                max_date: $('#to').val() + ' 23:59:59'
+            },
+            success: function (data) {
+
+                var valve_actuator_array = [
+                    ['Time', 'Actuator', 'Status']
+                ];
+                var valve_flow_array = [
+                    ['Time', 'Flow']
+                ];
+                var valve_pressure_array = [
+                    ['Time', 'Pressure']
+                ];
+
+                $.each(data, function (index, value) {
+                    var temp_array = [];
+                    temp_array.push(value.valve_date_received);
+                    temp_array.push(parseInt(value.valve_user_define_1));
+                    temp_array.push(parseInt(value.valve_status));
+                    valve_actuator_array.push(temp_array);
+
+                    temp_array = [];
+                    temp_array.push(value.valve_date_received);
+                    temp_array.push(value.valve_flow);
+                    valve_flow_array.push(temp_array);
+
+                    temp_array = [];
+                    temp_array.push(value.valve_date_received);
+                    temp_array.push(value.valve_pressure);
+                    valve_pressure_array.push(temp_array);
+                });
+
+                var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
+                var data_flow = google.visualization.arrayToDataTable(valve_actuator_array);
+                var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
+
+                var options_actuator = {title: 'Actuator & Status'};
+                var options_flow = {title: 'Flow'};
+                var options_pressure = {title: 'Pressure'};
+
+                var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
+                chart_actuator.draw(data_actuator, options_actuator);
+
+                var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
+                chart_flow.draw(data_flow, options_flow);
+
+                var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
+                chart_pressure.draw(data_pressure, options_pressure);
+
+                showTag('graphs');
+            }
+        });
+    }
+
+</script>
 </body>
 </html>

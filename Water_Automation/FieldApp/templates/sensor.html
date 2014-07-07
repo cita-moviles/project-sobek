@@ -80,11 +80,12 @@
 
         console.log(init_date);
         console.log(end_date);
+        var sensor_id = $('#sensor').val();
 
         $.ajax({
             url: "/Sensor_Log/",
             data: {
-                sensor_id: '0',
+                sensor_id: sensor_id,
                 min_date: init_date,
                 max_date: end_date,
                 ordering: "-log_timestamp"
@@ -96,6 +97,41 @@
             },
             error: function (data) {
                 console.log(data);
+                var moisture_array = [];
+                moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
+
+                var temperature_array = [];
+                temperature_array.push(['Time', 'Temperature']);
+
+                $.each(data, function (index, value) {
+                    var temp_array = [];
+                    temp_array.push(value.sensor_date_received);
+                    temp_array.push(value.sensor_hl1);
+                    temp_array.push(value.sensor_hl2);
+                    temp_array.push(value.sensor_hl3);
+                    moisture_array.push(temp_array);
+
+                    var temp_array2 = [];
+                    temp_array2.push(value.sensor_date_received);
+                    temp_array2.push(value.sensor_temperature);
+                    temperature_array.push(temp_array2);
+                });
+
+                var data_moisture = google.visualization.arrayToDataTable(moisture_array);
+                var data_temperature = google.visualization.arrayToDataTable(temperature_array);
+
+                var options_moisture = {title: 'Soil Moisture'};
+                var options_temperature = {title: 'Temperature'};
+
+
+                var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
+                var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));
+
+                chart_moisture.draw(data_moisture, options_moisture);
+                chart_temperature.draw(data_temperature, options_temperature);
+
+                showTag('graphs');
+
             }
         });
 

@@ -16,9 +16,9 @@
 
 <div class="row">
     <div class="medium-5 card left">
-        <p>
+        <h3>
             Select the Sensor you wish to graph:
-        </p>
+        </h3>
         <label>Field</label>
         <select id="field" onchange="getAreas('area', 'field');"></select>
         <label>Area</label>
@@ -35,20 +35,17 @@
         {#        <input type="text" id="to" name="to">#}
         <input id="to_datetimepicker" type="text"/>
 
-        <button>24h</button>
-        <button>7</button>
-        <button>15</button>
-        <button>30</button>
-        <button onclick="getSensorsLog();">Graph</button>
+        <button onclick="quick_date(1)" value="24 hours"></button>
+        <button onclick="quick_date(2)" value="7 days"></button>
+        <button onclick="quick_date(3)" value="15 days"></button>
+        <button onclick="quick_date(4)" value="30 days"></button>
+        <button onclick="graphLogs();">Graph</button>
         <button onclick="hideTag('graphs');">Clean</button>
     </div>
 
-    <div class="medium-1">
 
-    </div>
-
-    <div class="medium-5 card right">
-        <p>Hello world</p>
+    <div class="medium-6 card right">
+        <h3>Graphs</h3>
         <section id="graphs">
             <div id="moisture_chart" height="400" width="1000"></div>
             <br/>
@@ -58,9 +55,12 @@
     </div>
 
 </div>
-
+<br/>
+<br/>
+<br/>
 {% include 'footer.html' %}
 <script>
+
     google.load("visualization", "1", {packages: ["corechart"]});
     getFields('field', 'area', 'sensor');
     var init_date;
@@ -81,8 +81,15 @@
         }
     });
 
+    function quick_date(option) {
 
-    function getSensorsLog() {
+        var current_date = new Date();
+        console.log(current_date);
+
+    }
+
+
+    function graphLogs() {
 
         console.log(init_date);
         console.log(end_date);

@@ -1,6 +1,7 @@
 /**
  * Created by luishoracio on 24/01/14.
  */
+
 function navigate(adress){
     window.location.replace(adress);
 }

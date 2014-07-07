@@ -35,11 +35,15 @@
         <section id="graphs" style="display: none;">
             <h2>Evotranspiration</h2>
             <canvas id="weather_canvas" height="250" width="1000"></canvas>
+
+        </section>
     </div>
 </div>
 {% include 'footer.html' %}
 
 <script>
+
+    getFields('field');
     $(function () {
         $("#from").datepicker({
             dateFormat: 'yy-mm-dd',
@@ -62,7 +66,7 @@
             }
         });
 
-        getFields('field');
+
     });
 
 

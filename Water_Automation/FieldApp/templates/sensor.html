@@ -29,14 +29,16 @@
         <p>Select the range of dates you wish to graph:</p>
 
         <label for="from">From</label>
-        <input type="text" id="from" name="from">
+        {#        <input type="text" id="from" name="from">#}
+        <input id="from_datetimepicker" type="text"/>
         <label for="to">to</label>
-        <input type="text" id="to" name="to">
+        {#        <input type="text" id="to" name="to">#}
+        <input id="to_datetimepicker" type="text"/>
 
-        <button onclick="getSensorGraph(1);">24h</button>
-        <button onclick="getSensorGraph(7);">7</button>
-        <button onclick="getSensorGraph(15);">15</button>
-        <button onclick="getSensorGraph(30);">30</button>
+        <button>24h</button>
+        <button>7</button>
+        <button>15</button>
+        <button>30</button>
         <button onclick="getSensorsLog();">Graph</button>
         <button onclick="hideTag('graphs');">Clean</button>
     </div>
@@ -52,100 +54,52 @@
 </div>
 
 {% include 'footer.html' %}
-
 <script>
     google.load("visualization", "1", {packages: ["corechart"]});
+    getFields('field', 'area', 'sensor');
+    var init_date;
+    var end_date;
+    var from = jQuery('#from_datetimepicker').datetimepicker({
 
-    $(function () {
-        $("#from").datepicker({
-            dateFormat: 'yy-mm-dd',
-            defaultDate: "-2w",
-            maxDate: "0",
-            changeMonth: true,
-            numberOfMonths: 3,
-            onClose: function (selectedDate) {
-                $("#to").datepicker("option", "minDate", selectedDate);
-            }
-        });
-        $("#to").datepicker({
-            dateFormat: 'yy-mm-dd',
-            defaultDate: "0",
-            maxDate: "0",
-            changeMonth: true,
-            numberOfMonths: 3,
-            onClose: function (selectedDate) {
-                $("#from").datepicker("option", "maxDate", selectedDate);
-            }
-        });
+        closeOnDateSelect: true,
+        onSelectDate: function (current_time, $input) {
+            init_date = current_time.dateFormat('Y-m-d H:i:s');
+        }
 
-        getFields('field', 'area', 'sensor');
+    });
+    var to = jQuery('#to_datetimepicker').datetimepicker({
+        closeOnDateSelect: true,
+        onSelectDate: function (current_time, $input) {
+            end_date = current_time.dateFormat('Y-m-d H:i:s');
+
+        }
     });
 
-    function getSensorGraph(time) {
-        $('#to').datepicker("setDate", "Today");
-        $('#from').datepicker("setDate", -time);
-        getSensorsLog();
-    }
 
     function getSensorsLog() {
 
-        sensor_id = $('#sensor').val();
-        if (sensor_id === null) {
-            hideTag('graphs');
-            alert('No sensor has been selected');
-            return;
-        }
-        if (( $('#from').val() === "") || ( $('#to').val() === "" )) {
-            alert('You must select a date Range to proceed');
-            return;
-        }
+        console.log(init_date);
+        console.log(end_date);
 
         $.ajax({
             url: "/Sensor_Log/",
             data: {
-                sensor_id: sensor_id,
-                min_date: $('#from').val() + ' 00:00:00',
-                max_date: $('#to').val() + ' 23:59:59',
+                sensor_id: '0',
+                min_date: init_date,
+                max_date: end_date,
                 ordering: "-log_timestamp"
             },
             success: function (data) {
 
-                moisture_array = [];
-                moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
+                console.log(data);
 
-                temperature_array = [];
-                temperature_array.push(['Time', 'Temperature']);
-
-                $.each(data, function (index, value) {
-                    temp_array = [];
-                    temp_array.push(value.sensor_date_received);
-                    temp_array.push(value.sensor_hl1);
-                    temp_array.push(value.sensor_hl2);
-                    temp_array.push(value.sensor_hl3);
-                    moisture_array.push(temp_array);
-
-                    temp_array2 = [];
-                    temp_array2.push(value.sensor_date_received);
-                    temp_array2.push(value.sensor_temperature);
-                    temperature_array.push(temp_array2);
-                });
-
-                var data_moisture = google.visualization.arrayToDataTable(moisture_array);
-                var data_temperature = google.visualization.arrayToDataTable(temperature_array);
-
-                var options_moisture = {title: 'Soil Moisture'};
-                var options_temperature = {title: 'Temperature'};
-
-
-                var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
-                var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));
-
-                chart_moisture.draw(data_moisture, options_moisture);
-                chart_temperature.draw(data_temperature, options_temperature);
-
-                showTag('graphs');
+            },
+            error: function (data) {
+                console.log(data);
             }
         });
+
+
     }
 
 </script>

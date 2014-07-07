@@ -51,6 +51,9 @@
 
 <script>
 
+    getFields('field');
+    getStations('station');
+
     $(function () {
         $("#from").datepicker({
             dateFormat: 'yy-mm-dd',
@@ -72,8 +75,7 @@
                 $("#from").datepicker("option", "maxDate", selectedDate);
             }
         });
-        getFields('field');
-        getStations('station');
+
     });
 
     function getStationLog() {

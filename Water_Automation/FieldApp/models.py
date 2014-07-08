@@ -39,7 +39,7 @@ class Crop_Area(models.Model):
 
 
 class Area_Configuration(models.Model):
-    area_id = models.ForeignKey('Area', primary_key=True)
+    area_id = models.ForeignKey('Crop_Area', primary_key=True)
     area_configuration = models.TextField(max_length=250, null=True, blank=True)
 
 

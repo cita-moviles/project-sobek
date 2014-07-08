@@ -35,12 +35,34 @@
         {#        <input type="text" id="to" name="to">#}
         <input id="to_datetimepicker" type="text"/>
 
-        <button onclick="quick_date(1)">24 hours</button>
-        <button onclick="quick_date(2)">7 days</button>
-        <button onclick="quick_date(3)">15 days</button>
-        <button onclick="quick_date(4)">30 days</button>
-        <button onclick="graphLogs();">Graph</button>
-        <button onclick="hideTag('graphs');">Clean</button>
+
+        <ul class="button-group [radius round]">
+            <li>
+                <button onclick="quick_date(1)" class="button">6 hours</button>
+            </li>
+            <li>
+                <button onclick="quick_date(2)" class="button">24 hours</button>
+            </li>
+            <li>
+                <button onclick="quick_date(3)" class="button">7 days</button>
+            </li>
+            <li>
+                <button onclick="quick_date(4)" class="button">15 days</button>
+            </li>
+            <li>
+                <button onclick="quick_date(5)" class="button">30 days</button>
+            </li>
+        </ul>
+
+        <br/>
+        <ul class="button-group [radius round]">
+            <li>
+                <button class="button" onclick="graphLogs()">Graph</button>
+            </li>
+            <li>
+                <button class="button [secondary alert success]" onclick="hideTag('graphs')">Clean</button>
+            </li>
+        </ul>
     </div>
 
 
@@ -68,6 +90,7 @@
     var from = jQuery('#from_datetimepicker').datetimepicker({
 
         closeOnDateSelect: true,
+        defaultChecked: true,
         onSelectDate: function (current_time, $input) {
             init_date = current_time.dateFormat('Y-m-d H:i:s');
         }
@@ -75,25 +98,69 @@
     });
     var to = jQuery('#to_datetimepicker').datetimepicker({
         closeOnDateSelect: true,
+        defaultChecked: true,
         onSelectDate: function (current_time, $input) {
             end_date = current_time.dateFormat('Y-m-d H:i:s');
 
         }
     });
 
+
     function quick_date(option) {
 
+        init_date = new Date();
+        end_date = new Date();
 
         switch (option) {
 
-            case 1:
-                var current_date = new Date();
-                end_date = current_date;
-                init_date = current_date.setHours(current_date.getDate() - 2);
-                console.log("Initial Date: " + current_date);
-                console.log("End date: " + end_date);
+            case 1: //6 hours
+                init_date.setHours(end_date.getHours() - 6);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
                 break;
-            case 2:
+
+            case 2: //24 hours
+                init_date.setHours(end_date.getHours() - 24);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 3: //7 days
+                init_date.setDate(end_date.getDate() - 7);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 4: //15 days
+                init_date.setDate(end_date.getDate() - 15);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 5: //30 days
+                init_date.setDate(end_date.getDate() - 30);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
                 break;
 
         }
@@ -116,7 +183,6 @@
                 ordering: "-log_timestamp"
             },
             success: function (data) {
-
 
                 var moisture_array = [];
                 moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
@@ -150,7 +216,6 @@
 
                 chart_moisture.draw(data_moisture, options_moisture);
                 chart_temperature.draw(data_temperature, options_temperature);
-
 
             }
         });

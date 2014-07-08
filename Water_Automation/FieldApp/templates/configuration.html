@@ -21,9 +21,7 @@
         <label>Field</label>
         <select id="field" onchange="getAreas('area', 'field');"></select>
         <label>Area</label>
-        <select id="area" onchange="getValves('valve', 'area');"></select>
-        <label>Valve</label>
-        <select id="valve" onchange="hideOperations();"></select>
+        <select id="area" onchange="hideOperations();"></select>
 
         <button onclick="getConfigurations()">Get Configuration</button>
 
@@ -77,16 +75,19 @@
     var strConfig;
 
     $(function () {
-        getFields('field', 'area', 'valve');
+        getFields('field', 'area', '');
     });
 
     function getConfigurations() {
-        var area_id = $('#valve').val();
-        var url = "http://127.0.0.1:8000/Area_Configuration/" + area_id;
+        var area_id = $('#area').val();
+        var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
         $.ajax({
             url: url,
             success: function(json){
                 $('#opModeSelect').css('display', 'block');
+                $('#opAutomatic').css('display', 'none');
+                $('#opManual').css('display', 'none');
+
                 console.log(json);
                 var area_configuration = json.area_configuration.substr(2);
                 var area_operation = json.area_configuration[0];

@@ -1,6 +1,6 @@
 __author__ = 'admin'
 from rest_framework import serializers
-from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Valve_Configuration, Weather_Station, Sensor, \
+from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
     Crop_Area_Log, Weather_Station_Log, Sensor_Log, Valve_Log, Farm_Field_Log
 
 
@@ -43,13 +43,13 @@ class Valve_Serializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class Valve_Configuration_Serializer(serializers.ModelSerializer):  # HyperlinkedModelSerializer):
-    FieldApp = serializers.SlugRelatedField(slug_field='fk_valve_id')  # (many=False, view_name='valve-configuration-detail')
+class Area_Configuration_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=False, view_name='area-configuration-detail')
 
     class Meta:
-        model = Valve_Configuration
+        model = Area_Configuration
         fields = (
-            'fk_valve_id', 'valve_configuration'
+            'area_id', 'area_configuration'
         )
 
 

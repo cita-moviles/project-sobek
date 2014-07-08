@@ -38,6 +38,11 @@ class Crop_Area(models.Model):
     fk_crop = models.ForeignKey('Crop')
 
 
+class Area_Configuration(models.Model):
+    area_id = models.ForeignKey('Area', primary_key=True)
+    area_configuration = models.TextField(max_length=250, null=True, blank=True)
+
+
 class Valve(models.Model):
     valve_id = models.IntegerField(primary_key=True)
     valve_name = models.CharField(max_length=50)
@@ -50,11 +55,6 @@ class Valve(models.Model):
     valve_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     valve_user_define2 = models.TextField(max_length=250, null=True, blank=True)
     fk_area = models.ForeignKey('Crop_Area')
-
-
-class Valve_Configuration(models.Model):
-    fk_valve_id = models.ForeignKey('Valve', primary_key=True)
-    valve_configuration = models.TextField(max_length=250, null=True, blank=True)
 
 
 class Weather_Station(models.Model):

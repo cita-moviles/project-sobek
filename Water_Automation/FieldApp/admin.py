@@ -1,9 +1,8 @@
 __author__ = 'Enrique Ramirez'
 
 from django.contrib import admin
-from models import Crop, Crop_Area, Farm_Field, Sensor, Valve, Weather_Station, Valve_Configuration
+from models import Crop, Crop_Area, Farm_Field, Sensor, Valve, Weather_Station, Area_Configuration
 
-# TODO: Change the Class name object to id or object name on list
 
 class CropAdmin(admin.ModelAdmin):
     # Configure which parameters to display and configure on the admin screen
@@ -106,11 +105,12 @@ class StationAdmin(admin.ModelAdmin):
 
 class ConfigAdmin(admin.ModelAdmin):
     fields = [
-        'fk_valve_id',
-        'valve_configuration'
+
+        'area_id',
+        'area_configuration'
     ]
 
-    list_display = ('fk_valve_id',)
+    list_display = ('area_id',)
 
 
 # Register all the models for admin
@@ -120,4 +120,4 @@ admin.site.register(Farm_Field, FieldAdmin)
 admin.site.register(Sensor, SensorAdmin)
 admin.site.register(Valve, ValveAdmin)
 admin.site.register(Weather_Station, StationAdmin)
-admin.site.register(Valve_Configuration, ConfigAdmin)
+admin.site.register(Area_Configuration, ConfigAdmin)

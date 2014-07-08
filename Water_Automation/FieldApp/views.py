@@ -6,10 +6,10 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from django.views.generic import TemplateView
-from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Valve_Configuration, Weather_Station, Sensor, \
+from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
     Crop_Area_Log, Sensor_Log, Weather_Station_Log, Valve_Log, Farm_Field_Log
 from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Serializer, \
-    Valve_Serializer, Valve_Configuration_Serializer, Station_Serializer, Sensor_Serializer, Area_Log_Serializer, \
+    Valve_Serializer, Area_Configuration_Serializer, Station_Serializer, Sensor_Serializer, Area_Log_Serializer, \
     Weather_Station_Log_Serializer, Valve_Log_Serializer, Sensor_Log_Serializer, Farm_Field_Log_Serializer
 
 
@@ -31,9 +31,9 @@ class Valve_ViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
-class Valve_Configuration_ViewSet(viewsets.ModelViewSet):
-    queryset = Valve_Configuration.objects.all()
-    serializer_class = Valve_Configuration_Serializer
+class Area_Configuration_ViewSet(viewsets.ModelViewSet):
+    queryset = Area_Configuration.objects.all()
+    serializer_class = Area_Configuration_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
@@ -84,10 +84,10 @@ class ValveFilter(django_filters.FilterSet):
                   'valve_ideal', 'valve_date_received', 'valve_user_define1', 'valve_user_define2', 'fk_area']
 
 
-class ValveConfigurationFilter(django_filters.FilterSet):
+class AreaConfigurationFilter(django_filters.FilterSet):
     class Meta:
-        model = Valve_Configuration
-        fields = ['fk_valve_id', 'valve_configuration']
+        model = Area_Configuration
+        fields = ['area_id', 'area_configuration']
 
 
 class StationFilter(django_filters.FilterSet):
@@ -180,11 +180,11 @@ class ValveSearch(generics.ListCreateAPIView):
     filter_class = ValveFilter
 
 
-class ValveConfigurationSearch(generics.ListCreateAPIView):
-    queryset = Valve_Configuration.objects.all()
-    serializer_class = Valve_Configuration_Serializer
+class AreaConfigurationSearch(generics.ListCreateAPIView):
+    queryset = Area_Configuration.objects.all()
+    serializer_class = Area_Configuration_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    filter_class = ValveConfigurationFilter
+    filter_class = AreaConfigurationFilter
 
 
 class StationSearch(generics.ListCreateAPIView):
@@ -240,7 +240,7 @@ def api_root(request, format=None):
         'station': reverse('station-list', request=request, format=format),
         'sensor': reverse('sensor-list', request=request, format=format),
         'area-log': reverse('area-log-list', request=request, format=format),
-        'valve-configuration': reverse('valve-configuration-list', request=request, format=format)
+        'area-configuration': reverse('area-configuration-list', request=request, format=format)
     })
 
 

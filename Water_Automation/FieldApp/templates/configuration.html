@@ -134,24 +134,41 @@
     }
 
     function saveOpMan() {
+        var area_id = $('#area').val();
+        var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
+
         strConfig = "1-";
         console.log($('input[name=rOpMan]:radio:checked').val(0));
         switch ($('input[name=rOpMan]:radio:checked').attr('id')) {
             case 'rOpManON':
-                strConfig += '1#';
+                strConfig += '1';
                 break;
             case 'rOpManOFF':
-                strConfig += '0#';
+                strConfig += '0';
                 break;
             default:
                 alert("You didn't select an operation");
                 return;
                 break;
         }
+
+        $.ajax({
+            url: url,
+            type: 'PUT',
+            data: { area_configuration: strConfig },
+            success: function(data) {
+                $('.result').html(data);
+                alert('Data was sent');
+            }
+        });
+
         alert(strConfig);
     }
 
     function saveOpAut() {
+        var area_id = $('#area').val();
+        var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
+
         strConfig = "2-";
         var maxHum = parseFloat($('#maxHum').val());
         var minHum = parseFloat($('#minHum').val());
@@ -160,6 +177,17 @@
         var integerMin = parseInt(Math.floor(minHum) + (minHum % 1).toFixed(1).substr(2,1));
 
         strConfig += lPad3(integerMax) + lPad3(integerMin);
+
+        $.ajax({
+            url: url,
+            type: 'PUT',
+            data: { area_configuration: strConfig },
+            success: function(data) {
+                $('.result').html(data);
+                alert('Data was sent');
+            }
+        });
+
         alert(strConfig);
     }
 

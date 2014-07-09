@@ -153,10 +153,13 @@
 
     function saveOpAut() {
         strConfig = "2-";
-        strConfig += $('#maxHum').val();
-        strConfig += "/";
-        strConfig += $('#minHum').val();
-        strConfig += "#";
+        var maxHum = parseFloat($('#maxHum').val());
+        var minHum = parseFloat($('#minHum').val());
+
+        var integerMax = parseInt(Math.floor(maxHum) + (maxHum % 1).toFixed(1).substr(2,1));
+        var integerMin = parseInt(Math.floor(minHum) + (minHum % 1).toFixed(1).substr(2,1));
+
+        strConfig += lPad3(integerMax) + lPad3(integerMin);
         alert(strConfig);
     }
 
@@ -164,6 +167,11 @@
         strConfig = "3-";
         strConfig += "#";
         alert(strConfig);
+    }
+
+    function lPad3(number) {
+        if (number<=999) { number = ("00"+number).slice(-3); }
+        return number;
     }
 </script>
 </body>

@@ -29,7 +29,18 @@ class Area_Serializer(serializers.HyperlinkedModelSerializer):
         model = Crop_Area
         fields = (
             'area_id', 'area_name', 'area_description', 'area_ev', 'area_x_position', 'area_y_position',
-            'area_date_received', 'area_user_define1', 'area_user_define2', 'fk_farm_field', 'fk_crop')
+            'area_date_received', 'area_user_define1', 'area_user_define2', 'fk_farm_field', 'fk_crop'
+        )
+
+
+class Area_Configuration_Serializer(serializers.ModelSerializer):
+    area_id = serializers.RelatedField()
+
+    class Meta:
+        model = Area_Configuration
+        fields = (
+            'area_id', 'area_configuration'
+        )
 
 
 class Valve_Serializer(serializers.HyperlinkedModelSerializer):
@@ -40,16 +51,6 @@ class Valve_Serializer(serializers.HyperlinkedModelSerializer):
         fields = (
             'valve_id', 'valve_name', 'valve_status', 'valve_flow', 'valve_pressure', 'valve_limit', 'valve_ideal',
             'valve_date_received', 'valve_user_define1', 'valve_user_define2', 'fk_area'
-        )
-
-
-class Area_Configuration_Serializer(serializers.HyperlinkedModelSerializer):
-    FieldApp = serializers.HyperlinkedRelatedField(many=False, view_name='area-configuration-detail')
-
-    class Meta:
-        model = Area_Configuration
-        fields = (
-            'area_id', 'area_configuration'
         )
 
 

@@ -5,6 +5,9 @@ import urllib2
 import datetime
 import pytz
 import logging
+from datetime import timedelta
+from dateutil.parser import parse
+from time import strftime
 
 currentDate = None
 
@@ -280,8 +283,11 @@ class Farm_Field:
                 self.field_user_define2 = message[comma + 1: terminator]
         global currentDate
         strTimezoneDiff = datetime.datetime.now(pytz.timezone('America/Chihuahua')).strftime('%z')
-        currentDate = "20" + message[46:48] + "-" + message[49:51] + "-" + message[52:54] + "T" + \
-                      self.field_user_define2 + ".000000" + strTimezoneDiff
+        tmpcurrentDate = "20" + message[46:48] + "-" + message[49:51] + "-" + message[52:54] + "T" + \
+                      self.field_user_define2 + ".000000"
+        varcurrentDate = parse(tmpcurrentDate)
+        dateC = varcurrentDate + timedelta(hours=int(strTimezoneDiff[0] + strTimezoneDiff[2]))
+        currentDate = dateC.strftime("%Y-%m-%dT%H:%M:%S.000000") + strTimezoneDiff
         self.field_date_received = str(currentDate)
 
 

@@ -12,7 +12,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="medium-6 card">
+    <div class="medium-5 card left">
         <p>
             Select the Area you wish to graph:
         </p>
@@ -24,96 +24,171 @@
         <p>Select the range of dates you wish to graph:</p>
 
         <label for="from">From</label>
-        <input type="text" id="from" name="from">
+        <input id="from_datetimepicker" type="text"/>
         <label for="to">to</label>
-        <input type="text" id="to" name="to">
+        <input id="to_datetimepicker" type="text"/>
 
-        <button onclick="getAreaLog()">Graph</button>
-        <button onclick="hideTag('graphs');">Clean</button>
+        <ul class="button-group [radius round]">
+            <li>
+                <button onclick="quick_date(1)" class="button">6 hours</button>
+            </li>
+            <li>
+                <button onclick="quick_date(2)" class="button">24 hours</button>
+            </li>
+            <li>
+                <button onclick="quick_date(3)" class="button">7 days</button>
+            </li>
+            <li>
+                <button onclick="quick_date(4)" class="button">15 days</button>
+            </li>
+            <li>
+                <button onclick="quick_date(5)" class="button">30 days</button>
+            </li>
+        </ul>
+
+        <br/>
+
+        <ul class="button-group [radius round]">
+            <li>
+                <button class="button" onclick="graphLogs()">Graph</button>
+            </li>
+            <li>
+                <button class="button [secondary alert success]" onclick="hideTag('graphs')">Clean</button>
+            </li>
+        </ul>
+
     </div>
-    <div class="medium-6 card">
-        <section id="graphs" style="display: none;">
-            <h2>Evotranspiration</h2>
-            <canvas id="weather_canvas" height="250" width="1000"></canvas>
+    <div class="medium-5 card right">
+        <h3>Graphs</h3>
+        <section id="graphs">
+            <h4>Evotranspiration</h4>
+
+            <div id="ev_chart" height="400" width="1000"></div>
 
         </section>
     </div>
 </div>
+<br/>
+<br/>
+<br/>
 {% include 'footer.html' %}
 
 <script>
-
     getFields('field');
-    $(function () {
-        $("#from").datepicker({
-            dateFormat: 'yy-mm-dd',
-            defaultDate: "-2w",
-            maxDate: "0",
-            changeMonth: true,
-            numberOfMonths: 3,
-            onClose: function (selectedDate) {
-                $("#to").datepicker("option", "minDate", selectedDate);
-            }
-        });
-        $("#to").datepicker({
-            dateFormat: 'yy-mm-dd',
-            defaultDate: "0",
-            maxDate: "0",
-            changeMonth: true,
-            numberOfMonths: 3,
-            onClose: function (selectedDate) {
-                $("#from").datepicker("option", "maxDate", selectedDate);
-            }
-        });
+    google.load("visualization", "1", {packages: ["corechart"]});
+    var init_date;
+    var end_date;
+    var from = jQuery('#from_datetimepicker').datetimepicker({
 
+        closeOnDateSelect: true,
+        defaultChecked: true,
+        onSelectDate: function (current_time, $input) {
+            init_date = current_time.dateFormat('Y-m-d H:i:s');
+        }
 
     });
+    var to = jQuery('#to_datetimepicker').datetimepicker({
+        closeOnDateSelect: true,
+        defaultChecked: true,
+        onSelectDate: function (current_time, $input) {
+            end_date = current_time.dateFormat('Y-m-d H:i:s');
 
+        }
+    });
 
-    function getAreaLog() {
+    function quick_date(option) {
+
+        init_date = new Date();
+        end_date = new Date();
+
+        switch (option) {
+
+            case 1: //6 hours
+                init_date.setHours(end_date.getHours() - 6);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 2: //24 hours
+                init_date.setHours(end_date.getHours() - 24);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 3: //7 days
+                init_date.setDate(end_date.getDate() - 7);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 4: //15 days
+                init_date.setDate(end_date.getDate() - 15);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 5: //30 days
+                init_date.setDate(end_date.getDate() - 30);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+        }
+
+    }
+
+    function graphLogs() {
         area_id = $('#area').val();
-        if (area_id == null) {
-            hideTag('graphs');
-            alert('No area has been selected');
-            return;
-        }
-        if (( $('#from').val() === "") || ( $('#to').val() === "" )) {
-            alert('You must select a date Range to proceed');
-            return;
-        }
+        console.log(init_date);
+        console.log(end_date);
+        var sensor_id = $('#sensor').val();
         $.ajax({
             url: "/Crop_Area_Log/",
             data: {
                 area_id: area_id,
-                min_date: $('#from').val() + ' 00:00:00',
-                max_date: $('#to').val() + ' 23:59:59'
+                min_date: init_date,
+                max_date: end_date
             },
-            success: function (data) {
-                time_array = [];
-                ev_array = [];
-                $.each(data, function (index, value) {
 
-                    time_array.push(value.log_timestamp);
-                    ev_array.push(value.area_ev);
+            success: function (data) {
+                var ev_array = [];
+                ev_array.push(['Time', 'EV']);
+
+                $.each(data, function (index, value) {
+                    var tmp_array = [];
+                    tmp_array.push(value.area_date_received);
+                    tmp_array.push(value.area_ev);
+                    ev_array.push(tmp_array);
                 });
 
-                var evChart = {
-                    labels: time_array,
-                    datasets: [
-                        {
-                            fillColor: "rgba(204,0,0,0.5)",
-                            strokeColor: "rgba(204,0,0,1)",
-                            pointColor: "rgba(204,0,0,1)",
-                            pointStrokeColor: "#fff",
-                            data: ev_array
-                        }
-                    ]
-                }
-                var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Line(evChart);
-                showTag('graphs');
+                var data_ev = google.visualization.arrayToDataTable(ev_array);
+                var options_ev = {title: 'Evotranspiration'};
+                var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
+                chart_ev.draw(data_ev, options_ev);
             }
         });
     }
+
 </script>
 
 </body>

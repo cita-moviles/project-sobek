@@ -103,8 +103,8 @@ class StationFilter(django_filters.FilterSet):
 class AreaLogFilter(django_filters.FilterSet):
     year = django_filters.CharFilter(name='log_timestamp', lookup_type='startswith')
     max_ev = django_filters.NumberFilter(name='area_ev', lookup_type='lte')
-    max_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='lte')
-    min_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='gte')
+    max_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='gte')
 
     class Meta:
         model = Crop_Area_Log
@@ -112,8 +112,8 @@ class AreaLogFilter(django_filters.FilterSet):
 
 
 class StationLogFilter(django_filters.FilterSet):
-    max_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='lte')
-    min_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='gte')
+    max_date = django_filters.DateTimeFilter(name='station_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='station_date_received', lookup_type='gte')
 
     class Meta:
         model = Weather_Station_Log
@@ -133,8 +133,8 @@ class SensorLogFilter(django_filters.FilterSet):
 
 
 class ValveLogFilter(django_filters.FilterSet):
-    max_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='lte')
-    min_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='gte')
+    max_date = django_filters.DateTimeFilter(name='valve_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='valve_date_received', lookup_type='gte')
 
     class Meta:
         model = Valve_Log
@@ -143,8 +143,8 @@ class ValveLogFilter(django_filters.FilterSet):
 
 
 class FarmFieldLogFilter(django_filters.FilterSet):
-    max_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='lte')
-    min_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='gte')
+    max_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='gte')
 
     class Meta:
         model = Farm_Field_Log

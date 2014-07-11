@@ -171,7 +171,8 @@
             data: {
                 station_id: $('#station').val(),
                 min_date: init_date,
-                max_date: end_date
+                max_date: end_date,
+                ordering: "-station_date_received"
             },
             success: function (data) {
                 console.log(init_date);

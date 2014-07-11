@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="medium-6 card">
+    <div class="medium-5 card left">
         <p>
             Select the Weather Station you wish to graph:
         </p>
@@ -25,148 +25,222 @@
 
         <p>Select the range of dates you wish to graph:</p>
 
+        {# Inputs #}
         <label for="from">From</label>
-        <input type="text" id="from" name="from">
+        <input id="from_datetimepicker" type="text"/>
         <label for="to">to</label>
-        <input type="text" id="to" name="to">
+        <input id="to_datetimepicker" type="text"/>
 
-        <button onclick="getStationLog();">Graph</button>
-        <button onclick="hideTag('graphs');">Clean</button>
+        {#Buttons#}
+        <ul class="button-group [radius round]">
+            <li>
+                <button onclick="quick_date(1)" class="button">6 hours</button>
+            </li>
+            <li>
+                <button onclick="quick_date(2)" class="button">24 hours</button>
+            </li>
+            <li>
+                <button onclick="quick_date(3)" class="button">7 days</button>
+            </li>
+            <li>
+                <button onclick="quick_date(4)" class="button">15 days</button>
+            </li>
+            <li>
+                <button onclick="quick_date(5)" class="button">30 days</button>
+            </li>
+        </ul>
+
+        <br/>
+        <ul class="button-group [radius round]">
+            <li>
+                <button class="button" onclick="graphLogs()">Graph</button>
+            </li>
+            <li>
+                <button class="button [secondary alert success]" onclick="hideTag('graphs')">Clean</button>
+            </li>
+        </ul>
     </div>
-    <div class="medium-6 card">
+    <div class="medium-6 card right">
         <section id="graphs" style="display:none;">
-            <h2>Relative Humidity</h2>
-            <canvas id="weather_canvas" height="250" width="1000"></canvas>
-            <h2>Temperature</h2>
-            <canvas id="weather_canvas2" height="250" width="1000"></canvas>
-            <h2>Wind Speed</h2>
-            <canvas id="weather_canvas3" height="250" width="1000"></canvas>
-            <h2>Solar Radiation</h2>
-            <canvas id="weather_canvas4" height="250" width="1000"></canvas>
+            <h4>Status</h4>
+
+            <div id="status_chart" height="400" width="1000"></div>
+            <br/>
+            <h4>Relative Humidity</h4>
+
+            <div id="moisture_chart" height="400" width="1000"></div>
+            <br/>
+            <h4>Temperature</h4>
+
+            <div id="temperature_chart" height="400" width="1000"></div>
+            <h4>Wind Speed</h4>
+
+            <div id="wind_chart" height="400" width="1000"></div>
+            <h4>Solar Radiation</h4>
+
+            <div id="radiation_chart" height="400" width="1000"></div>
 
         </section>
     </div>
 </div>
 {% include 'footer.html' %}
-
 <script>
+    google.load("visualization", "1", {packages: ["corechart"]});
+    getFields('field', 'area', 'sensor');
+    var init_date;
+    var end_date;
+    var from = jQuery('#from_datetimepicker').datetimepicker({
 
-    getFields('field');
-    getStations('station');
-
-    $(function () {
-        $("#from").datepicker({
-            dateFormat: 'yy-mm-dd',
-            defaultDate: "-2w",
-            maxDate: "0",
-            changeMonth: true,
-            numberOfMonths: 3,
-            onClose: function (selectedDate) {
-                $("#to").datepicker("option", "minDate", selectedDate);
-            }
-        });
-        $("#to").datepicker({
-            dateFormat: 'yy-mm-dd',
-            defaultDate: "0",
-            maxDate: "0",
-            changeMonth: true,
-            numberOfMonths: 3,
-            onClose: function (selectedDate) {
-                $("#from").datepicker("option", "maxDate", selectedDate);
-            }
-        });
+        closeOnDateSelect: true,
+        defaultChecked: true,
+        onSelectDate: function (current_time, $input) {
+            init_date = current_time.dateFormat('Y-m-d H:i:s');
+        }
 
     });
+    var to = jQuery('#to_datetimepicker').datetimepicker({
+        closeOnDateSelect: true,
+        defaultChecked: true,
+        onSelectDate: function (current_time, $input) {
+            end_date = current_time.dateFormat('Y-m-d H:i:s');
 
-    function getStationLog() {
-        if (( $('#from').val() === "") || ( $('#to').val() === "" )) {
-            alert('You must select a date Range to proceed');
-            return;
         }
+    });
+
+    function quick_date(option) {
+
+        init_date = new Date();
+        end_date = new Date();
+
+        switch (option) {
+
+            case 1: //6 hours
+                init_date.setHours(end_date.getHours() - 6);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 2: //24 hours
+                init_date.setHours(end_date.getHours() - 24);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 3: //7 days
+                init_date.setDate(end_date.getDate() - 7);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 4: //15 days
+                init_date.setDate(end_date.getDate() - 15);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+            case 5: //30 days
+                init_date.setDate(end_date.getDate() - 30);
+                from.datetimepicker({
+                    value: init_date.dateFormat('Y-m-d H:i:s')
+                });
+                to.datetimepicker({
+                    value: end_date.dateFormat('Y-m-d H:i:s')
+                });
+                break;
+
+        }
+
         $.ajax({
             url: "/Station_Log/",
             data: {
                 station_id: $('#station').val(),
-                min_date: $('#from').val() + ' 00:00:00',
-                max_date: $('#to').val() + ' 23:59:59'
+                min_date: init_date,
+                max_date: end_date
             },
             success: function (data) {
-                time_array = [];
-                rh_array = [];
-                temperature_array = [];
-                ws_array = [];
-                sr_array = [];
+                console.log(init_date);
+                console.log(end_date);
+
+                var status_array = [];
+                status_array.push(['Time', 'Status']);
+                var relative_humidity_array = [];
+                relative_humidity_array.push(['Time', 'Relative Humidity']);
+                var temperature_array = [];
+                temperature_array.push(['Time', 'Temperature']);
+                var wind_speed_array = [];
+                wind_speed_array.push(['Time', 'Wind Speed']);
+                var solar_radiation_array = [];
+                solar_radiation_array.push(['Time', 'Solar Radiation']);
 
                 $.each(data, function (index, value) {
+                    var tmp_status = [];
+                    tmp_status.push(value.station_status);
+                    status_array.push(tmp_status);
 
-                    time_array.push(value.log_timestamp);
-                    rh_array.push(value.station_relative_humidity);
-                    temperature_array.push(value.station_temperature);
-                    ws_array.push(value.station_wind_speed);
-                    sr_array.push(value.station_solar_radiation);
+                    var tmp_humidity = [];
+                    tmp_humidity.push(value.station_relative_humidity);
+                    relative_humidity_array.push(tmp_humidity);
+
+                    var tmp_temperature = [];
+                    tmp_temperature.push(value.station_temperature);
+                    temperature_array.push(tmp_temperature);
+
+                    var tmp_wind = [];
+                    tmp_wind.push(value.station_wind_speed);
+                    wind_speed_array.push(tmp_wind);
+
+                    var tmp_radiation = [];
+                    tmp_radiation.push(value.station_solar_radiation);
+                    solar_radiation_array.push(tmp_radiation);
+
                 });
 
-                var rhChart = {
-                    labels: time_array,
-                    datasets: [
-                        {
-                            fillColor: "rgba(204,0,0,0.5)",
-                            strokeColor: "rgba(204,0,0,1)",
-                            pointColor: "rgba(204,0,0,1)",
-                            pointStrokeColor: "#fff",
-                            data: rh_array
-                        }
-                    ]
-                }
+                var data_status = google.visualization.arrayToDataTable(status_array);
+                var data_humidity = google.visualization.arrayToDataTable(relative_humidity_array);
+                var data_temperature = google.visualization.arrayToDataTable(temperature_array);
+                var data_wind = google.visualization.arrayToDataTable(wind_speed_array);
+                var data_radiation = google.visualization.arrayToDataTable(solar_radiation_arrays);
 
-                var tempChart = {
-                    labels: time_array,
-                    datasets: [
-                        {
-                            fillColor: "rgba(204,0,0,0.5)",
-                            strokeColor: "rgba(204,0,0,1)",
-                            pointColor: "rgba(204,0,0,1)",
-                            pointStrokeColor: "#fff",
-                            data: temperature_array
-                        }
-                    ]
-                }
+                var options_status = {title: 'Station Status'};
+                var options_humidity = {title: 'Relative Humidity'};
+                var options_temperature = {title: 'Temperature'};
+                var options_wind = {title: 'Wind Speed'};
+                var options_radiation = {title: 'Solar Radiation'};
 
-                var wsChart = {
-                    labels: time_array,
-                    datasets: [
-                        {
-                            fillColor: "rgba(204,0,0,0.5)",
-                            strokeColor: "rgba(204,0,0,1)",
-                            pointColor: "rgba(204,0,0,1)",
-                            pointStrokeColor: "#fff",
-                            data: ws_array
-                        }
-                    ]
-                }
 
-                var srChart = {
-                    labels: time_array,
-                    datasets: [
-                        {
-                            fillColor: "rgba(204,0,0,0.5)",
-                            strokeColor: "rgba(204,0,0,1)",
-                            pointColor: "rgba(204,0,0,1)",
-                            pointStrokeColor: "#fff",
-                            data: sr_array
-                        }
-                    ]
-                }
+                var chart_status = new google.visualization.LineChart(document.getElementById('status_chart'));
+                var chart_humidity = new google.visualization.LineChart(document.getElementById('moisture_chart'));
+                var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));
+                var chart_wind = new google.visualization.LineChart(document.getElementById('wind_chart'));
+                var chart_radiation = new google.visualization.LineChart(document.getElementById('radiation_chart'));
 
-                var weather_lineChart = new Chart($("#weather_canvas").get(0).getContext("2d")).Line(rhChart);
-                var weather_lineChart2 = new Chart($("#weather_canvas2").get(0).getContext("2d")).Line(tempChart);
-                var weather_lineChart3 = new Chart($("#weather_canvas3").get(0).getContext("2d")).Line(wsChart);
-                var weather_lineChart4 = new Chart($("#weather_canvas4").get(0).getContext("2d")).Line(srChart);
+                chart_status.draw(data_status, options_status);
+                chart_humidity.draw(data_humidity, options_humidity);
+                chart_temperature.draw(data_temperature, options_temperature);
+                chart_wind.draw(data_wind, options_wind);
+                chart_radiation.draw(data_radiation, options_radiation);
 
-                $('#graphs').css('display', 'block');
             }
         });
+
     }
+
 </script>
 </body>
 </html>

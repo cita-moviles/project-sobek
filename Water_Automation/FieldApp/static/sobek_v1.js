@@ -31,6 +31,10 @@ function getFields(select_id, field2, field3){
                 getAreas(field2, select_id, field3);
             }
 
+            if (field2 === 'station'){
+                getStations(field2, select_id);
+            }
+
 
         }
     });
@@ -80,6 +84,22 @@ function getStations(select_id){
     $.ajax({
         url: "/Weather_Station/",
         data: { },
+        success:function(data){
+            options = "";
+
+            $.each(data, function( index, value ) {
+                options += '<option value="' + value.station_id + '">' + value.station_name + '</option>';
+            });
+
+            $('#'+select_id).html(options);
+        }
+    });
+}
+
+function getStations(select_id, search_id){
+    $.ajax({
+        url: "/Weather_Station_Search/",
+        data: { fk_farm_field: $('#' + search_id).val()},
         success:function(data){
             options = "";
 

@@ -19,7 +19,7 @@
             Select the Weather Station you wish to graph:
         </p>
         <label>Field</label>
-        <select id="field" onchange="getAreas('area', 'field');"></select>
+        <select id="field" onchange="getStations('station', 'field');"></select>
         <label>Weather Station</label>
         <select id="station"></select>
 
@@ -85,10 +85,14 @@
 </div>
 {% include 'footer.html' %}
 <script>
+
     google.load("visualization", "1", {packages: ["corechart"]});
-    getFields('field', 'area', 'sensor');
+
+    getFields('field', 'station', '');
+
     var init_date;
     var end_date;
+
     var from = jQuery('#from_datetimepicker').datetimepicker({
 
         closeOnDateSelect: true,
@@ -116,55 +120,36 @@
 
             case 1: //6 hours
                 init_date.setHours(end_date.getHours() - 6);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 2: //24 hours
                 init_date.setHours(end_date.getHours() - 24);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 3: //7 days
                 init_date.setDate(end_date.getDate() - 7);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 4: //15 days
                 init_date.setDate(end_date.getDate() - 15);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 5: //30 days
                 init_date.setDate(end_date.getDate() - 30);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
         }
+        from.datetimepicker({
+            value: init_date.dateFormat('Y-m-d H:i:s')
+        });
+        to.datetimepicker({
+            value: end_date.dateFormat('Y-m-d H:i:s')
+        });
+    }
+
+    function graphLogs() {
+        console.log(init_date);
+        console.log(end_date);
 
         $.ajax({
             url: "/Station_Log/",
@@ -175,38 +160,45 @@
                 ordering: "-station_date_received"
             },
             success: function (data) {
-                console.log(init_date);
-                console.log(end_date);
 
                 var status_array = [];
                 status_array.push(['Time', 'Status']);
+
                 var relative_humidity_array = [];
                 relative_humidity_array.push(['Time', 'Relative Humidity']);
+
                 var temperature_array = [];
                 temperature_array.push(['Time', 'Temperature']);
+
                 var wind_speed_array = [];
                 wind_speed_array.push(['Time', 'Wind Speed']);
+
                 var solar_radiation_array = [];
                 solar_radiation_array.push(['Time', 'Solar Radiation']);
 
                 $.each(data, function (index, value) {
                     var tmp_status = [];
+                    tmp_status.push(value.station_date_received);
                     tmp_status.push(value.station_status);
                     status_array.push(tmp_status);
 
                     var tmp_humidity = [];
+                    tmp_humidity.push(value.station_date_received);
                     tmp_humidity.push(value.station_relative_humidity);
                     relative_humidity_array.push(tmp_humidity);
 
                     var tmp_temperature = [];
+                    tmp_temperature.push(value.station_date_received);
                     tmp_temperature.push(value.station_temperature);
                     temperature_array.push(tmp_temperature);
 
                     var tmp_wind = [];
+                    tmp_wind.push(value.station_date_received);
                     tmp_wind.push(value.station_wind_speed);
                     wind_speed_array.push(tmp_wind);
 
                     var tmp_radiation = [];
+                    tmp_radiation.push(value.station_date_received);
                     tmp_radiation.push(value.station_solar_radiation);
                     solar_radiation_array.push(tmp_radiation);
 
@@ -223,7 +215,6 @@
                 var options_temperature = {title: 'Temperature'};
                 var options_wind = {title: 'Wind Speed'};
                 var options_radiation = {title: 'Solar Radiation'};
-
 
                 var chart_status = new google.visualization.LineChart(document.getElementById('status_chart'));
                 var chart_humidity = new google.visualization.LineChart(document.getElementById('moisture_chart'));

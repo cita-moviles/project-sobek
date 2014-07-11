@@ -98,7 +98,7 @@ function getStations(select_id){
 
 function getStations(select_id, search_id){
     $.ajax({
-        url: "/Weather_Station_Search/",
+        url: "/Station_Search/",
         data: { fk_farm_field: $('#' + search_id).val()},
         success:function(data){
             options = "";

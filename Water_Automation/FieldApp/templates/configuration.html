@@ -35,19 +35,21 @@
         </section>
 
         <section id="opManual" class="operationModes">
-            <label>ON</label>
-            <input type="radio" name="rOpMan" id="rOpManON" value="1" selected/>
-            <label>OFF</label>
-            <input type="radio" name="rOpMan" id="rOpManOFF" value="0"/>
+            <label>Manual Operation</label>
+
+            <input type="radio" name="rOpMan" id="rOpManON" value="1" selected/><label for="rOpManON">ON</label>
+            <input type="radio" name="rOpMan" id="rOpManOFF" value="0"/><label for="rOpManOFF">OFF</label>
             <br/>
             <button onclick="saveOpMan();">Save</button>
+
         </section>
 
         <section id="opAutomatic" class="operationModes">
+            <label>Automatic Operation</label>
 
-            <label>Minimum Soil Moisture</label>
+            <label for="minHum">Minimum Soil Moisture</label>
             <input type="number" id="maxHum" max="99.9" min="0" step="0.1" class="inpHumidity" value="0"/>
-            <label>Maximum Soil Moisture</label>
+            <label for="maxHum">Maximum Soil Moisture</label>
             <input type="number" id="minHum" max="99.9" min="0" step="0.1" class="inpHumidity" value="0"/>
 
             <button onclick="saveOpAut();">Save</button>
@@ -88,7 +90,6 @@
                 $('#opAutomatic').css('display', 'none');
                 $('#opManual').css('display', 'none');
 
-                console.log(json);
                 var area_configuration = json.area_configuration.substr(2);
                 var area_operation = json.area_configuration[0];
                 switch (area_operation){
@@ -158,11 +159,9 @@
             data: { area_configuration: strConfig },
             success: function(data) {
                 $('.result').html(data);
-                alert('Data was sent');
+                alert('Configuration was sent');
             }
         });
-
-        alert(strConfig);
     }
 
     function saveOpAut() {
@@ -184,11 +183,9 @@
             data: { area_configuration: strConfig },
             success: function(data) {
                 $('.result').html(data);
-                alert('Data was sent');
+                alert('Configuration was sent');
             }
         });
-
-        alert(strConfig);
     }
 
     function saveOpTim() {

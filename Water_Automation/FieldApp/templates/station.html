@@ -19,7 +19,7 @@
             Select the Weather Station you wish to graph:
         </p>
         <label>Field</label>
-        <select id="field" onchange="getAreas('area', 'field');"></select>
+        <select id="field" onchange="getStations('station', 'field');"></select>
         <label>Weather Station</label>
         <select id="station"></select>
 
@@ -85,8 +85,10 @@
 </div>
 {% include 'footer.html' %}
 <script>
+
     google.load("visualization", "1", {packages: ["corechart"]});
-    getFields('field', 'area', 'sensor');
+    getFields('field', 'station', '');
+
     var init_date;
     var end_date;
     var from = jQuery('#from_datetimepicker').datetimepicker({
@@ -116,55 +118,31 @@
 
             case 1: //6 hours
                 init_date.setHours(end_date.getHours() - 6);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 2: //24 hours
                 init_date.setHours(end_date.getHours() - 24);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 3: //7 days
                 init_date.setDate(end_date.getDate() - 7);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 4: //15 days
                 init_date.setDate(end_date.getDate() - 15);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 5: //30 days
                 init_date.setDate(end_date.getDate() - 30);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
-
         }
+
+        from.datetimepicker({
+            value: init_date.dateFormat('Y-m-d H:i:s')
+        });
+        to.datetimepicker({
+            value: end_date.dateFormat('Y-m-d H:i:s')
+        });
     }
 
     function graphLogs() {
@@ -182,6 +160,7 @@
 
                 var status_array = [];
                 status_array.push(['Time', 'Status']);
+
                 var relative_humidity_array = [];
                 relative_humidity_array.push(['Time', 'Relative Humidity']);
                 var temperature_array = [];

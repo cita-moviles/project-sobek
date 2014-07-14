@@ -166,8 +166,8 @@
             url: "/Crop_Area_Log/",
             data: {
                 area_id: area_id,
-                min_date: init_date,
-                max_date: end_date,
+                min_date: init_date.dateFormat('Y-m-d H:i:s'),
+                max_date: end_date.dateFormat('Y-m-d H:i:s'),
                 ordering: "-area_date_received"
             },
 

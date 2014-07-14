@@ -165,13 +165,15 @@
                 break;
 
         }
+    }
 
+    function graphLogs() {
         $.ajax({
             url: "/Station_Log/",
             data: {
                 station_id: $('#station').val(),
-                min_date: init_date,
-                max_date: end_date,
+                min_date: init_date.dateFormat('Y-m-d H:i:s'),
+                max_date: end_date.dateFormat('Y-m-d H:i:s'),
                 ordering: "-station_date_received"
             },
             success: function (data) {
@@ -216,7 +218,7 @@
                 var data_humidity = google.visualization.arrayToDataTable(relative_humidity_array);
                 var data_temperature = google.visualization.arrayToDataTable(temperature_array);
                 var data_wind = google.visualization.arrayToDataTable(wind_speed_array);
-                var data_radiation = google.visualization.arrayToDataTable(solar_radiation_arrays);
+                var data_radiation = google.visualization.arrayToDataTable(solar_radiation_array);
 
                 var options_status = {title: 'Station Status'};
                 var options_humidity = {title: 'Relative Humidity'};
@@ -239,7 +241,6 @@
 
             }
         });
-
     }
 
 </script>

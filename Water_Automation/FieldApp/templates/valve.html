@@ -64,9 +64,13 @@
     <div class="medium-6 card right">
         <h3>Graphs</h3>
         <section id="graphs" style="display: none;">
-
+            <h4>Actuator & Status</h4>
             <div id="valve_actuator_graph" height="400" width="1000"></div>
+
+            <h4>Flow</h4>
             <div id="valve_flow_graph" height="400" width="1000"></div>
+
+            <h4>Pressure</h4>
             <div id="valve_pressure_graph" height="400" width="1000"></div>
 
         </section>
@@ -108,56 +112,33 @@
 
             case 1: //6 hours
                 init_date.setHours(end_date.getHours() - 6);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 2: //24 hours
                 init_date.setHours(end_date.getHours() - 24);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 3: //7 days
                 init_date.setDate(end_date.getDate() - 7);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 4: //15 days
                 init_date.setDate(end_date.getDate() - 15);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 5: //30 days
                 init_date.setDate(end_date.getDate() - 30);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
         }
+        from.datetimepicker({
+            value: init_date.dateFormat('Y-m-d H:i:s')
+        });
+        to.datetimepicker({
+            value: end_date.dateFormat('Y-m-d H:i:s')
+        });
 
+        graphLogs();
 
     }
 
@@ -209,18 +190,18 @@
                 var data_flow = google.visualization.arrayToDataTable(valve_actuator_array);
                 var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
 
-                var options_actuator = {title: 'Actuator & Status'};
-                var options_flow = {title: 'Flow'};
-                var options_pressure = {title: 'Pressure'};
+                // var options_actuator = {title: 'Actuator & Status'};
+                // var options_flow = {title: 'Flow'};
+                // var options_pressure = {title: 'Pressure'};
 
                 var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
-                chart_actuator.draw(data_actuator, options_actuator);
+                chart_actuator.draw(data_actuator);
 
                 var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
-                chart_flow.draw(data_flow, options_flow);
+                chart_flow.draw(data_flow);
 
                 var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
-                chart_pressure.draw(data_pressure, options_pressure);
+                chart_pressure.draw(data_pressure);
 
             }
         });

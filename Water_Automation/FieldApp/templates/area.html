@@ -125,14 +125,16 @@
             case 5: //30 days
                 init_date.setDate(end_date.getDate() - 30);
                 break;
-
         }
+
         from.datetimepicker({
             value: init_date.dateFormat('Y-m-d H:i:s')
         });
         to.datetimepicker({
             value: end_date.dateFormat('Y-m-d H:i:s')
         });
+
+        graphLogs();
 
     }
 
@@ -162,9 +164,9 @@
                 });
 
                 var data_ev = google.visualization.arrayToDataTable(ev_array);
-                var options_ev = {title: 'Evotranspiration'};
+                //var options_ev = {title: 'Evotranspiration'};
                 var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
-                chart_ev.draw(data_ev, options_ev);
+                chart_ev.draw(data_ev);
             }
         });
     }

@@ -62,22 +62,20 @@
     </div>
     <div class="medium-6 card right">
         <section id="graphs" style="display:none;">
+
             <h4>Status</h4>
-
             <div id="status_chart" height="400" width="1000"></div>
-            <br/>
+
             <h4>Relative Humidity</h4>
-
             <div id="moisture_chart" height="400" width="1000"></div>
-            <br/>
+
             <h4>Temperature</h4>
-
             <div id="temperature_chart" height="400" width="1000"></div>
+
             <h4>Wind Speed</h4>
-
             <div id="wind_chart" height="400" width="1000"></div>
-            <h4>Solar Radiation</h4>
 
+            <h4>Solar Radiation</h4>
             <div id="radiation_chart" height="400" width="1000"></div>
 
         </section>
@@ -143,9 +141,16 @@
         to.datetimepicker({
             value: end_date.dateFormat('Y-m-d H:i:s')
         });
+
+        graphLogs();
     }
 
     function graphLogs() {
+
+        $('#graphs').css('display', 'none');
+        console.log(init_date);
+        console.log(end_date);
+
         $.ajax({
             url: "/Station_Log/",
             data: {
@@ -155,8 +160,6 @@
                 ordering: "-station_date_received"
             },
             success: function (data) {
-                console.log(init_date);
-                console.log(end_date);
 
                 var status_array = [];
                 status_array.push(['Time', 'Status']);
@@ -199,11 +202,13 @@
                 var data_wind = google.visualization.arrayToDataTable(wind_speed_array);
                 var data_radiation = google.visualization.arrayToDataTable(solar_radiation_array);
 
-                var options_status = {title: 'Station Status'};
-                var options_humidity = {title: 'Relative Humidity'};
-                var options_temperature = {title: 'Temperature'};
-                var options_wind = {title: 'Wind Speed'};
-                var options_radiation = {title: 'Solar Radiation'};
+                /*
+                    var options_status = {title: 'Station Status'};
+                    var options_humidity = {title: 'Relative Humidity'};
+                    var options_temperature = {title: 'Temperature'};
+                    var options_wind = {title: 'Wind Speed'};
+                    var options_radiation = {title: 'Solar Radiation'};
+                */
 
 
                 var chart_status = new google.visualization.LineChart(document.getElementById('status_chart'));
@@ -212,11 +217,14 @@
                 var chart_wind = new google.visualization.LineChart(document.getElementById('wind_chart'));
                 var chart_radiation = new google.visualization.LineChart(document.getElementById('radiation_chart'));
 
-                chart_status.draw(data_status, options_status);
-                chart_humidity.draw(data_humidity, options_humidity);
-                chart_temperature.draw(data_temperature, options_temperature);
-                chart_wind.draw(data_wind, options_wind);
-                chart_radiation.draw(data_radiation, options_radiation);
+                chart_status.draw(data_status);
+                chart_humidity.draw(data_humidity);
+                chart_temperature.draw(data_temperature);
+                chart_wind.draw(data_wind);
+                chart_radiation.draw(data_radiation);
+
+                $('#graphs').css('display', 'block');
+
 
             }
         });

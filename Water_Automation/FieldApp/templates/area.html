@@ -74,8 +74,11 @@
 {% include 'footer.html' %}
 
 <script>
-    getFields('field');
+
+    getFields('field', 'area', '');
+
     google.load("visualization", "1", {packages: ["corechart"]});
+
     var init_date;
     var end_date;
     var from = jQuery('#from_datetimepicker').datetimepicker({
@@ -105,63 +108,39 @@
 
             case 1: //6 hours
                 init_date.setHours(end_date.getHours() - 6);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 2: //24 hours
                 init_date.setHours(end_date.getHours() - 24);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 3: //7 days
                 init_date.setDate(end_date.getDate() - 7);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 4: //15 days
                 init_date.setDate(end_date.getDate() - 15);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
             case 5: //30 days
                 init_date.setDate(end_date.getDate() - 30);
-                from.datetimepicker({
-                    value: init_date.dateFormat('Y-m-d H:i:s')
-                });
-                to.datetimepicker({
-                    value: end_date.dateFormat('Y-m-d H:i:s')
-                });
                 break;
 
         }
+        from.datetimepicker({
+            value: init_date.dateFormat('Y-m-d H:i:s')
+        });
+        to.datetimepicker({
+            value: end_date.dateFormat('Y-m-d H:i:s')
+        });
 
     }
 
     function graphLogs() {
-        area_id = $('#area').val();
+        var area_id = $('#area').val();
         console.log(init_date);
         console.log(end_date);
-        var sensor_id = $('#sensor').val();
+
         $.ajax({
             url: "/Crop_Area_Log/",
             data: {

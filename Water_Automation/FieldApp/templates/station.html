@@ -148,8 +148,8 @@
     function graphLogs() {
 
         $('#graphs').css('display', 'none');
-        console.log(init_date);
-        console.log(end_date);
+        console.log(init_date.dateFormat('Y-m-d H:i:s'));
+        console.log(end_date.dateFormat('Y-m-d H:i:s'));
 
         $.ajax({
             url: "/Station_Log/",
@@ -166,31 +166,39 @@
 
                 var relative_humidity_array = [];
                 relative_humidity_array.push(['Time', 'Relative Humidity']);
+
                 var temperature_array = [];
                 temperature_array.push(['Time', 'Temperature']);
+
                 var wind_speed_array = [];
                 wind_speed_array.push(['Time', 'Wind Speed']);
+
                 var solar_radiation_array = [];
                 solar_radiation_array.push(['Time', 'Solar Radiation']);
 
                 $.each(data, function (index, value) {
                     var tmp_status = [];
+                    tmp_status.push(value.station_date_received);
                     tmp_status.push(value.station_status);
                     status_array.push(tmp_status);
 
                     var tmp_humidity = [];
+                    tmp_status.push(value.station_date_received);
                     tmp_humidity.push(value.station_relative_humidity);
                     relative_humidity_array.push(tmp_humidity);
 
                     var tmp_temperature = [];
+                    tmp_status.push(value.station_date_received);
                     tmp_temperature.push(value.station_temperature);
                     temperature_array.push(tmp_temperature);
 
                     var tmp_wind = [];
+                    tmp_status.push(value.station_date_received);
                     tmp_wind.push(value.station_wind_speed);
                     wind_speed_array.push(tmp_wind);
 
                     var tmp_radiation = [];
+                    tmp_status.push(value.station_date_received);
                     tmp_radiation.push(value.station_solar_radiation);
                     solar_radiation_array.push(tmp_radiation);
 
@@ -202,14 +210,11 @@
                 var data_wind = google.visualization.arrayToDataTable(wind_speed_array);
                 var data_radiation = google.visualization.arrayToDataTable(solar_radiation_array);
 
-                /*
-                    var options_status = {title: 'Station Status'};
-                    var options_humidity = {title: 'Relative Humidity'};
-                    var options_temperature = {title: 'Temperature'};
-                    var options_wind = {title: 'Wind Speed'};
-                    var options_radiation = {title: 'Solar Radiation'};
-                */
-
+                // var options_status = {title: 'Station Status'};
+                // var options_humidity = {title: 'Relative Humidity'};
+                // var options_temperature = {title: 'Temperature'};
+                // var options_wind = {title: 'Wind Speed'};
+                // var options_radiation = {title: 'Solar Radiation'};
 
                 var chart_status = new google.visualization.LineChart(document.getElementById('status_chart'));
                 var chart_humidity = new google.visualization.LineChart(document.getElementById('moisture_chart'));
@@ -224,7 +229,6 @@
                 chart_radiation.draw(data_radiation);
 
                 $('#graphs').css('display', 'block');
-
 
             }
         });

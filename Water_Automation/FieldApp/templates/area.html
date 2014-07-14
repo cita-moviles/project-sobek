@@ -140,8 +140,8 @@
 
     function graphLogs() {
         var area_id = $('#area').val();
-        console.log(init_date);
-        console.log(end_date);
+        console.log(init_date.dateFormat('Y-m-d H:i:s'));
+        console.log(end_date.dateFormat('Y-m-d H:i:s'));
 
         $.ajax({
             url: "/Crop_Area_Log/",

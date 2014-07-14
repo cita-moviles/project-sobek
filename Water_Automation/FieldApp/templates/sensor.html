@@ -150,8 +150,8 @@
 
     function graphLogs() {
 
-        console.log(init_date);
-        console.log(end_date);
+        console.log(init_date.dateFormat('Y-m-d H:i:s'));
+        console.log(end_date.dateFormat('Y-m-d H:i:s'));
         var sensor_id = $('#sensor').val();
 
         $.ajax({
@@ -189,7 +189,6 @@
 
                 //var options_moisture = {title: 'Soil Moisture'};
                 //var options_temperature = {title: 'Temperature'};
-
 
                 var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
                 var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));

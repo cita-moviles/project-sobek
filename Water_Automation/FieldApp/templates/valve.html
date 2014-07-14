@@ -144,8 +144,8 @@
 
     function graphLogs() {
 
-        console.log(init_date);
-        console.log(end_date);
+        console.log(init_date.dateFormat('Y-m-d H:i:s'));
+        console.log(end_date.dateFormat('Y-m-d H:i:s'));
         var sensor_id = $('#sensor').val();
 
         $.ajax({

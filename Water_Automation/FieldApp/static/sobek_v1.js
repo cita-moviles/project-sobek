@@ -71,7 +71,7 @@ function getAreas(select_id, search_id, field2){
             $.each(data, function( index, value ) {
                 options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
                 current_data += "<h4>Area: " + value.area_id + "</h4>";
-                current_data += "Evotranspiration: " + value.ev + "<br/>";
+                current_data += "Evotranspiration: " + value.area_ev + "<br/>";
                 current_data += "Date: " + value.area_date_received + "</p>";
             });
 
@@ -195,8 +195,8 @@ function getValves(select_id){
                 current_data += "<h4>Valve: " + value.valve_id + "</h4>";
                 current_data += "<p>Actuator: " + value.valve_user_define_1 + "<br/>";
                 current_data += "Status: " + value.valve_status + "<br/>";
-                current_data += "Flow: " + value.flow + "<br/>";
-                current_data += "Pressure: " + value.pressure + "</p>";
+                current_data += "Flow: " + value.valve_flow + "<br/>";
+                current_data += "Pressure: " + value.valve_pressure + "</p>";
             });
 
             $('#'+select_id).html(options);

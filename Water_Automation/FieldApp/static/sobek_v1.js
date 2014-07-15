@@ -139,13 +139,21 @@ function getSensors(select_id, search_id){
         url: "/Sensor_Search/",
         data: { fk_area: area},
         success:function(data){
-            options = "";
+            var options = "";
+            var current_data = "";
 
             $.each(data, function( index, value ) {
                 options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
+                current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
+                current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
+                current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
+                current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
+                current_data += "Temperature: " + value.sensor_temperature + "<br/>";
+                current_data += "Date: " + value.sensor_date_received + "</p>";
             });
 
             $('#'+select_id).html(options);
+            $('#current_sensor').html(current_data);
         }
     });
 }

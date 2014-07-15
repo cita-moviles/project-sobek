@@ -28,13 +28,11 @@
 
         <p>Select the range of dates you wish to graph:</p>
 
-        <label for="from">From</label>
-        {#        <input type="text" id="from" name="from">#}
+        <label for="from_datetimepicker">From</label>
         <input id="from_datetimepicker" type="text"/>
-        <label for="to">to</label>
-        {#        <input type="text" id="to" name="to">#}
-        <input id="to_datetimepicker" type="text"/>
 
+        <label for="to_datetimepicker">to</label>
+        <input id="to_datetimepicker" type="text"/>
 
         <ul class="button-group [radius round]">
             <li>
@@ -65,6 +63,11 @@
         </ul>
     </div>
 
+    <div class="medium-6 card right" style="margin-bottom: 20px;">
+        <h3>Current data</h3>
+        <div id="current_sensor"></div>
+
+    </div>
 
     <div class="medium-6 card right">
         <h3>Graphs</h3>

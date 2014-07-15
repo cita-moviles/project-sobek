@@ -14,7 +14,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="medium-5 card left">
+    <div class="medium-4 card left">
         <h3>
             Select the valve you wish to graph:
         </h3>
@@ -61,7 +61,12 @@
         </ul>
     </div>
 
-    <div class="medium-6 card right">
+    <div class="medium-4 card left">
+        <h3>Current data</h3>
+        <div id="current_valve"></div>
+    </div>
+
+    <div class="medium-4 card right">
         <h3>Graphs</h3>
         <section id="graphs" style="display: none;">
             <h4>Actuator & Status</h4>
@@ -72,9 +77,7 @@
 
             <h4>Pressure</h4>
             <div id="valve_pressure_graph" height="400" width="1000"></div>
-
         </section>
-
     </div>
 </div>
 {% include 'footer.html' %}
@@ -85,6 +88,7 @@
 
     var init_date;
     var end_date;
+
     var from = jQuery('#from_datetimepicker').datetimepicker({
 
         closeOnDateSelect: true,

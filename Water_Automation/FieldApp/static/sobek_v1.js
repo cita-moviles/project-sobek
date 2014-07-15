@@ -215,7 +215,7 @@ function getValves(select_id, search_id){
             $.each(data, function( index, value ) {
                 options += '<option value="' + value.valve_id + '">' + value.valve_id + '</option>';
                 current_data += "<h4>Valve: " + value.valve_id + "</h4>";
-                current_data += "<p>Actuator: " + value.valve_user_define_1 + "<br/>";
+                current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
                 current_data += "Status: " + value.valve_status + "<br/>";
                 current_data += "Flow: " + value.valve_flow + "<br/>";
                 current_data += "Pressure: " + value.valve_pressure + "</p>";

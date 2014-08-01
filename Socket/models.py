@@ -179,7 +179,7 @@ class Crop_Area:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
             print result2['area_configuration']
-            print self.valve_user_define2
+            print self.area_user_define1
             if result2['area_configuration'] == self.area_user_define1:
                 area_cfg += 'ROK'
                 print "No configuration pending"

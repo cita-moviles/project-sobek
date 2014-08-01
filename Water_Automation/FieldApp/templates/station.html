@@ -69,7 +69,7 @@
     </div>
 
     <div class="medium-4 card right">
-        <section id="graphs" style="display:none;">
+        <section id="graphs">
 
             <h4>Status</h4>
             <div id="status_chart" height="400" width="1000"></div>
@@ -236,8 +236,6 @@
                 chart_temperature.draw(data_temperature);
                 chart_wind.draw(data_wind);
                 chart_radiation.draw(data_radiation);
-
-                $('#graphs').css('display', 'block');
 
             }
         });

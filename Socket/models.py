@@ -361,7 +361,7 @@ class MessageProcessor:
                     field.upload_to_server()
 
                 else:
-                    print "Nothing cool"
+                    print "Nothing cool > " + msg
 
             except ValueError:
                 print('Non-numeric data: ' + msg)

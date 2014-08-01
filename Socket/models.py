@@ -17,6 +17,11 @@ def instanciate_date():
     currentDate = datetime.datetime.today()
 
 
+def instanciate_cfg():
+    global area_cfg
+    area_cfg = ' '
+
+
 class Sensor:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
@@ -152,7 +157,8 @@ class Crop_Area:
         self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
         global currentDate
         self.area_date_received = str(currentDate)
-        self.area_configuration = self.get_from_server()
+        global area_cfg
+        area_cfg = self.get_from_server()
 
 
     def to_json(self):
@@ -189,7 +195,7 @@ class Crop_Area:
 
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
-            print('Valve configuration not found ' + str(self.area_id))
+            print('Area configuration not found ' + str(self.area_id))
         return area_cfg
 
 
@@ -316,6 +322,8 @@ class MessageProcessor:
         if currentDate is None:
             instanciate_date()
 
+        instanciate_cfg()
+
         print currentDate
         area_configuration = "ROK"
         msglist = message.split('#')
@@ -341,7 +349,6 @@ class MessageProcessor:
                     area = Crop_Area(msg + "#")
                     #print area.to_json()
                     area.upload_to_server()
-                    area_configuration = area.area_configuration
 
                 elif msg[1:3] == "40":
                     station = Weather_Station(msg + "#")
@@ -362,5 +369,8 @@ class MessageProcessor:
             except Exception, ex:
                 logging.exception("Something awful happened!")
                 print('Unexpected error: ' + msg)
+
+        global area_cfg
+        print "--" + area_cfg + "---"
 
         return area_configuration

@@ -372,5 +372,6 @@ class MessageProcessor:
 
         global area_cfg
         print "--" + area_cfg + "---"
-
+        if area_configuration != area_cfg:
+            area_configuration = area_cfg
         return area_configuration

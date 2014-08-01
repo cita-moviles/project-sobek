@@ -141,7 +141,7 @@ class Crop_Area:
         self.area_id = int(message[3:7])
         self.area_ev = float(message[7:9] + "." + message[9])
         self.area_x_position = 0
-        self.area_x_position = 0
+        self.area_y_position = 0
         comma = message.index(",")
         if comma == 10:
             self.area_user_define1 = ' '
@@ -159,7 +159,6 @@ class Crop_Area:
         self.area_date_received = str(currentDate)
         global area_cfg
         area_cfg = self.get_from_server()
-
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -374,4 +373,5 @@ class MessageProcessor:
         print "--" + area_cfg + "---"
         if area_configuration != area_cfg:
             area_configuration = area_cfg
+
         return area_configuration

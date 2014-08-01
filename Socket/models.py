@@ -161,6 +161,7 @@ class Crop_Area:
         global area_cfg
         self.area_name = " "
         self.area_description = " "
+        self.get_name_from_server()
         area_cfg = self.get_from_server()
 
     def to_json(self):
@@ -176,6 +177,21 @@ class Crop_Area:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
+    def get_name_from_server(self):
+        request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/" + str(self.area_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'GET'
+        try:
+            result = urllib2.urlopen(request)
+            result2 = json.load(result)
+            self.area_name = result2['area_name']
+            self.area_description = result2['area_description']
+        except urllib2.HTTPError, ex:
+            #logging.exception("Something awful happened!")
+            print('Area names not found ' + str(self.area_id))
+        pass
+
     def get_from_server(self):
         area_cfg = ''
         request = urllib2.Request("http://riego.chi.itesm.mx/Area_Configuration/" + str(self.area_id) + "/")
@@ -188,8 +204,6 @@ class Crop_Area:
             result2 = json.load(result)
             print result2['area_configuration']
             print self.area_user_define1
-            self.area_name = result2['area_name']
-            self.area_description = result2['area_description']
             if result2['area_configuration'] == self.area_user_define1:
                 area_cfg += 'ROK'
                 print "No configuration pending"

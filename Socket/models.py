@@ -159,6 +159,8 @@ class Crop_Area:
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
+        self.area_name = " "
+        self.area_description = " "
         area_cfg = self.get_from_server()
 
     def to_json(self):
@@ -186,6 +188,8 @@ class Crop_Area:
             result2 = json.load(result)
             print result2['area_configuration']
             print self.area_user_define1
+            self.area_name = result2['area_name']
+            self.area_description = result2['area_description']
             if result2['area_configuration'] == self.area_user_define1:
                 area_cfg += 'ROK'
                 print "No configuration pending"

@@ -19,7 +19,7 @@ def instanciate_date():
 
 def instanciate_cfg():
     global area_cfg
-    area_cfg = ' '
+    area_cfg = 'ROK'
 
 
 class Sensor:

@@ -127,7 +127,7 @@ function getStations(select_id, search_id){
                 current_data += "Temperature: " + value.station_temperature + "<br/>";
                 current_data += "Wind Speed: " + value.station_wind_speed + "<br/>";
                 current_data += "Solar Station: " + value.station_solar_radiation + "<br/>";
-                current_data += "Date: " + value.sensor_date_received + "</p>";
+                current_data += "Date: " + value.station_date_received + "</p>";
             });
 
             $('#'+select_id).html(options);

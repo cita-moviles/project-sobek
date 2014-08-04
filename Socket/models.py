@@ -125,7 +125,7 @@ class Valve:
         request.get_method = lambda: 'PUT'
         print "---http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/"
         print self.to_json()
-        #result = urllib2.urlopen(request, self.to_json())
+        result = urllib2.urlopen(request, self.to_json())
         pass
 
 

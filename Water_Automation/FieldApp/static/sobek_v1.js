@@ -218,7 +218,8 @@ function getValves(select_id, search_id){
                 current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
                 current_data += "Status: " + value.valve_status + "<br/>";
                 current_data += "Flow: " + value.valve_flow + "<br/>";
-                current_data += "Pressure: " + value.valve_pressure + "</p>";
+                current_data += "Pressure: " + value.valve_pressure + "<br/>";
+                current_data += "Date: " + value.valve_date_received + "</p>";
             });
 
             $('#'+select_id).html(options);

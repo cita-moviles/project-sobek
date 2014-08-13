@@ -13,11 +13,11 @@
         <h1>Weather Stations</h1>
     </div>
 </div>
-<div class="row">
-    <div class="medium-4 card left">
-        <p>
+<div class="row card">
+    <div class="medium-4 columns">
+        <h3>
             Select the Weather Station you wish to graph:
-        </p>
+        </h3>
         <label>Field</label>
         <select id="field" onchange="getStations('station', 'field');"></select>
         <label>Weather Station</label>
@@ -61,17 +61,17 @@
         </ul>
     </div>
 
-    <div class="medium-4 card left">
+    <div class="medium-4 columns">
 
-        <h4>Current data</h4>
+        <h3>Current data</h3>
         <div id="current_station"></div>
 
     </div>
 
-    <div class="medium-4 card right">
+    <div class="medium-4 columns">
         <section id="graphs">
 
-            <h4>Status</h4>
+            <h3>Status</h3>
             <div id="status_chart" height="400" width="1000"></div>
 
             <h4>Relative Humidity</h4>

@@ -14,15 +14,18 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="medium-4 card left">
+<div class="row card">
+
+    <div class="medium-4 columns">
         <h3>
             Select the Sensor you wish to graph:
         </h3>
         <label>Field</label>
-        <select id="field" onchange="getAreas('area', 'field');"></select>
+        <select id="field"
+                onchange="getAreas('area', 'field');"></select>
         <label>Area</label>
-        <select id="area" onchange="getSensors('sensor', 'area');"></select>
+        <select id="area"
+                onchange="getSensors('sensor', 'area');"></select>
         <label>Sensor</label>
         <select id="sensor"></select>
 
@@ -36,50 +39,61 @@
 
         <ul class="button-group [radius round]">
             <li>
-                <button onclick="quick_date(1)" class="button">6 hours</button>
+                <button onclick="quick_date(1)" class="button">6 hours
+                </button>
             </li>
             <li>
-                <button onclick="quick_date(2)" class="button">24 hours</button>
+                <button onclick="quick_date(2)" class="button">24 hours
+                </button>
             </li>
             <li>
-                <button onclick="quick_date(3)" class="button">7 days</button>
+                <button onclick="quick_date(3)" class="button">7 days
+                </button>
             </li>
             <li>
-                <button onclick="quick_date(4)" class="button">15 days</button>
+                <button onclick="quick_date(4)" class="button">15 days
+                </button>
             </li>
             <li>
-                <button onclick="quick_date(5)" class="button">30 days</button>
+                <button onclick="quick_date(5)" class="button">30 days
+                </button>
             </li>
         </ul>
 
         <br/>
         <ul class="button-group [radius round]">
             <li>
-                <button class="button" onclick="graphLogs()">Graph</button>
+                <button class="button" onclick="graphLogs()">Graph
+                </button>
             </li>
             <li>
-                <button class="button [secondary alert success]" onclick="hideTag('graphs')">Clean</button>
+                <button class="button [secondary alert success]"
+                        onclick="hideTag('graphs')">Clean
+                </button>
             </li>
         </ul>
     </div>
 
-    <div class="medium-4 card left">
+    <div class="medium-4  columns">
         <h3>Current data</h3>
+
         <div id="current_sensor"></div>
 
     </div>
 
-    <div class="medium-4 card right">
+    <div class="medium-4 columns">
         <h3>Graphs</h3>
         <section id="graphs">
             <h4>Soil Moisture</h4>
+
             <div id="moisture_chart" height="400" width="1000"></div>
 
             <h4>Temperature</h4>
+
             <div id="temperature_chart" height="400" width="1000"></div>
         </section>
-    </div>
 
+    </div>
 </div>
 <br/>
 <br/>

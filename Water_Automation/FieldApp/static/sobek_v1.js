@@ -71,7 +71,9 @@ function getAreas(select_id, search_id, field2){
             $.each(data, function( index, value ) {
                 var date_received = "";
                 if (value.area_date_received !== "") {
-                    date_received = new Date(Date.parse(value.area_date_received)).format("YY-mm-dd HH:ii:ss");
+
+                    var dr = new Date(Date.parse(value.area_date_received));
+                    date_received = dr.format("YY-mm-dd HH:ii:ss");
                 }
 
                 options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
@@ -128,7 +130,8 @@ function getStations(select_id, search_id){
 
                 var date_received = "";
                 if (value.station_date_received !== "") {
-                    date_received = new Date(Date.parse(value.station_date_received)).format("YY-mm-dd HH:ii:ss");
+                    var dr = new Date(Date.parse(value.station_date_received));
+                    date_received = dr.format("YY-mm-dd HH:ii:ss");
                 }
 
                 options += '<option value="' + value.station_id + '">' + value.station_id + '</option>';
@@ -181,7 +184,8 @@ function getSensors(select_id, search_id){
 
                 var date_received = "";
                 if (value.sensor_date_received !== "") {
-                    date_received = new Date(Date.parse(value.sensor_date_received)).format("YY-mm-dd HH:ii:ss");
+                    var dr = new Date(Date.parse(value.sensor_date_received));
+                    date_received = dr.format("YY-mm-dd HH:ii:ss");
                 }
 
                 options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
@@ -233,7 +237,8 @@ function getValves(select_id, search_id){
 
                 var date_received = "";
                 if (value.valve_date_received !== "") {
-                    date_received = new Date(Date.parse(value.valve_date_received)).format("YY-mm-dd HH:ii:ss");
+                    var dr = new Date(Date.parse(value.valve_date_received));
+                    date_received = dr.format("YY-mm-dd HH:ii:ss");
                 }
 
                 options += '<option value="' + value.valve_id + '">' + value.valve_id + '</option>';

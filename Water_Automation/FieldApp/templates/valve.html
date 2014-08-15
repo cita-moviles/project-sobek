@@ -83,7 +83,7 @@
 {% include 'footer.html' %}
 
 <script>
-    var tzdiff = new Date().getTimezoneOffset()/60;
+    //var tzdiff = new Date().getTimezoneOffset()/60;
 
     google.load("visualization", "1", {packages: ["corechart"]});
     getFields('field', 'area', 'valve');
@@ -176,7 +176,6 @@
 
                 $.each(data, function (index, value) {
                     var date_received = new Date(Date.parse(value.valve_date_received));
-                    //date_received.setHours(date_received.getHours() - tzdiff);
 
                     var temp_array = [];
                     temp_array.push(date_received);

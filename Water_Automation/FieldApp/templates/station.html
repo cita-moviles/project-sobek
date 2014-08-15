@@ -184,28 +184,30 @@
                 solar_radiation_array.push(['Time', 'Solar Radiation']);
 
                 $.each(data, function (index, value) {
+                    var date_received = new Date(Date.parse(value.station_date_received));
+
                     var tmp_status = [];
-                    tmp_status.push(value.station_date_received);
+                    tmp_status.push(date_received);
                     tmp_status.push(value.station_status);
                     status_array.push(tmp_status);
 
                     var tmp_humidity = [];
-                    tmp_humidity.push(value.station_date_received);
+                    tmp_humidity.push(date_received);
                     tmp_humidity.push(value.station_relative_humidity);
                     relative_humidity_array.push(tmp_humidity);
 
                     var tmp_temperature = [];
-                    tmp_temperature.push(value.station_date_received);
+                    tmp_temperature.push(date_received);
                     tmp_temperature.push(value.station_temperature);
                     temperature_array.push(tmp_temperature);
 
                     var tmp_wind = [];
-                    tmp_wind.push(value.station_date_received);
+                    tmp_wind.push(date_received);
                     tmp_wind.push(value.station_wind_speed);
                     wind_speed_array.push(tmp_wind);
 
                     var tmp_radiation = [];
-                    tmp_radiation.push(value.station_date_received);
+                    tmp_radiation.push(date_received);
                     tmp_radiation.push(value.station_solar_radiation);
                     solar_radiation_array.push(tmp_radiation);
 

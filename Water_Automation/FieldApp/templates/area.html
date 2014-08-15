@@ -162,14 +162,17 @@
                 ev_array.push(['Time', 'EV']);
 
                 $.each(data, function (index, value) {
+
+                    var date_received = new Date(Date.parse(value.area_date_received));
+
                     var tmp_array = [];
-                    tmp_array.push(value.area_date_received);
+                    tmp_array.push(date_received);
                     tmp_array.push(value.area_ev);
                     ev_array.push(tmp_array);
                 });
 
                 var data_ev = google.visualization.arrayToDataTable(ev_array);
-                //var options_ev = {title: 'Evotranspiration'};
+
                 var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
                 chart_ev.draw(data_ev);
             }

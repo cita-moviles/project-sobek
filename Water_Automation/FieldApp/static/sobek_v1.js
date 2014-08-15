@@ -120,6 +120,7 @@ function getStations(select_id, search_id){
             var current_data = "";
 
             $.each(data, function( index, value ) {
+                var date_received = new Date(Date.parse(value.station_date_received));
                 options += '<option value="' + value.station_id + '">' + value.station_id + '</option>';
                 current_data += "<h4>Station: " + value.station_id + "</h4>";
                 current_data += "<p>Status: " + value.station_status + "<br/>";
@@ -127,7 +128,7 @@ function getStations(select_id, search_id){
                 current_data += "Temperature: " + value.station_temperature + "<br/>";
                 current_data += "Wind Speed: " + value.station_wind_speed + "<br/>";
                 current_data += "Solar Station: " + value.station_solar_radiation + "<br/>";
-                current_data += "Date: " + value.station_date_received + "</p>";
+                current_data += "Date: " + date_received + "</p>";
             });
 
             $('#'+select_id).html(options);
@@ -167,13 +168,16 @@ function getSensors(select_id, search_id){
             var current_data = "";
 
             $.each(data, function( index, value ) {
+
+                var date_received = new Date(Date.parse(value.sensor_date_received))
+
                 options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
                 current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
                 current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
                 current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
                 current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
                 current_data += "Temperature: " + value.sensor_temperature + "<br/>";
-                current_data += "Date: " + value.sensor_date_received + "</p>";
+                current_data += "Date: " + date_received + "</p>";
             });
 
             $('#'+select_id).html(options);
@@ -213,13 +217,15 @@ function getValves(select_id, search_id){
             var current_data = "";
 
             $.each(data, function( index, value ) {
+
+                var date_received = new Date(Date.parse(value.valve_date_received));
                 options += '<option value="' + value.valve_id + '">' + value.valve_id + '</option>';
                 current_data += "<h4>Valve: " + value.valve_id + "</h4>";
                 current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
                 current_data += "Status: " + value.valve_status + "<br/>";
                 current_data += "Flow: " + value.valve_flow + "<br/>";
                 current_data += "Pressure: " + value.valve_pressure + "<br/>";
-                current_data += "Date: " + value.valve_date_received + "</p>";
+                current_data += "Date: " + date_received + "</p>";
             });
 
             $('#'+select_id).html(options);

@@ -188,15 +188,16 @@
                 temperature_array.push(['Time', 'Temperature']);
 
                 $.each(data, function (index, value) {
+                    var date_received = new Date(Date.parse(value.sensor_date_received));
                     var temp_array = [];
-                    temp_array.push(value.sensor_date_received);
+                    temp_array.push(date_received);
                     temp_array.push(value.sensor_hl1);
                     temp_array.push(value.sensor_hl2);
                     temp_array.push(value.sensor_hl3);
                     moisture_array.push(temp_array);
 
                     var temp_array2 = [];
-                    temp_array2.push(value.sensor_date_received);
+                    temp_array2.push(date_received);
                     temp_array2.push(value.sensor_temperature);
                     temperature_array.push(temp_array2);
                 });

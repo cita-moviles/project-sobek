@@ -83,6 +83,8 @@
 {% include 'footer.html' %}
 
 <script>
+    var tzdiff = new Date().getTimezoneOffset()/60;
+
     google.load("visualization", "1", {packages: ["corechart"]});
     getFields('field', 'area', 'valve');
 
@@ -173,19 +175,22 @@
                 ];
 
                 $.each(data, function (index, value) {
+                    var date_received = new Date(Date.parse(value.valve_date_received);
+                    date_received.setHours(date_received.getHours() - tzdiff);
+
                     var temp_array = [];
-                    temp_array.push(value.valve_date_received);
+                    temp_array.push(date_received);
                     temp_array.push(parseInt(value.valve_user_define_1));
                     temp_array.push(parseInt(value.valve_status));
                     valve_actuator_array.push(temp_array);
 
                     temp_array = [];
-                    temp_array.push(value.valve_date_received);
+                    temp_array.push(date_received);
                     temp_array.push(value.valve_flow);
                     valve_flow_array.push(temp_array);
 
                     temp_array = [];
-                    temp_array.push(value.valve_date_received);
+                    temp_array.push(date_received);
                     temp_array.push(value.valve_pressure);
                     valve_pressure_array.push(temp_array);
                 });
@@ -193,10 +198,6 @@
                 var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
                 var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
                 var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
-
-                // var options_actuator = {title: 'Actuator & Status'};
-                // var options_flow = {title: 'Flow'};
-                // var options_pressure = {title: 'Pressure'};
 
                 var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
                 chart_actuator.draw(data_actuator);

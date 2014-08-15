@@ -69,13 +69,15 @@ function getAreas(select_id, search_id, field2){
             var current_data = "";
 
             $.each(data, function( index, value ) {
-                var date_received = new Date(Date.parse(value.area_date_received));
+                var date_received = "";
+                if (value.area_date_received !== null) {
+                    date_received = new Date(Date.parse(value.area_date_received)).format("YY-mm-dd HH:ii:ss");
+                }
+
                 options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
                 current_data += "<h4>Area: " + value.area_id + "</h4>";
                 current_data += "Evotranspiration: " + value.area_ev + "<br/>";
-                if (date_received !== null) {
-                    current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
-                }
+                current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
             });
 
             $('#'+select_id).html(options);
@@ -123,7 +125,12 @@ function getStations(select_id, search_id){
             var current_data = "";
 
             $.each(data, function( index, value ) {
-                var date_received = new Date(Date.parse(value.station_date_received));
+
+                var date_received = "";
+                if (value.station_date_received !== null) {
+                    date_received = new Date(Date.parse(value.station_date_received)).format("YY-mm-dd HH:ii:ss");
+                }
+
                 options += '<option value="' + value.station_id + '">' + value.station_id + '</option>';
                 current_data += "<h4>Station: " + value.station_id + "</h4>";
                 current_data += "<p>Status: " + value.station_status + "<br/>";
@@ -131,9 +138,7 @@ function getStations(select_id, search_id){
                 current_data += "Temperature: " + value.station_temperature + "<br/>";
                 current_data += "Wind Speed: " + value.station_wind_speed + "<br/>";
                 current_data += "Solar Station: " + value.station_solar_radiation + "<br/>";
-                if (date_received !== null) {
-                    current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
-                }
+                current_data += "Date: " + date_received + "</p>";
             });
 
             $('#'+select_id).html(options);
@@ -174,7 +179,10 @@ function getSensors(select_id, search_id){
 
             $.each(data, function( index, value ) {
 
-                var date_received = new Date(Date.parse(value.sensor_date_received))
+                var date_received = "";
+                if (value.sensor_date_received !== null) {
+                    date_received = new Date(Date.parse(value.sensor_date_received)).format("YY-mm-dd HH:ii:ss");
+                }
 
                 options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
                 current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
@@ -182,9 +190,7 @@ function getSensors(select_id, search_id){
                 current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
                 current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
                 current_data += "Temperature: " + value.sensor_temperature + "<br/>";
-                if (date_received !== null) {
-                    current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
-                }
+                current_data += "Date: " + date_received + "</p>";
             });
 
             $('#'+select_id).html(options);
@@ -225,16 +231,18 @@ function getValves(select_id, search_id){
 
             $.each(data, function( index, value ) {
 
-                var date_received = new Date(Date.parse(value.valve_date_received));
+                var date_received = "";
+                if (value.valve_date_received !== null) {
+                    date_received = new Date(Date.parse(value.valve_date_received)).format("YY-mm-dd HH:ii:ss");
+                }
+                
                 options += '<option value="' + value.valve_id + '">' + value.valve_id + '</option>';
                 current_data += "<h4>Valve: " + value.valve_id + "</h4>";
                 current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
                 current_data += "Status: " + value.valve_status + "<br/>";
                 current_data += "Flow: " + value.valve_flow + "<br/>";
                 current_data += "Pressure: " + value.valve_pressure + "<br/>";
-                if (date_received !== null){
-                    current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
-                }
+                current_data += "Date: " + date_received + "</p>";
             });
 
             $('#'+select_id).html(options);

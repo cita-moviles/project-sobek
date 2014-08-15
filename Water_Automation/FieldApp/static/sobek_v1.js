@@ -69,10 +69,11 @@ function getAreas(select_id, search_id, field2){
             var current_data = "";
 
             $.each(data, function( index, value ) {
+                var date_received = new Date(Date.parse(value.area_date_received));
                 options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
                 current_data += "<h4>Area: " + value.area_id + "</h4>";
                 current_data += "Evotranspiration: " + value.area_ev + "<br/>";
-                current_data += "Date: " + value.area_date_received + "</p>";
+                current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
             });
 
             $('#'+select_id).html(options);
@@ -128,7 +129,7 @@ function getStations(select_id, search_id){
                 current_data += "Temperature: " + value.station_temperature + "<br/>";
                 current_data += "Wind Speed: " + value.station_wind_speed + "<br/>";
                 current_data += "Solar Station: " + value.station_solar_radiation + "<br/>";
-                current_data += "Date: " + date_received + "</p>";
+                current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
             });
 
             $('#'+select_id).html(options);
@@ -177,7 +178,7 @@ function getSensors(select_id, search_id){
                 current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
                 current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
                 current_data += "Temperature: " + value.sensor_temperature + "<br/>";
-                current_data += "Date: " + date_received + "</p>";
+                current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
             });
 
             $('#'+select_id).html(options);
@@ -225,7 +226,7 @@ function getValves(select_id, search_id){
                 current_data += "Status: " + value.valve_status + "<br/>";
                 current_data += "Flow: " + value.valve_flow + "<br/>";
                 current_data += "Pressure: " + value.valve_pressure + "<br/>";
-                current_data += "Date: " + date_received + "</p>";
+                current_data += "Date: " + date_received.format("YY-mm-dd HH:ii:ss") + "</p>";
             });
 
             $('#'+select_id).html(options);

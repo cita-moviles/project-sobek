@@ -7,21 +7,21 @@ import pytz
 import logging
 from datetime import timedelta
 from dateutil.parser import parse
-from time import strftime
 
 currentDate = None
 
 
-def instanciate_date():
+def instantiate_date():
     global currentDate
     currentDate = datetime.datetime.today()
 
 
-def instanciate_cfg():
+def instantiate_cfg():
     global area_cfg
     area_cfg = 'ROK'
 
 
+#10
 class Sensor:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
@@ -65,10 +65,8 @@ class Sensor:
         global currentDate
         self.sensor_date_received = str(currentDate)
 
-
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def upload_to_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/" + str(self.sensor_id) + "/")
@@ -79,6 +77,7 @@ class Sensor:
         result = urllib2.urlopen(request, self.to_json())
 
 
+#20
 class Valve:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
@@ -115,8 +114,7 @@ class Valve:
         #self.limit = int(message[21:26])
 
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def upload_to_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/")
@@ -129,6 +127,7 @@ class Valve:
         pass
 
 
+#30
 class Crop_Area:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
@@ -165,8 +164,7 @@ class Crop_Area:
         area_cfg = self.get_from_server()
 
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def upload_to_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/" + str(self.area_id) + "/")
@@ -217,6 +215,7 @@ class Crop_Area:
         return area_cfg
 
 
+#40
 class Weather_Station:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
@@ -257,10 +256,8 @@ class Weather_Station:
         global currentDate
         self.station_date_received = str(currentDate)
 
-
     def to_json(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def upload_to_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/" + str(self.station_id) + "/")
@@ -272,6 +269,7 @@ class Weather_Station:
         pass
 
 
+#50
 class Farm_Field:
     def __init__(self, message):
         """ Class that process and creates objects in order to be uploaded to the server
@@ -305,15 +303,28 @@ class Farm_Field:
                 self.field_user_define2 = ' '
             else:
                 self.field_user_define2 = message[comma + 1: terminator]
-        global currentDate
-        strTimezoneDiff = datetime.datetime.now(pytz.timezone('America/Chihuahua')).strftime('%z')
-        tmpcurrentDate = "20" + message[46:48] + "-" + message[49:51] + "-" + message[52:54] + "T" + \
-                      self.field_user_define2 + ".000000"
-        varcurrentDate = parse(tmpcurrentDate)
-        dateC = varcurrentDate + timedelta(hours=int(strTimezoneDiff[0] + strTimezoneDiff[2]))
-        currentDate = dateC.strftime("%Y-%m-%dT%H:%M:%S.000000") + strTimezoneDiff
-        self.field_date_received = str(currentDate)
 
+        global currentDate
+        #TimeZone
+        str_timezone_diff = datetime.datetime.now(pytz.timezone('America/Chihuahua')).strftime('%z')
+        #String Builder
+        tmp_current_date = "20" + message[46:48] + "-" + message[49:51] + "-" + message[52:54] + "T" + \
+            self.field_user_define2 + ".000000"
+        #Device Date
+        var_current_date = parse(tmp_current_date)
+        #Server Date
+        date_now = datetime.datetime.today()
+        #Time Diff
+        elapsed_time = date_now - var_current_date
+        #If the timediff > 1 month, use the Server Date
+        if abs(elapsed_time.total_seconds()) > (3600 * 24 * 31):
+            var_current_date = date_now
+        else:
+            #Substract the timezone from the date
+            date_c = var_current_date + timedelta(hours=int(str_timezone_diff[0] + str_timezone_diff[2]))
+        #Format String
+        currentDate = date_c.strftime("%Y-%m-%dT%H:%M:%S.000000") + str_timezone_diff
+        self.field_date_received = str(currentDate)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -338,9 +349,9 @@ class MessageProcessor:
         global currentDate
 
         if currentDate is None:
-            instanciate_date()
+            instantiate_date()
 
-        instanciate_cfg()
+        instantiate_cfg()
 
         print currentDate
         area_configuration = "ROK"

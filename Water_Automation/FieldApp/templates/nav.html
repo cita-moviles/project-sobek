@@ -1,25 +1,60 @@
-{#<ul class="top-bar">#}
-{#  <li class="active"><a href="#">Nav Item 1</a></li>#}
-
-
-<nav class="top-bar sticky" data-topbar data-options="sticky_on: large">
+<nav class="top-bar" data-topbar="" style="">
     <ul class="title-area">
+        <!-- Title Area -->
         <li class="name">
-            <h1><a href="index.html">Water Automation System</a></h1>
+            <h1><a href="#">Water Automation System</a></h1>
         </li>
         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+        <li class="toggle-topbar menu-icon"><a href=""><span>Menu</span></a>
+        </li>
     </ul>
 
-    <section class="top-bar-section">
-        <!-- Left Nav Section -->
+
+    <section class="top-bar-section" style="left: 0%;">
+        <!-- Start Right Nav Section -->
+
         <ul class="left">
             <li><a href="index.html" class="stylizedButton">Home</a></li>
-            <li><a href="sensor.html" class="stylizedButton">Sensors</a></li>
+            <li><a href="sensor.html" class="stylizedButton">Sensors</a>
+            </li>
             <li><a href="valve.html" class="stylizedButton">Valves</a></li>
             <li><a href="area.html" class="stylizedButton">Areas</a></li>
-            <li><a href="station.html" class="stylizedButton">Weather Stations</a></li>
-            <li><a href="configuration.html" class="stylizedButton">Area Configuration</a></li>
-        </ul>
+            <li><a href="station.html" class="stylizedButton">Weather
+                Stations</a></li>
+            <li><a href="configuration.html" class="stylizedButton">Area
+                Configuration</a></li>
+            <li class="has-dropdown not-click"><a>Developers</a>
+                <ul class="dropdown">
+                    <li class="has-dropdown not-click"><a>API</a>
+                        <ul class="dropdown">
+                            <li class="title back js-generated"><h5><a
+                                    href="javascript:void(0)">Back</a></h5></li>
+                            <li><label>APIs</label></li>
+                            <li><a href="/Farm_Field/">Fields</a></li>
+                            <li><a href="/Valve/">Valves</a></li>
+                            <li><a href="/Crop/">Crops</a></li>
+                            <li><a href="/Crop_Area/">Areas</a></li>
+                            <li><a href="/Weather_Station/">Stations</a></li>
+                            <li><a href="/Sensor/">Sensors</a></li>
+
+                        </ul>
+                    </li>
+
+                    <li class="has-dropdown not-click"><a>Logs</a>
+
+                        <ul class="dropdown">
+                            <li class="title back js-generated"><h5><a
+                                    href="javascript:void(0)">Back</a></h5></li>
+                            <li><label>Logs API</label></li>
+                            <li><a href="/Crop_Area_Log/">Area Log</a></li>
+                            <li><a href="/Sensor_Log/">Sensor Log</a></li>
+                            <li><a href="/Valve_Log/">Valve Log</a></li>
+                            <li><a href="/Station_Log/">Station Log</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+                <!-- End Right Nav Section -->
+
     </section>
 </nav>

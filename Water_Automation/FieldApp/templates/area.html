@@ -17,7 +17,7 @@
             Select the Area you wish to graph:
         </h3>
         <label>Field</label>
-        <select id="field" onchange="getAreas('area', 'field');"></select>
+        <select id="field" onchange="getAreasOptions('area', 'field');"></select>
         <label>Area</label>
         <select id="area"></select>
 
@@ -53,7 +53,9 @@
                 <button class="button" onclick="graphLogs()">Graph</button>
             </li>
             <li>
-                <button class="button [secondary alert success]" onclick="hideTag('graphs')">Clean</button>
+                <button class="button [secondary alert success]"
+                        onclick="hideTag('graphs')">Clean
+                </button>
             </li>
         </ul>
 
@@ -61,6 +63,7 @@
 
     <div class="medium-4 columns">
         <h3>Current data</h3>
+
         <div id="current_area"></div>
     </div>
 
@@ -68,6 +71,7 @@
         <h3>Graphs</h3>
         <section id="graphs">
             <h4>Evotranspiration</h4>
+
             <div id="ev_chart" height="400" width="1000"></div>
         </section>
     </div>
@@ -80,73 +84,19 @@
 
 <script>
 
+    // Getting data from
     getFields('field', 'area', '');
 
     google.load("visualization", "1", {packages: ["corechart"]});
 
-    var init_date;
-    var end_date;
-    var from = jQuery('#from_datetimepicker').datetimepicker({
+    var from_picker = '#to_datetimepicker';
+    var to_picker = '#from_datetimepicker';
 
-        closeOnDateSelect: true,
-        defaultChecked: true,
-        onSelectDate: function (current_time, $input) {
-            init_date = current_time.dateFormat('Y-m-d H:i:s');
-        }
+    initDatePickers(from_picker, to_picker);
 
-    });
-    var to = jQuery('#to_datetimepicker').datetimepicker({
-        closeOnDateSelect: true,
-        defaultChecked: true,
-        onSelectDate: function (current_time, $input) {
-            end_date = current_time.dateFormat('Y-m-d H:i:s');
-
-        }
-    });
-
-    function quick_date(option) {
-
-        init_date = new Date();
-        end_date = new Date();
-
-        switch (option) {
-
-            case 1: //6 hours
-                init_date.setHours(end_date.getHours() - 6);
-                break;
-
-            case 2: //24 hours
-                init_date.setHours(end_date.getHours() - 24);
-                break;
-
-            case 3: //7 days
-                init_date.setDate(end_date.getDate() - 7);
-                break;
-
-            case 4: //15 days
-                init_date.setDate(end_date.getDate() - 15);
-                break;
-
-            case 5: //30 days
-                init_date.setDate(end_date.getDate() - 30);
-                break;
-        }
-
-        from.datetimepicker({
-            value: init_date.dateFormat('Y-m-d H:i:s')
-        });
-        to.datetimepicker({
-            value: end_date.dateFormat('Y-m-d H:i:s')
-        });
-
-        graphLogs();
-
-    }
 
     function graphLogs() {
         var area_id = $('#area').val();
-        console.log(init_date.dateFormat('Y-m-d H:i:s'));
-        console.log(end_date.dateFormat('Y-m-d H:i:s'));
 
         $.ajax({
             url: "/Crop_Area_Log/",
@@ -178,6 +128,7 @@
             }
         });
     }
+
 
 </script>
 

@@ -10,44 +10,103 @@
 <body>
 {% include 'nav.html' %}
 
-{#Welcome message#}
-<div class="row">
-    <div class="large-12 columns">
-        <h1>Water Automation System</h1>
-    </div>
-</div>
-
-{#API & Logs#}
-<div class="row">
-    <div class="small-4 columns card">
-
-        <h2>API</h2>
-        <ul>
-            <li><a href="/Farm_Field/">Fields</a></li>
-            <li><a href="/Valve/">Valves</a></li>
-            <li><a href="/Crop/">Crops</a></li>
-            <li><a href="/Crop_Area/">Areas</a></li>
-            <li><a href="/Weather_Station/">Stations</a></li>
-            <li><a href="/Sensor/">Sensors</a></li>
-        </ul>
-
-    </div>
-</div>
 <div class="row">&nbsp;</div>
 <div class="row">
-    <div class="small-4 columns card">
-        <h2>Logs</h2>
-        <ul>
-            <li><a href="/Crop_Area_Log/">Area Log</a></li>
-            <li><a href="/Sensor_Log/">Sensor Log</a></li>
-            <li><a href="/Valve_Log/">Valve Log</a></li>
-            <li><a href="/Station_Log/">Station Log</a></li>
-        </ul>
+    <div class="large-6 columns">
+        <img src="http://placehold.it/500x500&text=Image"><br>
     </div>
+    <div class="large-6 columns">
+        <h3 class="show-for-small">Header
+            <hr/>
+        </h3>
+        <div class="panel">
+            <h4 class="hide-for-small">Weather Information
+                <hr/>
+            </h4>
+            <h5 class="subheader" id="weather_info">
 
+            </h5>
+        </div>
+        <div class="row">
+            <div class="large-6 small-6 columns">
+                <div class="panel">
+                    <h5>Header</h5>
+                    <h6 class="subheader">Praesent placerat dui tincidunt elit
+                        suscipit sed.</h6>
+                    <a href="#" class="small button">BUTTON TIME!</a>
+                </div>
+            </div>
+            <div class="large-6 small-6 columns">
+                <div class="panel">
+                    <h5>Header</h5>
+                    <h6 class="subheader">Praesent placerat dui tincidunt elit
+                        suscipit sed.</h6>
+                    <a href="#" class="small button">BUTTON TIME!</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="large-12 columns">
+        <div class="radius panel">
+            <form>
+                <div class="row collapse">
+                    <div class="large-10 small-8 columns">
+                        <input type="text"/>
+                    </div>
+                    <div class="large-2 small-3 columns">
+                        <a href="#" class="postfix button expand">Search</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="large-12 show-for-small columns">
+        <h3>Header</h3>
+        <hr>
+    </div>
+    <div class="large-3 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+            <p>Description</p>
+        </div>
+    </div>
+    <div class="large-3 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+            <p>Description</p>
+        </div>
+    </div>
+    <div class="large-3 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+            <p>Description</p>
+        </div>
+    </div>
+    <div class="large-3 small-6 columns">
+        <img src="http://placehold.it/500x500&text=Thumbnail">
+
+        <div class="panel">
+            <p>Description</p>
+        </div>
+    </div>
 </div>
 
 
 {% include 'footer.html' %}
+<script>
+    $.getElementById('#weather_info').append(getStationCurrentData(0, 0));
+</script>
+
 </body>
 </html>

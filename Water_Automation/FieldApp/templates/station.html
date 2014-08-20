@@ -19,7 +19,7 @@
             Select the Weather Station you wish to graph:
         </h3>
         <label>Field</label>
-        <select id="field" onchange="getStations('station', 'field');"></select>
+        <select id="field" onchange="getStationsOptions('station', 'field');"></select>
         <label>Weather Station</label>
         <select id="station"></select>
 
@@ -93,66 +93,12 @@
 {% include 'footer.html' %}
 <script>
 
-    google.load("visualization", "1", {packages: ["corechart"]});
-    getFields('field', 'station', '');
+    ggoogle.load("visualization", "1", {packages: ["corechart"]});
 
-    var init_date;
-    var end_date;
-    var from = jQuery('#from_datetimepicker').datetimepicker({
+    var from_picker = '#to_datetimepicker';
+    var to_picker = '#from_datetimepicker';
 
-        closeOnDateSelect: true,
-        defaultChecked: true,
-        onSelectDate: function (current_time, $input) {
-            init_date = current_time.dateFormat('Y-m-d H:i:s');
-        }
-
-    });
-    var to = jQuery('#to_datetimepicker').datetimepicker({
-        closeOnDateSelect: true,
-        defaultChecked: true,
-        onSelectDate: function (current_time, $input) {
-            end_date = current_time.dateFormat('Y-m-d H:i:s');
-
-        }
-    });
-
-    function quick_date(option) {
-
-        init_date = new Date();
-        end_date = new Date();
-
-        switch (option) {
-
-            case 1: //6 hours
-                init_date.setHours(end_date.getHours() - 6);
-                break;
-
-            case 2: //24 hours
-                init_date.setHours(end_date.getHours() - 24);
-                break;
-
-            case 3: //7 days
-                init_date.setDate(end_date.getDate() - 7);
-                break;
-
-            case 4: //15 days
-                init_date.setDate(end_date.getDate() - 15);
-                break;
-
-            case 5: //30 days
-                init_date.setDate(end_date.getDate() - 30);
-                break;
-        }
-
-        from.datetimepicker({
-            value: init_date.dateFormat('Y-m-d H:i:s')
-        });
-        to.datetimepicker({
-            value: end_date.dateFormat('Y-m-d H:i:s')
-        });
-
-        graphLogs();
-    }
+    initDatePickers(from_picker, to_picker);
 
     function graphLogs() {
         console.log(init_date.dateFormat('Y-m-d H:i:s'));
@@ -219,11 +165,6 @@
                 var data_wind = google.visualization.arrayToDataTable(wind_speed_array);
                 var data_radiation = google.visualization.arrayToDataTable(solar_radiation_array);
 
-                // var options_status = {title: 'Station Status'};
-                // var options_humidity = {title: 'Relative Humidity'};
-                // var options_temperature = {title: 'Temperature'};
-                // var options_wind = {title: 'Wind Speed'};
-                // var options_radiation = {title: 'Solar Radiation'};
 
                 var chart_status = new google.visualization.LineChart(document.getElementById('status_chart'));
                 var chart_humidity = new google.visualization.LineChart(document.getElementById('moisture_chart'));

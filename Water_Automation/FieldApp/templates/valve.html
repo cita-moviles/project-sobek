@@ -19,7 +19,7 @@
             Select the valve you wish to graph:
         </h3>
         <label>Field</label>
-        <select id="field" onchange="getAreas('area', 'field');"></select>
+        <select id="field" onchange="getAreasOptions('area', 'field');"></select>
         <label>Area</label>
         <select id="area" onchange="getValves('valve', 'area');"></select>
         <label>Valve</label>
@@ -86,67 +86,11 @@
     //var tzdiff = new Date().getTimezoneOffset()/60;
 
     google.load("visualization", "1", {packages: ["corechart"]});
-    getFields('field', 'area', 'valve');
 
-    var init_date;
-    var end_date;
+    var from_picker = '#to_datetimepicker';
+    var to_picker = '#from_datetimepicker';
 
-    var from = jQuery('#from_datetimepicker').datetimepicker({
-
-        closeOnDateSelect: true,
-        defaultChecked: true,
-        onSelectDate: function (current_time, $input) {
-            init_date = current_time.dateFormat('Y-m-d H:i:s');
-        }
-
-    });
-    var to = jQuery('#to_datetimepicker').datetimepicker({
-        closeOnDateSelect: true,
-        defaultChecked: true,
-        onSelectDate: function (current_time, $input) {
-            end_date = current_time.dateFormat('Y-m-d H:i:s');
-
-        }
-    });
-
-    function quick_date(option) {
-
-        init_date = new Date();
-        end_date = new Date();
-
-        switch (option) {
-
-            case 1: //6 hours
-                init_date.setHours(end_date.getHours() - 6);
-                break;
-
-            case 2: //24 hours
-                init_date.setHours(end_date.getHours() - 24);
-                break;
-
-            case 3: //7 days
-                init_date.setDate(end_date.getDate() - 7);
-                break;
-
-            case 4: //15 days
-                init_date.setDate(end_date.getDate() - 15);
-                break;
-
-            case 5: //30 days
-                init_date.setDate(end_date.getDate() - 30);
-                break;
-
-        }
-        from.datetimepicker({
-            value: init_date.dateFormat('Y-m-d H:i:s')
-        });
-        to.datetimepicker({
-            value: end_date.dateFormat('Y-m-d H:i:s')
-        });
-
-        graphLogs();
-
-    }
+    initDatePickers(from_picker, to_picker);
 
     function graphLogs() {
 

@@ -122,9 +122,12 @@
                 });
 
                 var data_ev = google.visualization.arrayToDataTable(ev_array);
+                var options = {
+                    smoothLine: true
+                };
 
                 var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
-                chart_ev.draw(data_ev);
+                chart_ev.draw(data_ev, options);
             }
         });
     }

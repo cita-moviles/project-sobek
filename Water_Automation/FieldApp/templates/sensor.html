@@ -25,7 +25,7 @@
                 onchange="getAreasOptions('area', 'field');"></select>
         <label>Area</label>
         <select id="area"
-                onchange="getSensors('sensor', 'area');"></select>
+                onchange="getSensorsOptions('sensor', 'area');"></select>
         <label>Sensor</label>
         <select id="sensor"></select>
 
@@ -156,8 +156,12 @@
                 var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
                 var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));
 
-                chart_moisture.draw(data_moisture);
-                chart_temperature.draw(data_temperature);
+                var options = {
+                    smoothLine: true
+                };
+
+                chart_moisture.draw(data_moisture, options);
+                chart_temperature.draw(data_temperature, options);
 
             }
         });

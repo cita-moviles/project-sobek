@@ -19,9 +19,11 @@
             Select the valve you wish to graph:
         </h3>
         <label>Field</label>
-        <select id="field" onchange="getAreasOptions('area', 'field');"></select>
+        <select id="field"
+                onchange="getAreasOptions('area', 'field');"></select>
         <label>Area</label>
-        <select id="area" onchange="getValves('valve', 'area');"></select>
+        <select id="area"
+                onchange="getValvesOptions('valve', 'area');"></select>
         <label>Valve</label>
         <select id="valve"></select>
 
@@ -56,13 +58,16 @@
                 <button class="button" onclick="graphLogs()">Graph</button>
             </li>
             <li>
-                <button class="button [secondary alert success]" onclick="hideTag('graphs')">Clean</button>
+                <button class="button [secondary alert success]"
+                        onclick="hideTag('graphs')">Clean
+                </button>
             </li>
         </ul>
     </div>
 
     <div class="medium-4 columns">
         <h3>Current data</h3>
+
         <div id="current_valve"></div>
     </div>
 
@@ -70,12 +75,15 @@
         <h3>Graphs</h3>
         <section id="graphs">
             <h4>Actuator & Status</h4>
+
             <div id="valve_actuator_graph" height="400" width="1000"></div>
 
             <h4>Flow</h4>
+
             <div id="valve_flow_graph" height="400" width="1000"></div>
 
             <h4>Pressure</h4>
+
             <div id="valve_pressure_graph" height="400" width="1000"></div>
         </section>
     </div>
@@ -142,14 +150,18 @@
                 var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
                 var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
 
+                var options = {
+                    smoothLine: true
+                };
+
                 var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
-                chart_actuator.draw(data_actuator);
+                chart_actuator.draw(data_actuator, options);
 
                 var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
-                chart_flow.draw(data_flow);
+                chart_flow.draw(data_flow, options);
 
                 var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
-                chart_pressure.draw(data_pressure);
+                chart_pressure.draw(data_pressure, options);
 
             }
         });

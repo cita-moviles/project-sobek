@@ -153,7 +153,7 @@ function getStationCurrentData(select_id, search_id) {
     return current_data;
 }
 
-function getSensors(select_id) {
+function getSensorsOptions(select_id) {
     $.ajax({
         url: "/Sensor/",
         data: { },
@@ -206,7 +206,7 @@ function getSensors(select_id, search_id) {
     });
 }
 
-function getValves(select_id) {
+function getValvesOptions(select_id) {
     $.ajax({
         url: "/Valve/",
         data: { },

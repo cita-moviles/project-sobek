@@ -14,7 +14,16 @@ function showTag(container) {
     $('#' + container).css('display', 'block')
 }
 
-function getFields(select_id, field2, field3) {
+
+/**
+ * Retrieves the available fields on the Database.
+ *
+ * @param {String} select_id id of the Selector containing hte fields available
+ * @param {String} field2 id of the next available selector
+ * @param {String} field3 id of the third selector if empty must use ""
+ *
+ * */
+function getAjaxFarmFields(select_id, field2, field3) {
     $.ajax({
         url: "/Farm_Field/",
         data: { },
@@ -196,7 +205,7 @@ function getSensors(select_id, search_id) {
                 current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
                 current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
                 current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
-                current_data += "Temperature: " + value.sensor_temperature + "<br/>";
+//                current_data += "Temperature: " + value.sensor_temperature + "<br/>";
                 current_data += "Date: " + date_received + "</p>";
             });
 
@@ -259,6 +268,13 @@ function getValves(select_id, search_id) {
     });
 }
 
+/**
+ * Initializes the date pickers with the proper configuration for the app.
+ *
+ *  @param {String} from_picker The id of the picker for the starting date.
+ * @param {String} to_picker
+ *
+ * */
 function initDatePickers(from_picker, to_picker) {
     var init_date;
     var end_date;
@@ -283,6 +299,12 @@ function initDatePickers(from_picker, to_picker) {
     });
 
 }
+
+/**
+ * Create a date object for the past 6 and 24 hours or for last 7,15 and 30 days.
+ *
+ * @param {Number} option 1 = 6 hours, 2 = 24 hours, 3 = 7 days, 4 = 15 days, 5 = 30 days.
+ * */
 
 function quick_date(option) {
 
@@ -322,4 +344,67 @@ function quick_date(option) {
     graphLogs();
 
 }
+
+/**
+ * Gets current weather data from /Weather_Station/ Web service
+ *
+ * @param {Number} station_id The Id of the station to be retreived
+ * @oaran {Function} Callback callback Function in charge of processing the JSON from web service
+ * */
+function getAjaxWeatherData(station_id, callback) {
+    $.ajax({
+        url: '/Weather_Station/' + station_id,
+
+        success: callback});
+}
+
+
+/**
+ * Callback function in charge of processing and displaying the data on the corresponding tags
+ *
+ * @param data JSON Retreived from the web service
+ * */
+function weatherCallback(data) {
+    var date_received = '';
+    if (data.station_date_received !== '') {
+        var dr = new Date(Date.parse(data.station_date_received));
+        date_received = dr.toLocaleString();
+
+    }
+
+    // Getting Data from received JSON
+    var station_id = data.station_id;
+    var station_name = data.station_name;
+    var relative_humidity = data.station_relative_humidity;
+    var radiation = data.station_solar_radiation;
+    var status = data.station_status;
+    var temperature = data.station_temperature;
+    var wind_speed = data.station_wind_speed;
+    var battery_level = data.station_user_define1;
+
+
+    // Selecting the tags
+    var id_tag = $('#station_data');
+    var date_tag = $('#date_data');
+    var humidity_tag = $('#humidity_data');
+    var radiation_tag = $('#radiation_data');
+    var status_tag = $('#status_data');
+    var temperature_tag = $('#temperature_data');
+    var wind_tag = $('#wind_data');
+    var battery_tag = $('#battery_data');
+
+
+    // Asign data received to tags
+    id_tag.append(station_id);
+    date_tag.append(date_received);
+    humidity_tag.append(relative_humidity);
+    radiation_tag.append(radiation);
+    status_tag.append(status);
+    temperature_tag.append(temperature);
+    wind_tag.append(wind_speed);
+    battery_tag.append(battery_level);
+
+
+}
+
 

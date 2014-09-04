@@ -48,6 +48,7 @@ class FieldAdmin(admin.ModelAdmin):
         'field_imei',
         'field_latitude',
         'field_longitude',
+        'field_date_received',
         'field_user_define1',
         'field_user_define2'
 

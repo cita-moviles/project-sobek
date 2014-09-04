@@ -103,15 +103,18 @@
 <script>
 
     google.load("visualization", "1", {packages: ["corechart"]});
-    getFields('field','station','');
+    getAjaxFarmFields('field', 'station', '');
     var from_picker = '#to_datetimepicker';
     var to_picker = '#from_datetimepicker';
 
     initDatePickers(from_picker, to_picker);
 
+    console.log($('#station').val());
+
     function graphLogs() {
         console.log(init_date.dateFormat('Y-m-d H:i:s'));
         console.log(end_date.dateFormat('Y-m-d H:i:s'));
+
 
         $.ajax({
             url: "/Station_Log/",
@@ -194,6 +197,8 @@
             }
         });
     }
+
+
 
 </script>
 </body>

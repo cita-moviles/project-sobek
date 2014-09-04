@@ -17,7 +17,8 @@
             Select the Area you wish to graph:
         </h3>
         <label>Field</label>
-        <select id="field" onchange="getAreasOptions('area', 'field');"></select>
+        <select id="field"
+                onchange="getAreasOptions('area', 'field');"></select>
         <label>Area</label>
         <select id="area"></select>
 
@@ -85,7 +86,7 @@
 <script>
 
     // Getting data from
-    getFields('field', 'area', '');
+    getAjaxFarmFields('field', 'area', '');
 
     google.load("visualization", "1", {packages: ["corechart"]});
 

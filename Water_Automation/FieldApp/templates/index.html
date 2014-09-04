@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Proyecto Sobek</title>
 
@@ -12,101 +12,454 @@
 
 <div class="row">&nbsp;</div>
 <div class="row">
+    <!-- Weather Information Current Data -->
     <div class="large-6 columns">
-        <img src="http://placehold.it/500x500&text=Image"><br>
-    </div>
-    <div class="large-6 columns">
-        <h3 class="show-for-small">Header
+        <h3 class="show-for-small">Sensor 0 Moisture Graph
             <hr/>
         </h3>
         <div class="panel">
-            <h4 class="hide-for-small">Weather Information
+            <h4>Weather Information
                 <hr/>
             </h4>
-            <h5 class="subheader" id="weather_info">
+            <p id="station_data">Station Id: </p>
 
-            </h5>
-        </div>
-        <div class="row">
-            <div class="large-6 small-6 columns">
-                <div class="panel">
-                    <h5>Header</h5>
-                    <h6 class="subheader">Praesent placerat dui tincidunt elit
-                        suscipit sed.</h6>
-                    <a href="#" class="small button">BUTTON TIME!</a>
-                </div>
-            </div>
-            <div class="large-6 small-6 columns">
-                <div class="panel">
-                    <h5>Header</h5>
-                    <h6 class="subheader">Praesent placerat dui tincidunt elit
-                        suscipit sed.</h6>
-                    <a href="#" class="small button">BUTTON TIME!</a>
-                </div>
-            </div>
+            <p id="date_data">Date: </p>
+
+            <p id="humidity_data">Relative Humidity: </p>
+
+            <p id="radiation_data">Radiation: </p>
+
+            <p id="status_data">Status: </p>
+
+            <p id="temperature_data">Temperature: </p>
+
+            <p id="wind_data">Wind Speed: </p>
+
+            <p id="battery_data">Battery: </p>
         </div>
     </div>
+
+    <!-- Sensor Graph-->
+
+    <div class="large-6 columns">
+        <!-- Sensor 0 Graph -->
+        <div class="progress round">
+            <p id="progress_message" style="float: left; margin-right:
+            5px"></p>
+            <span id="progress" class="meter"
+                  style="width: 0; float: left"></span>
+
+
+        </div>
+        <br>
+
+        <div id="moisture_chart" height="500" width="500"></div>
+        <br>
+
+        <div>
+
+            <label>Field</label>
+            <select id="field"
+                    onchange="getAreasOptions('area', 'field');"></select>
+            <label>Area</label>
+            <select id="area"
+                    onchange="getSensorsOptions('sensor', 'area');"></select>
+            <label>Sensor</label>
+            <select id="sensor"></select>
+            <button onclick="graphData()" class="button">Graph
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="row">
+    &nbsp;
 </div>
 
 
 <div class="row">
     <div class="large-12 columns">
-        <div class="radius panel">
-            <form>
-                <div class="row collapse">
-                    <div class="large-10 small-8 columns">
-                        <input type="text"/>
-                    </div>
-                    <div class="large-2 small-3 columns">
-                        <a href="#" class="postfix button expand">Search</a>
-                    </div>
-                </div>
-            </form>
+        <h3>Current Sensor Information</h3>
+        <hr>
+    </div>
+    <div id="sensors_information" class="large-12 columns">
+
+    </div>
+
+</div>
+
+<div class="row">
+    &nbsp;
+</div>
+
+<div class="row">
+
+    <div class="large-12 columns"></div>
+
+    <div id="graph_container" class="large-12">
+        <h4 id="ev_header"></h4>
+
+        <div id="ev_chart" height="500" width="500"></div>
+    </div>
+
+
+</div>
+
+<div class="row">
+    &nbsp;
+</div>
+
+<div class="row">
+
+    <div class="large-12 columns">
+        <h3>Current Sensor Information</h3>
+        <hr>
+    </div>
+
+    <div class="large-12 columns">
+        <div class="large-6 columns">
+            <label>Field</label>
+            <select id="field"
+                    onchange="getAreasOptions('area', 'field');"></select>
+            <label>Area</label>
+            <select id="area"
+                    onchange="getValvesOptions('valve', 'area');"></select>
+            <label>Valve</label>
+            <select id="valve"></select>
+
+            <button onclick="graphValveData()" class="button">Graph
+            </button>
+        </div>
+        <div class="large-6 columns">
+            <h4>Actuator & Status</h4>
+
+            <div id="valve_actuator_graph" height="400" width="1000"></div>
         </div>
     </div>
 </div>
 
+<div class="row">
+    <div class="large-12 columns">
+        <div class="large-6 columns">
+            <h4>Flow</h4>
+
+            <div id="valve_flow_graph" height="400" width="1000"></div>
+        </div>
+
+        <div class="large-6 columns">
+            <h4>Pressure</h4>
+
+            <div id="valve_pressure_graph" height="400" width="1000"></div>
+
+        </div>
+
+
+    </div>
+</div>
 
 <div class="row">
-    <div class="large-12 show-for-small columns">
-        <h3>Header</h3>
+    &nbsp;
+</div>
+
+<div class="row">
+    <div class="large-12 columns">
+        <h3>Current Valves Information</h3>
         <hr>
     </div>
-    <div class="large-3 small-6 columns">
-        <img src="http://placehold.it/500x500&text=Thumbnail">
-
-        <div class="panel">
-            <p>Description</p>
-        </div>
-    </div>
-    <div class="large-3 small-6 columns">
-        <img src="http://placehold.it/500x500&text=Thumbnail">
-
-        <div class="panel">
-            <p>Description</p>
-        </div>
-    </div>
-    <div class="large-3 small-6 columns">
-        <img src="http://placehold.it/500x500&text=Thumbnail">
-
-        <div class="panel">
-            <p>Description</p>
-        </div>
-    </div>
-    <div class="large-3 small-6 columns">
-        <img src="http://placehold.it/500x500&text=Thumbnail">
-
-        <div class="panel">
-            <p>Description</p>
-        </div>
+    <div id="current_valves" class="large-12 columns">
     </div>
 </div>
 
 
 {% include 'footer.html' %}
 <script>
-    console.log(getStationCurrentData(0, 0));
-</script>
 
+
+// Load the Visualization API library and the piechart library.
+google.load('visualization', '1.0', {'packages': ['corechart']});
+getAjaxFarmFields('field', 'area', 'sensor');
+getAjaxFarmFields('field', 'area', 'valve');
+getAjaxWeatherData(31, weatherCallback);
+
+var init_date = new Date();
+var end_date = new Date();
+
+init_date.setDate(end_date.getDate() - 10);
+
+var progressBar = $('#progress');
+
+
+function graphData() {
+
+    graphLogs(init_date, end_date);
+
+    var area_id = $('#area').val();
+    getCurrentSensorsData(area_id);
+    graphEvotranspiration(area_id);
+    getCurrentValves(area_id);
+    $('#ev_header').text('Ev for Area: ' + area_id);
+
+}
+
+function graphLogs(start, end) {
+
+    console.log(init_date.dateFormat('Y-m-d H:i:s'));
+    console.log(end_date.dateFormat('Y-m-d H:i:s'));
+    var sensor_id = $('#sensor').val();
+
+    $.ajax({
+        url: "/Sensor_Log/",
+        data: {
+            sensor_id: sensor_id,
+            min_date: init_date.dateFormat('Y-m-d H:i:s'),
+            max_date: end_date.dateFormat('Y-m-d H:i:s'),
+            ordering: "-sensor_date_received"
+        },
+        beforeSend: function () {
+            console.log('before send');
+            $('#progress').animate({width: 0});
+            $('#progress_message').text("Loading");
+
+        },
+        success: function (data) {
+
+            var moisture_array = [];
+            moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
+
+            if (data.length == 0) {
+                moisture_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                    0, 0, 0]);
+            } else {
+                $.each(data, function (index, value) {
+                    var date_received = new Date(Date.parse(value.sensor_date_received));
+                    var temp_array = [];
+                    temp_array.push(date_received);
+                    temp_array.push(value.sensor_hl1);
+                    temp_array.push(value.sensor_hl2);
+                    temp_array.push(value.sensor_hl3);
+                    moisture_array.push(temp_array);
+
+                });
+            }
+
+            var data_moisture = google.visualization.arrayToDataTable(moisture_array);
+
+            var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
+
+            var options = {
+                title: 'Soil Moisture (15 days)',
+                smoothLine: true
+            };
+
+            $('#progress_message').text("Done!");
+            $('#progress').animate({width: 100});
+            chart_moisture.draw(data_moisture, options);
+
+        }
+    });
+
+}
+
+function getCurrentSensorsData(area_id) {
+
+    $.ajax({
+        url: "/Sensor_Search/",
+        data: { fk_area: area_id},
+        success: function (data) {
+            var options = "";
+            var current_data = "";
+
+            $.each(data, function (index, value) {
+
+                var date_received = "";
+                if (value.sensor_date_received !== "") {
+                    var dr = new Date(Date.parse(value.sensor_date_received));
+                    date_received = dr.toLocaleString();
+                }
+                current_data += '<div class="panel large-4 small-6 ' +
+                        'columns">';
+                current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
+                current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
+                current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
+                current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
+                {#                current_data += "Temperature: " + value.sensor_temperature + "<br/>";#}
+                current_data += "Date: " + date_received + "</p>";
+                current_data += '</div>';
+            });
+
+            $('#sensors_information').html(current_data);
+        }
+    });
+
+}
+
+function graphEvotranspiration(area_id) {
+
+    $.ajax({
+        url: "/Crop_Area_Log/",
+        data: {
+            area_id: area_id,
+            min_date: init_date.dateFormat('Y-m-d H:i:s'),
+            max_date: end_date.dateFormat('Y-m-d H:i:s'),
+            ordering: "-area_date_received"
+        },
+
+        success: function (data) {
+            var ev_array = [];
+            ev_array.push(['Time', 'EV']);
+
+            if (data.length == 0) {
+
+                ev_array.push([end_date.dateFormat('Y-m-d H:i:s'), 0]);
+
+            } else {
+                $.each(data, function (index, value) {
+
+                            var date_received = new Date(Date.parse(value.area_date_received));
+
+                            var tmp_array = [];
+                            tmp_array.push(date_received);
+                            tmp_array.push(value.area_ev);
+                            ev_array.push(tmp_array);
+                        }
+                );
+
+
+            }
+
+
+            var data_ev = google.visualization.arrayToDataTable(ev_array);
+            var options = {
+                title: 'Evotranspiration (15 days)',
+                smoothLine: true
+            };
+
+            var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
+            chart_ev.draw(data_ev, options);
+        }
+    });
+
+
+}
+
+function graphValveData() {
+
+    var sensor_id = $('#sensor').val();
+
+    $.ajax({
+        url: "/Valve_Log/",
+        data: {
+            sensor_id: sensor_id,
+            min_date: init_date.dateFormat('Y-m-d H:i:s'),
+            max_date: end_date.dateFormat('Y-m-d H:i:s'),
+            ordering: "-valve_date_received"
+        },
+        success: function (data) {
+
+            var valve_actuator_array = [
+                ['Time', 'Actuator', 'Status']
+            ];
+            var valve_flow_array = [
+                ['Time', 'Flow']
+            ];
+            var valve_pressure_array = [
+                ['Time', 'Pressure']
+            ];
+
+            if (data.length == 0) {
+
+                valve_actuator_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                    0, 0]);
+                valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                    0]);
+
+                valve_pressure_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                    0]);
+
+            } else {
+                $.each(data, function (index, value) {
+                    var date_received = new Date(Date.parse(value.valve_date_received));
+
+                    var temp_array = [];
+                    temp_array.push(date_received);
+                    temp_array.push(parseInt(value.valve_user_define_1));
+                    temp_array.push(parseInt(value.valve_status));
+                    valve_actuator_array.push(temp_array);
+
+                    temp_array = [];
+                    temp_array.push(date_received);
+                    temp_array.push(value.valve_flow);
+                    valve_flow_array.push(temp_array);
+
+                    temp_array = [];
+                    temp_array.push(date_received);
+                    temp_array.push(value.valve_pressure);
+                    valve_pressure_array.push(temp_array);
+                });
+            }
+
+            var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
+            var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
+            var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
+
+            var options = {
+                smoothLine: true
+            };
+
+            var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
+            chart_actuator.draw(data_actuator, options);
+
+            var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
+            chart_flow.draw(data_flow, options);
+
+            var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
+            chart_pressure.draw(data_pressure, options);
+
+        }
+    });
+
+}
+
+function getCurrentValves(area_id) {
+
+    var current_data = '';
+
+    $.ajax({
+        url: "/Valve_Search/",
+        data: { fk_area: area_id},
+        success: function (data) {
+
+
+            var current_data = "";
+
+            $.each(data, function (index, value) {
+
+                var date_received = "";
+                if (value.valve_date_received !== "") {
+                    var dr = new Date(Date.parse(value.valve_date_received));
+                    date_received = dr.toLocaleString();
+                }
+                current_data += '<div class="panel large-4 small-6 ' +
+                        'columns">';
+                current_data += "<h4>Valve: " + value.valve_id + "</h4>";
+                current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
+                current_data += "Status: " + value.valve_status + "<br/>";
+                current_data += "Flow: " + value.valve_flow + "<br/>";
+                current_data += "Pressure: " + value.valve_pressure + "<br/>";
+                current_data += "Date: " + date_received + "</p>";
+                current_data += "</div>";
+            });
+
+            console.log(current_data);
+            $('#current_valves').html(current_data);
+        }
+    });
+}
+
+
+</script>
 </body>
 </html>

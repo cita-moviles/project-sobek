@@ -1,39 +1,25 @@
 <html>
 <head>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
+    {% include 'includeScripts.html' %}
 </head>
 <body>
-<div id="chart_div" style="width: 900px; height: 500px;"></div>
+<a href="#" data-reveal-id="myModal">Click Me For A Modal</a>
 
-<script type="text/javascript">
-    google.load("visualization", "1", {packages: ["corechart"]});
-    google.setOnLoadCallback(drawChart);
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ['Year', 'Sales', 'Expenses'],
-            ['2004', 1000, 400],
-            ['2005', 1170, 460],
-            ['2006', 660, 1120],
-            ['2007', 1030, 540]
-        ]);
+<div id="myModal" class="reveal-modal" data-reveal>
+    <h2>Yo!</h2>
+    <label>
+        Shit
+        <select></select>
+    </label>
+</div>
+{% include 'footer.html' %}
+<script>
+    $(document).ready(function () {
+        $('#myModal').foundation('reveal', 'open')
+    });
 
-        var options = {"title": "Average Load Summary",
-            "titlePosition": "in",
-            "width": 1100,
-            "height": 700,
-            "hAxis": {"slantedTextAngle": 90,
-                "position": "out",
-                "showTextEvery": 1,
-                "title": "Stops"},
-            "pointSize": 5,
-            "animation": {"duration": 1000,
-                "easing": 'out'}};
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-
-    }
 </script>
+
 </body>
 </html>

@@ -57,15 +57,9 @@
         <br>
 
         <div>
-
-            <label>Field</label>
-            <select id="field"
-                    onchange="getAreasOptions('area', 'field');"></select>
-            <label>Area</label>
-            <select id="area"
-                    onchange="getSensorsOptions('sensor', 'area');"></select>
-            <label>Sensor</label>
-            <select id="sensor"></select>
+            <label for="field">Field</label><select id="field"></select>
+            <label for="area">Area</label><select id="area"></select>
+            <label for="sensor">Sensor</label><select id="sensor"></select>
             <button onclick="graphData()" class="button">Graph
             </button>
 
@@ -121,15 +115,7 @@
 
     <div class="large-12 columns">
         <div class="large-6 columns">
-            <label>Field</label>
-            <select id="field"
-                    onchange="getAreasOptions('area', 'field');"></select>
-            <label>Area</label>
-            <select id="area"
-                    onchange="getValvesOptions('valve', 'area');"></select>
-            <label>Valve</label>
-            <select id="valve"></select>
-
+            <label for="valve">Valve</label><select id="valve"></select>
             <button onclick="graphValveData()" class="button">Graph
             </button>
         </div>
@@ -180,8 +166,66 @@
 
 // Load the Visualization API library and the piechart library.
 google.load('visualization', '1.0', {'packages': ['corechart']});
-getAjaxFarmFields('field', 'area', 'sensor');
-getAjaxFarmFields('field', 'area', 'valve');
+{#getAjaxFarmFields('field', 'area', 'sensor');#}
+
+var field_selector = $('#field');
+var area_selector = $('#area');
+var sensor_selector = $('#sensor');
+var valve_selector = $('#valve');
+
+getFarmFields(function (data) {
+    var options = "";
+
+    $.each(data, function (index, value) {
+        options += '<option value="' + value.field_id + '">' + value.field_name + '</option>';
+    });
+
+    field_selector.html(options);
+
+});
+
+
+field_selector.change(
+        getAreasForField(field_selector.val(), function (data) {
+
+
+                    var options = '';
+                    $.each(data, function (index, value) {
+                                options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
+                            }
+                    );
+                    area_selector.html(options);
+                }
+        ));
+
+area_selector.change(populateSensorAndValves(area_selector.val()));
+
+function populateSensorAndValves(area_id) {
+    getSensorsForArea(area_id, function (data) {
+
+        var options = '';
+        $.each(data, function (index, value) {
+
+            options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
+
+        });
+
+        sensor_selector.html(options);
+    });
+
+    getValvesForArea(area_id, function (data) {
+
+        var options = '';
+        $.each(data, function (index, value) {
+
+            options += '<option value="' + value.valve_id + '">' + value
+                    .valve_id + '</option>';
+
+        });
+        valve_selector.html(options);
+    });
+}
+
 getAjaxWeatherData(31, weatherCallback);
 
 var init_date = new Date();

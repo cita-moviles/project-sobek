@@ -5,7 +5,7 @@ import socket
 import sys
 import time
  
-HOST = 'localhost'#10.32.70.126'  # The remote host
+HOST = '200.34.100.126'  # The remote host
 PORT = 4580  # The same port as used by the server
 s = None
 for res in socket.getaddrinfo(HOST, PORT, socket.AF_UNSPEC, socket.SOCK_STREAM):

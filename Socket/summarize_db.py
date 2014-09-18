@@ -7,7 +7,10 @@ import json
 import urllib2
 import datetime
 
+from models import Sensor_Agg, Valve_Agg, Crop_Area_Agg, Weather_Station_Agg, Farm_Field_Agg
+
 today = datetime.datetime.today().strftime("%Y-%m-%d")
+current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 str_today = "&min_date=" + today + "%2000:00:00" + "&max_date=" + today + "%2023:59:59"
 
 
@@ -36,17 +39,38 @@ def get_sensor_log(sensorid):
             #print sensor_detail
 
         if len(res2) > 0:
-            print sensor_hl1 / len(res2)
-            print sensor_hl2 / len(res2)
-            print sensor_hl3 / len(res2)
-            print temperature / len(res2)
+            avg_sensor_hl1 = sensor_hl1 / len(res2)
+            avg_sensor_hl2 = sensor_hl2 / len(res2)
+            avg_sensor_hl3 = sensor_hl3 / len(res2)
+            avg_temperature = temperature / len(res2)
+            print avg_sensor_hl1
+            print avg_sensor_hl2
+            print avg_sensor_hl3
+            print avg_temperature
         else:
             print "No data"
 
         print ""
 
-        #TODO
+
         #Save to database
+        """
+        # * Socket model === Django Model
+        # 1. Build object for database.
+          # sensor_hl1
+          # sensor_hl2
+          # sensor_hl3
+          # sensor_temperature
+          # sensor_date_received = current_time
+
+        # 2. object.to_json() from model
+        # 3. object.upload_to_server() from model
+        # 4. Profit
+        """
+
+        sensor = Sensor_Agg(avg_sensor_hl1, avg_sensor_hl2, avg_sensor_hl3, avg_temperature, current_time)
+        sensor.to_json()
+        sensor.upload_to_server()
 
         # * Socket model === Django Model
         # 1. Build object for database.
@@ -84,12 +108,16 @@ def get_area_log(areaid):
             area_ev += area_detail['area_ev']
 
         if len(res2_area) > 0:
-            print area_ev / len(res2_area)
+            avg_area_ev = area_ev / len(res2_area)
+            print avg_area_ev
         else:
             print("Zero data")
         print ""
-        #TODO
+
         #Save to database
+        crop_area = Crop_Area_Agg(avg_area_ev, current_time)
+        crop_area.to_json()
+        crop_area.upload_to_server()
 
     except urllib2.HTTPError, ex:
         print('Not found ')
@@ -116,19 +144,112 @@ def get_valve_log(valveid):
             valve_pressure += valve_detail['valve_pressure']
 
         if len(res2_area) > 0:
-            print valve_flow / len(res2_area)
-            print valve_pressure / len(res2_area)
+            avg_valve_flow = valve_flow / len(res2_area)
+            avg_valve_pressure = valve_pressure / len(res2_area)
+            print avg_valve_flow
+            print avg_valve_pressure
         else:
             print("Zero data")
 
         print ""
-        #TODO
+
         #Save to database
+
+        valve = Valve_Agg(avg_valve_flow, avg_valve_pressure, current_time)
+        valve.to_json()
+        valve.upload_to_server()
 
     except urllib2.HTTPError, ex:
         print('Not found ')
+##Weather_Station
+    def get_station_log(stationid):
+        print "Station: " + str(stationid)
+        url = "http://riego.chi.itesm.mx/Station_Log/?station_id=" + str(stationid) + \
+            str_today + "&ordering=-station_date_received"
+
+        req_station = urllib2.Request(url)
+        req_station.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        req_station.add_header("Content-Type", "application/json")
+        req_station.get_method = lambda: 'GET'
+
+        try:
+            res2_station = json.load(urllib2.urlopen(req_station))
+            station_relative_humidity = 0
+            station_temperature = 0
+            station_wind_speed = 0
+            station_solar_radiation = 0
+
+            for station_detail in res2_station:
+                #print station_detail
+                station_relative_humidity += station_detail['station_relative_humidity']
+                station_temperature += station_detail['station_temperature']
+                station_wind_speed += station_detail['station_wind_speed']
+                station_solar_radiation += station_detail['station_solar_radiation']
+
+            if len(res2_station) > 0:
+                avg_station_humidity = station_relative_humidity / len(res2_station)
+                avg_station_temp = station_temperature / len(res2_station)
+                avg_station_wind = station_wind_speed / len(res2_station)
+                avg_station_radiation = station_solar_radiation / len (res2_station)
+            else:
+                print("Zero data")
+
+            print ""
+
+            #Save to database
+
+            station = Weather_Station_Agg(avg_station_humidity,avg_station_temp,avg_station_wind,
+                                          avg_station_radiation,current_time)
+            station.to_json()
+            station.upload_to_server()
+
+        except urllib2.HTTPError, ex:
+            print('Not found ')
+
+##Farm_Field
+    def get_field_log(fieldid):
+        print "Field: " + str(fieldid)
+        url = "http://riego.chi.itesm.mx/Farm_Field_Log/?field_id=" + str(fieldid) + \
+            str_today + "&ordering=-field_date_received"
+
+        req_field = urllib2.Request(url)
+        req_field.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        req_field.add_header("Content-Type", "application/json")
+        req_field.get_method = lambda: 'GET'
+
+        try:
+            res2_field = json.load(urllib2.urlopen(req_field))
+            field_signal = 0
+            field_latitude = 0
+            field_longitude = 0
+
+            for field_detail in res2_field:
+                #print field_detail
+                field_signal += field_detail['field_signal']
+                field_latitude += field_detail['field_latitude']
+                field_longitude += field_detail['field_longitude']
+
+            if len(res2_field) > 0:
+                avg_field_signal = field_signal / len(res2_field)
+                avg_field_latitude = field_latitude / len(res2_field)
+                avg_field_longitude = field_longitude / len(res2_field)
+
+            else:
+                print("Zero data")
+
+            print ""
+
+            #Save to database
+
+            field = Farm_Field_Agg(avg_field_signal, avg_field_latitude, avg_field_longitude, current_time)
+            field.to_json()
+            field.upload_to_server()
+
+        except urllib2.HTTPError, ex:
+            print('Not found ')
 
 
+##Execute
 request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
 request.add_header("Content-Type", "application/json")

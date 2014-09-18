@@ -7,6 +7,7 @@ import pytz
 import logging
 from datetime import timedelta
 from dateutil.parser import parse
+import requests
 
 currentDate = None
 
@@ -338,6 +339,102 @@ class Farm_Field:
         print self.to_json()
         result = urllib2.urlopen(request, self.to_json())
         pass
+
+class Sensor_Agg:
+    def __init__(self, sensor_hl1, sensor_hl2, sensor_hl3, sensor_temperature, sensor_date_received):
+        self.sensor_hl1 = sensor_hl1
+        self.sensor_hl2 = sensor_hl2
+        self.sensor_hl3 = sensor_hl3
+        self.sensor_temperature = sensor_temperature
+        self.sensor_date_received = sensor_date_received
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
+
+    def upload_to_server(self):
+        url = "http://riego.chi.itesm.mx/Sensor_Agg/"
+        headers = {"Authorization": "Basic YWRtaW46YWRtaW4=",
+                   "Content-Type": "application/json"}
+        print self.to_json()
+        request = requests.put(url, data=self.to_json(), headers=headers)
+        print request.status_code
+
+class Valve_Agg:
+    def __init__(self, valve_flow, valve_pressure, valve_date_received):
+        self.valve_flow = valve_flow
+        self.valve_pressure = valve_pressure
+        self.valve_date_received = valve_date_received
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
+
+    def upload_to_server(self):
+        url = "http://riego.chi.itesm.mx/Valve_Agg/"
+        headers = {"Authorization": "Basic YWRtaW46YWRtaW4=",
+                   "Content-Type": "application/json"}
+        print self.to_json()
+        request = requests.put(url, data=self.to_json(), headers=headers)
+        print request.status_code
+
+class Crop_Area_Agg:
+    def __init__(self, area_ev, area_date_received):
+        self.area_ev = area_ev
+        self.area_date_received = area_date_received
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
+
+    def upload_to_server(self):
+        url = "http://riego.chi.itesm.mx/Crop_Area_Agg/"
+        headers = {"Authorization": "Basic YWRtaW46YWRtaW4=",
+                   "Content-Type": "application/json"}
+        print self.to_json()
+        request = requests.put(url, data=self.to_json(), headers=headers)
+        print request.status_code
+
+class Weather_Station_Agg:
+    def __init__(self, station_relative_humidity, station_temp, station_wind_speed,
+                 station_solar_radiation, station_date_received):
+        self.station_relative_humidity = station_relative_humidity
+        self.station_temperature = station_temp
+        self.station_wind_speed = station_wind_speed
+        self.station_solar_radiation = station_solar_radiation
+        self.station_date_received = station_date_received
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
+
+    def upload_to_server(self):
+        url = "http://riego.chi.itesm.mx/Weather_Station_Agg/"
+        headers = {"Authorization": "Basic YWRtaW46YWRtaW4=",
+                   "Content-Type": "application/json"}
+        print self.to_json()
+        request = requests.put(url, data=self.to_json(), headers=headers)
+        print request.status_code
+
+class Farm_Field_Agg:
+    def __init__(self, field_signal, field_latitude, field_longitude, field_date_received):
+        self.field_signal = field_signal
+        self.field_latitude = field_latitude
+        self.field_longitude = field_longitude
+        self.field_date_received = field_date_received
+
+    def to_json(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
+
+    def upload_to_server(self):
+        url = "http://riego.chi.itesm.mx/Farm_Field_Agg/"
+        headers = {"Authorization": "Basic YWRtaW46YWRtaW4=",
+                   "Content-Type": "application/json"}
+        print self.to_json()
+        request = requests.put(url, data=self.to_json(), headers=headers)
+        print request.status_code
+
 
 
 class MessageProcessor:

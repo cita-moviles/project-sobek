@@ -7,10 +7,13 @@ from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from django.views.generic import TemplateView
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
-    Crop_Area_Log, Sensor_Log, Weather_Station_Log, Valve_Log, Farm_Field_Log
+    Crop_Area_Log, Sensor_Log, Weather_Station_Log, Valve_Log, Farm_Field_Log, Sensor_Agg, Valve_Agg, Crop_Area_Agg, \
+    Weather_Station_Agg, Farm_Field_Agg
 from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Serializer, \
     Valve_Serializer, Area_Configuration_Serializer, Station_Serializer, Sensor_Serializer, Area_Log_Serializer, \
-    Weather_Station_Log_Serializer, Valve_Log_Serializer, Sensor_Log_Serializer, Farm_Field_Log_Serializer
+    Weather_Station_Log_Serializer, Valve_Log_Serializer, Sensor_Log_Serializer, Farm_Field_Log_Serializer, \
+    Sensor_Agg_Serializer, Valve_Agg_Serializer, Crop_Area_Agg_Serializer, Weather_Station_Agg_Serializer, \
+    Farm_Field_Agg_Serializer
 
 
 class Crop_ViewSet(viewsets.ModelViewSet):
@@ -228,6 +231,33 @@ class Farm_Field_Log_ViewSet(generics.ListCreateAPIView):
     serializer_class = Farm_Field_Log_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = FarmFieldLogFilter
+
+#AggViewSets
+class Sensor_Agg_ViewSet(generics.ListCreateAPIView):
+    queryset = Sensor_Agg.objects.all()
+    serializer_class = Sensor_Agg_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+class Valve_Agg_ViewSet(generics.ListCreateAPIView):
+    queryset = Valve_Agg.objects.all()
+    serializer_class = Valve_Agg_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+class Crop_Area_Agg_ViewSet(generics.ListCreateAPIView):
+    queryset = Crop_Area_Agg.objects.all()
+    serializer_class = Crop_Area_Agg_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+class Weather_Station_Agg_ViewSet(generics.ListCreateAPIView):
+    queryset = Weather_Station_Agg.objects.all()
+    serializer_class = Weather_Station_Agg_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
+    queryset = Farm_Field_Agg.objects.all()
+    serializer_class = Farm_Field_Agg_Serializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
 
 
 @api_view(('GET',))

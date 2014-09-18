@@ -1,7 +1,10 @@
 __author__ = 'admin'
 from rest_framework import serializers
-from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
-    Crop_Area_Log, Weather_Station_Log, Sensor_Log, Valve_Log, Farm_Field_Log
+
+from models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
+    Crop_Area_Log, Weather_Station_Log, Sensor_Log, Valve_Log, Farm_Field_Log, Sensor_Agg, Valve_Agg, \
+    Crop_Area_Agg, Weather_Station_Agg, Farm_Field_Agg
+
 
 
 class Crop_Serializer(serializers.HyperlinkedModelSerializer):
@@ -124,3 +127,47 @@ class Valve_Log_Serializer(serializers.HyperlinkedModelSerializer):
         model = Valve_Log
         fields = ('log_number', 'log_timestamp', 'valve_id', 'valve_status', 'valve_flow', 'valve_pressure',
                   'valve_limit', 'valve_date_received', 'valve_user_define1', 'valve_user_define2')
+
+#AGGREGATE
+class Sensor_Agg_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='sensor-agg-detail')
+
+    class Meta:
+        model = Sensor_Agg
+        fields = ('agg_id', 'agg_date', 'sensor_id', 'sensor_hl1', 'sensor_hl2',
+                  'sensor_hl3', 'sensor_temperature', 'sensor_date_received')
+
+
+class Valve_Agg_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='valve-agg-detail')
+
+    class Meta:
+        model = Valve_Agg
+        fields = ('agg_id', 'agg_date', 'valve_id', 'valve_flow', 'valve_pressure', 'valve_limit',
+                  'valve_date_received')
+
+
+class Crop_Area_Agg_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='crop-area-agg-detail')
+
+    class Meta:
+        model = Crop_Area_Agg
+        fields = ('agg_id', 'agg_date', 'area_id', 'area_ev', 'area_date_received')
+
+
+class Weather_Station_Agg_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='weather-station-agg-detail')
+
+    class Meta:
+        model = Weather_Station_Agg
+        fields = ('agg_id', 'agg_date', 'station_id', 'station_status', 'station_relative_humidty',
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_date_received')
+
+
+class Farm_Field_Agg_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='farm-field-agg-detail')
+
+    class Meta:
+        model = Farm_Field_Agg
+        fields = ('agg_id', 'agg_date', 'field_id', 'field_imei', 'field_signal', 'field_latitude',
+                  'field_longitude', 'field_date_received')

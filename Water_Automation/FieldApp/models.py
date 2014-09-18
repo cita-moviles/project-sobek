@@ -193,3 +193,49 @@ class Farm_Field_Log(models.Model):
 
     def __unicode__ (self):
         return self.log_number
+
+## Aggregated Models
+class Sensor_Agg(models.Model):
+    agg_id = models.AutoField(primary_key=True)
+    agg_date = models.DateTimeField(auto_now=True)
+    sensor_id = models.ForeignKey('Sensor')
+    sensor_hl1 = models.FloatField()
+    sensor_hl2 = models.FloatField()
+    sensor_hl3 = models.FloatField()
+    sensor_temperature = models.FloatField()
+    sensor_date_received = models.DateTimeField()
+
+
+class Valve_Agg(models.Model):
+    agg_id = models.AutoField(primary_key=True)
+    agg_date = models.DateTimeField(auto_now=True)
+    valve_id = models.ForeignKey('Valve')
+    valve_flow = models.FloatField()
+    valve_pressure = models.FloatField()
+    valve_date_received = models.DateTimeField()
+
+class Crop_Area_Agg(models.Model):
+    agg_id = models.AutoField(primary_key=True)
+    agg_date = models.DateTimeField(auto_now=True)
+    area_id = models.ForeignKey('Crop_Area')
+    area_ev = models.FloatField()
+    area_date_received = models.DateTimeField()
+
+class Weather_Station_Agg(models.Model):
+    agg_id = models.AutoField(primary_key=True)
+    agg_date = models.DateTimeField(auto_now=True)
+    station_id = models.ForeignKey('Weather_Station')
+    station_relative_humidity = models.FloatField()
+    station_temperature = models.FloatField()
+    station_wind_speed = models.FloatField()
+    station_solar_radiation = models.FloatField()
+    station_date_received = models.DateTimeField()
+
+class Farm_Field_Agg(models.Model):
+    agg_id = models.AutoField(primary_key=True)
+    agg_date = models.DateTimeField(auto_now=True)
+    field_id = models.ForeignKey('Farm_Field')
+    field_signal = models.FloatField()
+    field_latitude = models.FloatField()
+    field_longitude = models.FloatField()
+    field_date_received = models.DateTimeField()

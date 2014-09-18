@@ -237,157 +237,82 @@ var progressBar = $('#progress');
 
 
 function graphData() {
+    getSensorLogs(init_date, end_date, function (data) {
+        var moisture_array = [];
+        moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
 
-    graphLogs(init_date, end_date);
+        if (data.length == 0) {
+            moisture_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                0, 0, 0]);
+        } else {
+            $.each(data, function (index, value) {
+                var date_received = new Date(Date.parse(value.sensor_date_received));
+                var temp_array = [];
+                temp_array.push(date_received);
+                temp_array.push(value.sensor_hl1);
+                temp_array.push(value.sensor_hl2);
+                temp_array.push(value.sensor_hl3);
+                moisture_array.push(temp_array);
+
+            });
+        }
+
+        var data_moisture = google.visualization.arrayToDataTable(moisture_array);
+
+        var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
+
+        var options = {
+            title: 'Soil Moisture (15 days)',
+            smoothLine: true
+        };
+
+        hideLoading();
+        chart_moisture.draw(data_moisture, options);
+    });
+
 
     var area_id = $('#area').val();
     getCurrentSensorsData(area_id);
-    graphEvotranspiration(area_id);
+    getEvotranspiration_log(area_id, init_date, end_date, function (data) {
+        var ev_array = [];
+        ev_array.push(['Time', 'EV']);
+
+        if (data.length == 0) {
+
+            ev_array.push([end_date.dateFormat('Y-m-d H:i:s'), 0]);
+
+        } else {
+            $.each(data, function (index, value) {
+
+                        var date_received = new Date(Date.parse(value.area_date_received));
+
+                        var tmp_array = [];
+                        tmp_array.push(date_received);
+                        tmp_array.push(value.area_ev);
+                        ev_array.push(tmp_array);
+                    }
+            );
+
+
+        }
+
+
+        var data_ev = google.visualization.arrayToDataTable(ev_array);
+        var options = {
+            title: 'Evotranspiration (15 days)',
+            smoothLine: true
+        };
+
+        var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
+        chart_ev.draw(data_ev, options);
+    });
     getCurrentValves(area_id);
     $('#ev_header').text('Ev for Area: ' + area_id);
 
 }
 
-function graphLogs(start, end) {
-
-    console.log(init_date.dateFormat('Y-m-d H:i:s'));
-    console.log(end_date.dateFormat('Y-m-d H:i:s'));
-    var sensor_id = $('#sensor').val();
-
-    $.ajax({
-        url: "/Sensor_Log/",
-        data: {
-            sensor_id: sensor_id,
-            min_date: init_date.dateFormat('Y-m-d H:i:s'),
-            max_date: end_date.dateFormat('Y-m-d H:i:s'),
-            ordering: "-sensor_date_received"
-        },
-        beforeSend: function () {
-            console.log('before send');
-            $('#progress').animate({width: 0});
-            $('#progress_message').text("Loading");
-
-        },
-        success: function (data) {
-
-            var moisture_array = [];
-            moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
-
-            if (data.length == 0) {
-                moisture_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                    0, 0, 0]);
-            } else {
-                $.each(data, function (index, value) {
-                    var date_received = new Date(Date.parse(value.sensor_date_received));
-                    var temp_array = [];
-                    temp_array.push(date_received);
-                    temp_array.push(value.sensor_hl1);
-                    temp_array.push(value.sensor_hl2);
-                    temp_array.push(value.sensor_hl3);
-                    moisture_array.push(temp_array);
-
-                });
-            }
-
-            var data_moisture = google.visualization.arrayToDataTable(moisture_array);
-
-            var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
-
-            var options = {
-                title: 'Soil Moisture (15 days)',
-                smoothLine: true
-            };
-
-            $('#progress_message').text("Done!");
-            $('#progress').animate({width: 100});
-            chart_moisture.draw(data_moisture, options);
-
-        }
-    });
-
-}
-
-function getCurrentSensorsData(area_id) {
-
-    $.ajax({
-        url: "/Sensor_Search/",
-        data: { fk_area: area_id},
-        success: function (data) {
-            var options = "";
-            var current_data = "";
-
-            $.each(data, function (index, value) {
-
-                var date_received = "";
-                if (value.sensor_date_received !== "") {
-                    var dr = new Date(Date.parse(value.sensor_date_received));
-                    date_received = dr.toLocaleString();
-                }
-                current_data += '<div class="panel large-4 small-6 ' +
-                        'columns">';
-                current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
-                current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
-                current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
-                current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
-                {#                current_data += "Temperature: " + value.sensor_temperature + "<br/>";#}
-                current_data += "Date: " + date_received + "</p>";
-                current_data += '</div>';
-            });
-
-            $('#sensors_information').html(current_data);
-        }
-    });
-
-}
-
-function graphEvotranspiration(area_id) {
-
-    $.ajax({
-        url: "/Crop_Area_Log/",
-        data: {
-            area_id: area_id,
-            min_date: init_date.dateFormat('Y-m-d H:i:s'),
-            max_date: end_date.dateFormat('Y-m-d H:i:s'),
-            ordering: "-area_date_received"
-        },
-
-        success: function (data) {
-            var ev_array = [];
-            ev_array.push(['Time', 'EV']);
-
-            if (data.length == 0) {
-
-                ev_array.push([end_date.dateFormat('Y-m-d H:i:s'), 0]);
-
-            } else {
-                $.each(data, function (index, value) {
-
-                            var date_received = new Date(Date.parse(value.area_date_received));
-
-                            var tmp_array = [];
-                            tmp_array.push(date_received);
-                            tmp_array.push(value.area_ev);
-                            ev_array.push(tmp_array);
-                        }
-                );
 
 
-            }
-
-
-            var data_ev = google.visualization.arrayToDataTable(ev_array);
-            var options = {
-                title: 'Evotranspiration (15 days)',
-                smoothLine: true
-            };
-
-            var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
-            chart_ev.draw(data_ev, options);
-        }
-    });
-
-
-}
 
 function graphValveData() {
 

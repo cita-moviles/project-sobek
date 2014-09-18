@@ -1,5 +1,8 @@
 __author__ = 'luishoracio'
 
+
+""""Program that runs every 1 hour to summarize the data"""
+
 import json
 import urllib2
 import datetime
@@ -44,6 +47,19 @@ def get_sensor_log(sensorid):
 
         #TODO
         #Save to database
+
+        # * Socket model === Django Model
+        # 1. Build object for database.
+          # sensor_hl1
+          # sensor_hl2
+          # sensor_hl3
+          # sensor_temperature
+          # sensor_date_received = current_time
+
+        # 2. object.to_json() from model
+        # 3. object.upload_to_server() from model
+        # 4. Profit
+
 
     except urllib2.HTTPError, ex:
         #logging.exception("Something awful happened!")
@@ -163,5 +179,3 @@ try:
 
 except urllib2.HTTPError, ex:
     print('Not found ')
-
-

@@ -238,12 +238,20 @@ function getSensorLog(sensor_id, start_date, end_date, before_callback, success_
 }
 
 /**
- * Callback function that displays
+ * Callback function that displays the loading section of the page
  * */
 function displayLoading() {
     $('#progress').animate({width: 0});
     $('#progress_message').text("Loading");
 
+}
+
+/**
+ * Callback function that hides the loading section of the page
+ * */
+function hideLoading(){
+    $('#progress_message').text("Done!");
+    $('#progress').animate({width: 100});
 }
 
 
@@ -382,6 +390,55 @@ function weatherCallback(data) {
     wind_tag.append(wind_speed);
     battery_tag.append(battery_level);
 
+}
+
+
+/**
+ * Requests the ajax data and displays the graphs in their corresponding container
+ *
+ * @param {String} start Starting date for the request
+ * @param {String} end The final date for the request, most of the time is the current date.
+ * @param {Function} callback Function that will handle the data retrieved from the web service
+ *
+ * */
+function getSensorLogs(start, end, callback) {
+    var sensor_id = $('#sensor').val();
+
+    $.ajax({
+        url: "/Sensor_Log/",
+        data: {
+            sensor_id: sensor_id,
+            min_date: start.dateFormat('Y-m-d H:i:s'),
+            max_date: end.dateFormat('Y-m-d H:i:s'),
+            ordering: "-sensor_date_received"
+        },
+        beforeSend: displayLoading,
+        success: callback
+    });
 
 }
 
+/**
+ * Requests the Evotranspiration log data from the web service
+ *
+ * @param {Number} area_id Identification number for the area.
+ * @param {String} start_date Starting date for the request
+ * @param {String} end_date The final date for the request, most of the time is the current date.
+ * @param {Function} callback Function that will handle the data retrieved from the web service
+ * */
+function getEvotranspiration_log(area_id, start_date, end_date, callback) {
+
+    $.ajax({
+        url: "/Crop_Area_Log/",
+        data: {
+            area_id: area_id,
+            min_date: start_date.dateFormat('Y-m-d H:i:s'),
+            max_date: end_date.dateFormat('Y-m-d H:i:s'),
+            ordering: "-area_date_received"
+        },
+
+        success: callback
+    });
+
+
+}

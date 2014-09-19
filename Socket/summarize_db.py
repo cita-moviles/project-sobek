@@ -47,6 +47,9 @@ def get_sensor_log(sensorid):
             print avg_sensor_hl2
             print avg_sensor_hl3
             print avg_temperature
+            sensor = Sensor_Agg(avg_sensor_hl1, avg_sensor_hl2, avg_sensor_hl3, avg_temperature, current_time)
+            sensor.to_json()
+            sensor.upload_to_server()
         else:
             print "No data"
 
@@ -67,10 +70,6 @@ def get_sensor_log(sensorid):
         # 3. object.upload_to_server() from model
         # 4. Profit
         """
-
-        sensor = Sensor_Agg(avg_sensor_hl1, avg_sensor_hl2, avg_sensor_hl3, avg_temperature, current_time)
-        sensor.to_json()
-        sensor.upload_to_server()
 
         # * Socket model === Django Model
         # 1. Build object for database.
@@ -110,14 +109,13 @@ def get_area_log(areaid):
         if len(res2_area) > 0:
             avg_area_ev = area_ev / len(res2_area)
             print avg_area_ev
+            #Save to database
+            crop_area = Crop_Area_Agg(avg_area_ev, current_time)
+            crop_area.to_json()
+            crop_area.upload_to_server()
         else:
             print("Zero data")
         print ""
-
-        #Save to database
-        crop_area = Crop_Area_Agg(avg_area_ev, current_time)
-        crop_area.to_json()
-        crop_area.upload_to_server()
 
     except urllib2.HTTPError, ex:
         print('Not found ')
@@ -148,6 +146,9 @@ def get_valve_log(valveid):
             avg_valve_pressure = valve_pressure / len(res2_area)
             print avg_valve_flow
             print avg_valve_pressure
+            valve = Valve_Agg(avg_valve_flow, avg_valve_pressure, current_time)
+            valve.to_json()
+            valve.upload_to_server()
         else:
             print("Zero data")
 
@@ -155,9 +156,7 @@ def get_valve_log(valveid):
 
         #Save to database
 
-        valve = Valve_Agg(avg_valve_flow, avg_valve_pressure, current_time)
-        valve.to_json()
-        valve.upload_to_server()
+
 
     except urllib2.HTTPError, ex:
         print('Not found ')
@@ -191,6 +190,10 @@ def get_valve_log(valveid):
                 avg_station_temp = station_temperature / len(res2_station)
                 avg_station_wind = station_wind_speed / len(res2_station)
                 avg_station_radiation = station_solar_radiation / len (res2_station)
+                station = Weather_Station_Agg(avg_station_humidity,avg_station_temp,avg_station_wind,
+                                          avg_station_radiation,current_time)
+                station.to_json()
+                station.upload_to_server()
             else:
                 print("Zero data")
 
@@ -198,10 +201,7 @@ def get_valve_log(valveid):
 
             #Save to database
 
-            station = Weather_Station_Agg(avg_station_humidity,avg_station_temp,avg_station_wind,
-                                          avg_station_radiation,current_time)
-            station.to_json()
-            station.upload_to_server()
+
 
         except urllib2.HTTPError, ex:
             print('Not found ')
@@ -233,17 +233,17 @@ def get_valve_log(valveid):
                 avg_field_signal = field_signal / len(res2_field)
                 avg_field_latitude = field_latitude / len(res2_field)
                 avg_field_longitude = field_longitude / len(res2_field)
-
+                field = Farm_Field_Agg(avg_field_signal, avg_field_latitude, avg_field_longitude, current_time)
+                field.to_json()
+                field.upload_to_server()
             else:
                 print("Zero data")
 
             print ""
 
-            #Save to database
 
-            field = Farm_Field_Agg(avg_field_signal, avg_field_latitude, avg_field_longitude, current_time)
-            field.to_json()
-            field.upload_to_server()
+
+
 
         except urllib2.HTTPError, ex:
             print('Not found ')

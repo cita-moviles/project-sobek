@@ -36,6 +36,7 @@ def get_sensor_log(sensorid):
             sensor_hl2 += sensor_detail['sensor_hl2']
             sensor_hl3 += sensor_detail['sensor_hl3']
             temperature += sensor_detail['sensor_temperature']
+            sensor_id = sensor_detail['sensor_id']
             #print sensor_detail
 
         if len(res2) > 0:
@@ -43,13 +44,9 @@ def get_sensor_log(sensorid):
             avg_sensor_hl2 = sensor_hl2 / len(res2)
             avg_sensor_hl3 = sensor_hl3 / len(res2)
             avg_temperature = temperature / len(res2)
-            print avg_sensor_hl1
-            print avg_sensor_hl2
-            print avg_sensor_hl3
-            print avg_temperature
-            sensor = Sensor_Agg(avg_sensor_hl1, avg_sensor_hl2, avg_sensor_hl3, avg_temperature, current_time)
+            sensor = Sensor_Agg(sensor_id, avg_sensor_hl1, avg_sensor_hl2, avg_sensor_hl3, avg_temperature, current_time)
             sensor.to_json()
-            sensor.upload_to_server()
+            sensor.upload_to_server(sensorid)
         else:
             print "No data"
 
@@ -104,15 +101,15 @@ def get_area_log(areaid):
         area_ev = 0
 
         for area_detail in res2_area:
+            area_id = area_detail['area_id']
             area_ev += area_detail['area_ev']
 
         if len(res2_area) > 0:
             avg_area_ev = area_ev / len(res2_area)
-            print avg_area_ev
             #Save to database
-            crop_area = Crop_Area_Agg(avg_area_ev, current_time)
+            crop_area = Crop_Area_Agg(area_id, avg_area_ev, current_time)
             crop_area.to_json()
-            crop_area.upload_to_server()
+            crop_area.upload_to_server(areaid)
         else:
             print("Zero data")
         print ""
@@ -126,29 +123,31 @@ def get_valve_log(valveid):
     url = "http://riego.chi.itesm.mx/Valve_Log/?valve_id=" + str(valveid) + \
         str_today + "&ordering=-valve_date_received"
 
-    req_area = urllib2.Request(url)
-    req_area.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
-    req_area.add_header("Content-Type", "application/json")
-    req_area.get_method = lambda: 'GET'
+    req_valve = urllib2.Request(url)
+    req_valve.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+    req_valve.add_header("Content-Type", "application/json")
+    req_valve.get_method = lambda: 'GET'
 
     try:
-        res2_area = json.load(urllib2.urlopen(req_area))
+        res2_valve = json.load(urllib2.urlopen(req_valve))
         valve_flow = 0
         valve_pressure = 0
 
-        for valve_detail in res2_area:
+        for valve_detail in res2_valve:
             #print valve_detail
+            valve_id = valve_detail['valve_id']
+            valve_limit = valve_detail['valve_limit']
             valve_flow += valve_detail['valve_flow']
             valve_pressure += valve_detail['valve_pressure']
 
-        if len(res2_area) > 0:
-            avg_valve_flow = valve_flow / len(res2_area)
-            avg_valve_pressure = valve_pressure / len(res2_area)
-            print avg_valve_flow
-            print avg_valve_pressure
-            valve = Valve_Agg(avg_valve_flow, avg_valve_pressure, current_time)
+
+        if len(res2_valve) > 0:
+            avg_valve_flow = valve_flow / len(res2_valve)
+            avg_valve_pressure = valve_pressure / len(res2_valve)
+            avg_valve_limit = valve_limit / len(res2_valve)
+            valve = Valve_Agg(valve_id, avg_valve_flow, avg_valve_pressure, avg_valve_limit, current_time)
             valve.to_json()
-            valve.upload_to_server()
+            valve.upload_to_server(valveid)
         else:
             print("Zero data")
 
@@ -180,6 +179,7 @@ def get_valve_log(valveid):
 
             for station_detail in res2_station:
                 #print station_detail
+                station_id = station_detail['station_id']
                 station_relative_humidity += station_detail['station_relative_humidity']
                 station_temperature += station_detail['station_temperature']
                 station_wind_speed += station_detail['station_wind_speed']
@@ -190,10 +190,10 @@ def get_valve_log(valveid):
                 avg_station_temp = station_temperature / len(res2_station)
                 avg_station_wind = station_wind_speed / len(res2_station)
                 avg_station_radiation = station_solar_radiation / len (res2_station)
-                station = Weather_Station_Agg(avg_station_humidity,avg_station_temp,avg_station_wind,
+                station = Weather_Station_Agg(station_id, avg_station_humidity,avg_station_temp,avg_station_wind,
                                           avg_station_radiation,current_time)
                 station.to_json()
-                station.upload_to_server()
+                station.upload_to_server(stationid)
             else:
                 print("Zero data")
 
@@ -225,6 +225,7 @@ def get_valve_log(valveid):
 
             for field_detail in res2_field:
                 #print field_detail
+                field_id = field_detail['field_id']
                 field_signal += field_detail['field_signal']
                 field_latitude += field_detail['field_latitude']
                 field_longitude += field_detail['field_longitude']
@@ -233,9 +234,9 @@ def get_valve_log(valveid):
                 avg_field_signal = field_signal / len(res2_field)
                 avg_field_latitude = field_latitude / len(res2_field)
                 avg_field_longitude = field_longitude / len(res2_field)
-                field = Farm_Field_Agg(avg_field_signal, avg_field_latitude, avg_field_longitude, current_time)
+                field = Farm_Field_Agg(field_id, avg_field_signal, avg_field_latitude, avg_field_longitude, current_time)
                 field.to_json()
-                field.upload_to_server()
+                field.upload_to_server(fieldid)
             else:
                 print("Zero data")
 
@@ -250,6 +251,7 @@ def get_valve_log(valveid):
 
 
 ##Execute
+"""
 request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
 request.add_header("Content-Type", "application/json")
@@ -282,7 +284,7 @@ try:
 
 except urllib2.HTTPError, ex:
     print('Not found ')
-
+"""
 
 request = urllib2.Request("http://riego.chi.itesm.mx/Valve/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")

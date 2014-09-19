@@ -211,6 +211,7 @@ class Valve_Agg(models.Model):
     agg_date = models.DateTimeField(auto_now=True)
     valve_id = models.ForeignKey('Valve')
     valve_flow = models.FloatField()
+    valve_limit = models.FloatField()
     valve_pressure = models.FloatField()
     valve_date_received = models.DateTimeField()
 

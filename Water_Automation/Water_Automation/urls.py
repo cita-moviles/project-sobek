@@ -33,11 +33,11 @@ urlpatterns = patterns(
     url(r'^Station_Log/', views.Station_Log_ViewSet.as_view(model='Weather_Station_Log')),
     url(r'^Farm_Field_Log/', views.Farm_Field_Log_ViewSet.as_view(model='Farm_Field_Log')),
 
-    url(r'^Sensor_Agg/', views.Sensor_Agg_Viewset.as_view(model='Sensor_Agg')),
-    url(r'^Valve_Agg/', views.Valve_Agg_Viewset.as_view(model='Valve_Agg')),
-    url(r'^Crop_Area_Agg/', views.Crop_Area_Agg_Viewset.as_view(model='Crop_Area_Agg')),
-    url(r'^Station_Agg/', views.Weather_Station_Agg_Viewset.as_view(model='Weather_Station_Agg')),
-    url(r'^Farm_Field_Agg/', views.Farm_Field_Agg_Viewset.as_view(model='Farm_Field_Agg')),
+    url(r'^Sensor_Agg/', views.Sensor_Agg_ViewSet.as_view(model='Sensor_Agg')),
+    url(r'^Valve_Agg/', views.Valve_Agg_ViewSet.as_view(model='Valve_Agg')),
+    url(r'^Crop_Area_Agg/', views.Crop_Area_Agg_ViewSet.as_view(model='Crop_Area_Agg')),
+    url(r'^Station_Agg/', views.Weather_Station_Agg_ViewSet.as_view(model='Weather_Station_Agg')),
+    url(r'^Farm_Field_Agg/', views.Farm_Field_Agg_ViewSet.as_view(model='Farm_Field_Agg')),
 
 
     url(r'^index.html', TemplateView.as_view(template_name="index.html")),

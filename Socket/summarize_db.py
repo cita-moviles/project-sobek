@@ -136,7 +136,6 @@ def get_valve_log(valveid):
         for valve_detail in res2_valve:
             #print valve_detail
             valve_id = valve_detail['valve_id']
-            valve_limit = valve_detail['valve_limit']
             valve_flow += valve_detail['valve_flow']
             valve_pressure += valve_detail['valve_pressure']
 
@@ -144,8 +143,7 @@ def get_valve_log(valveid):
         if len(res2_valve) > 0:
             avg_valve_flow = valve_flow / len(res2_valve)
             avg_valve_pressure = valve_pressure / len(res2_valve)
-            avg_valve_limit = valve_limit / len(res2_valve)
-            valve = Valve_Agg(valve_id, avg_valve_flow, avg_valve_pressure, avg_valve_limit, current_time)
+            valve = Valve_Agg(valve_id, avg_valve_flow, avg_valve_pressure, current_time)
             valve.to_json()
             valve.upload_to_server(valveid)
         else:

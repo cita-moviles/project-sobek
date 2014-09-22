@@ -365,11 +365,10 @@ class Sensor_Agg:
         print request.status_code
 
 class Valve_Agg:
-    def __init__(self, valve_id, valve_flow, valve_pressure, valve_limit, valve_date_received):
+    def __init__(self, valve_id, valve_flow, valve_pressure,  valve_date_received):
         self.valve_flow = valve_flow
         self.valve_pressure = valve_pressure
         self.valve_date_received = valve_date_received
-        self.valve_limit = valve_limit
         self.valve_id = valve_id
 
     def to_json(self):

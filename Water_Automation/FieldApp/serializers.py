@@ -143,7 +143,7 @@ class Valve_Agg_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Valve_Agg
-        fields = ('agg_id', 'agg_date', 'valve_id', 'valve_flow', 'valve_pressure', 'valve_limit',
+        fields = ('agg_id', 'agg_date', 'valve_id', 'valve_flow', 'valve_pressure',
                   'valve_date_received')
 
 

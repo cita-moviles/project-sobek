@@ -76,7 +76,7 @@
 
 <div class="row">
     <div class="large-12 columns">
-        <h3>Current Sensor Information</h3>
+        <h3>Area Evapotranspiration</h3>
         <hr>
     </div>
     <div id="sensors_information" class="large-12 columns">
@@ -272,8 +272,7 @@ function graphData() {
 
 
     var area_id = $('#area').val();
-    getCurrentSensorsData(area_id);
-    getEvotranspiration_log(area_id, init_date, end_date, function (data) {
+    getEvotranspirationLog(area_id, init_date, end_date, function (data) {
         var ev_array = [];
         ev_array.push(['Time', 'EV']);
 
@@ -306,126 +305,104 @@ function graphData() {
         var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
         chart_ev.draw(data_ev, options);
     });
-    getCurrentValves(area_id);
+    getCurrentValves(area_id, function (data) {
+
+
+        var current_data = "";
+
+        $.each(data, function (index, value) {
+
+            var date_received = "";
+            if (value.valve_date_received !== "") {
+                var dr = new Date(Date.parse(value.valve_date_received));
+                date_received = dr.toLocaleString();
+            }
+            current_data += '<div class="panel large-4 small-6 ' +
+                    'columns">';
+            current_data += "<h4>Valve: " + value.valve_id + "</h4>";
+            current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
+            current_data += "Status: " + value.valve_status + "<br/>";
+            current_data += "Flow: " + value.valve_flow + "<br/>";
+            current_data += "Pressure: " + value.valve_pressure + "<br/>";
+            current_data += "Date: " + date_received + "</p>";
+            current_data += "</div>";
+        });
+
+        console.log(current_data);
+        $('#current_valves').html(current_data);
+    });
     $('#ev_header').text('Ev for Area: ' + area_id);
 
 }
-
-
 
 
 function graphValveData() {
 
     var sensor_id = $('#sensor').val();
 
-    $.ajax({
-        url: "/Valve_Log/",
-        data: {
-            sensor_id: sensor_id,
-            min_date: init_date.dateFormat('Y-m-d H:i:s'),
-            max_date: end_date.dateFormat('Y-m-d H:i:s'),
-            ordering: "-valve_date_received"
-        },
-        success: function (data) {
+    getValveLog(sensor_id, init_date, end_date, function (data) {
 
-            var valve_actuator_array = [
-                ['Time', 'Actuator', 'Status']
-            ];
-            var valve_flow_array = [
-                ['Time', 'Flow']
-            ];
-            var valve_pressure_array = [
-                ['Time', 'Pressure']
-            ];
+        var valve_actuator_array = [
+            ['Time', 'Actuator', 'Status']
+        ];
+        var valve_flow_array = [
+            ['Time', 'Flow']
+        ];
+        var valve_pressure_array = [
+            ['Time', 'Pressure']
+        ];
 
-            if (data.length == 0) {
+        if (data.length == 0) {
 
-                valve_actuator_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                    0, 0]);
-                valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                    0]);
+            valve_actuator_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                0, 0]);
+            valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                0]);
 
-                valve_pressure_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                    0]);
+            valve_pressure_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                0]);
 
-            } else {
-                $.each(data, function (index, value) {
-                    var date_received = new Date(Date.parse(value.valve_date_received));
-
-                    var temp_array = [];
-                    temp_array.push(date_received);
-                    temp_array.push(parseInt(value.valve_user_define_1));
-                    temp_array.push(parseInt(value.valve_status));
-                    valve_actuator_array.push(temp_array);
-
-                    temp_array = [];
-                    temp_array.push(date_received);
-                    temp_array.push(value.valve_flow);
-                    valve_flow_array.push(temp_array);
-
-                    temp_array = [];
-                    temp_array.push(date_received);
-                    temp_array.push(value.valve_pressure);
-                    valve_pressure_array.push(temp_array);
-                });
-            }
-
-            var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
-            var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
-            var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
-
-            var options = {
-                smoothLine: true
-            };
-
-            var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
-            chart_actuator.draw(data_actuator, options);
-
-            var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
-            chart_flow.draw(data_flow, options);
-
-            var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
-            chart_pressure.draw(data_pressure, options);
-
-        }
-    });
-
-}
-
-function getCurrentValves(area_id) {
-
-    var current_data = '';
-
-    $.ajax({
-        url: "/Valve_Search/",
-        data: { fk_area: area_id},
-        success: function (data) {
-
-
-            var current_data = "";
-
+        } else {
             $.each(data, function (index, value) {
+                var date_received = new Date(Date.parse(value.valve_date_received));
 
-                var date_received = "";
-                if (value.valve_date_received !== "") {
-                    var dr = new Date(Date.parse(value.valve_date_received));
-                    date_received = dr.toLocaleString();
-                }
-                current_data += '<div class="panel large-4 small-6 ' +
-                        'columns">';
-                current_data += "<h4>Valve: " + value.valve_id + "</h4>";
-                current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
-                current_data += "Status: " + value.valve_status + "<br/>";
-                current_data += "Flow: " + value.valve_flow + "<br/>";
-                current_data += "Pressure: " + value.valve_pressure + "<br/>";
-                current_data += "Date: " + date_received + "</p>";
-                current_data += "</div>";
+                var temp_array = [];
+                temp_array.push(date_received);
+                temp_array.push(parseInt(value.valve_user_define_1));
+                temp_array.push(parseInt(value.valve_status));
+                valve_actuator_array.push(temp_array);
+
+                temp_array = [];
+                temp_array.push(date_received);
+                temp_array.push(value.valve_flow);
+                valve_flow_array.push(temp_array);
+
+                temp_array = [];
+                temp_array.push(date_received);
+                temp_array.push(value.valve_pressure);
+                valve_pressure_array.push(temp_array);
             });
-
-            console.log(current_data);
-            $('#current_valves').html(current_data);
         }
+
+        var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
+        var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
+        var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
+
+        var options = {
+            smoothLine: true
+        };
+
+        var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
+        chart_actuator.draw(data_actuator, options);
+
+        var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
+        chart_flow.draw(data_flow, options);
+
+        var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
+        chart_pressure.draw(data_pressure, options);
+
     });
+
 }
 
 

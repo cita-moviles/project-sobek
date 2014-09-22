@@ -249,7 +249,7 @@ function displayLoading() {
 /**
  * Callback function that hides the loading section of the page
  * */
-function hideLoading(){
+function hideLoading() {
     $('#progress_message').text("Done!");
     $('#progress').animate({width: 100});
 }
@@ -426,7 +426,7 @@ function getSensorLogs(start, end, callback) {
  * @param {String} end_date The final date for the request, most of the time is the current date.
  * @param {Function} callback Function that will handle the data retrieved from the web service
  * */
-function getEvotranspiration_log(area_id, start_date, end_date, callback) {
+function getEvotranspirationLog(area_id, start_date, end_date, callback) {
 
     $.ajax({
         url: "/Crop_Area_Log/",
@@ -441,4 +441,40 @@ function getEvotranspiration_log(area_id, start_date, end_date, callback) {
     });
 
 
+}
+
+/**
+ * Request the Valve log from the web services
+ * @param {Number} sensor_id Identification number for the sensor.
+ * @param {String} start_date Starting date for the request
+ * @param {String} end_date The final date for the request, most of the time is the current date.
+ * @param {Function} callback Function that will handle the data retrieved from the web service
+ * */
+function getValveLog(sensor_id, start_date, end_date, callback) {
+
+    $.ajax({
+        url: "/Valve_Log/",
+        data: {
+            sensor_id: sensor_id,
+            min_date: start_date.dateFormat('Y-m-d H:i:s'),
+            max_date: end_date.dateFormat('Y-m-d H:i:s'),
+            ordering: "-valve_date_received"
+        },
+        success: callback
+
+    });
+
+}
+
+/**
+ * Gets the current information for all the valves of a given area
+ *
+ *
+ * */
+function getCurrentValves(area_id, callback) {
+    $.ajax({
+        url: "/Valve_Search/",
+        data: { fk_area: area_id},
+        success: callback
+    });
 }

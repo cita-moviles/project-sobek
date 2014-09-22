@@ -2,8 +2,8 @@ __author__ = 'luishoracio'
 
 import socket
 
-#UDP_IP = "riego.chi.itesm.mx"
-UDP_IP = "localhost"
+UDP_IP = "riego.chi.itesm.mx"
+# UDP_IP = "localhost"
 UDP_PORT = 4580
 MESSAGE = "!20000000043861312400,1-1#"
 #MESSAGE ="!50000101289600679420718-106.0925920028.6701220,0#"
@@ -16,4 +16,5 @@ print "message:", MESSAGE
 
 sock = socket.socket(socket.AF_INET, # Internet
                      socket.SOCK_DGRAM) # UDP
-sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
+sock.sen
+o(MESSAGE, (UDP_IP, UDP_PORT))

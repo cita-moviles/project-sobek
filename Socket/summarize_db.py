@@ -251,7 +251,7 @@ def get_valve_log(valveid):
 
 
 ##Execute
-"""
+
 request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
 request.add_header("Content-Type", "application/json")
@@ -284,7 +284,7 @@ try:
 
 except urllib2.HTTPError, ex:
     print('Not found ')
-"""
+
 
 request = urllib2.Request("http://riego.chi.itesm.mx/Valve/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")

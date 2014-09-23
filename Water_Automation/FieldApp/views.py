@@ -105,33 +105,33 @@ class StationFilter(django_filters.FilterSet):
 #AggFilters
 class FieldAggFilter(django_filters.FilterSet):
     class Meta:
-        model = Farm_Field
+        model = Farm_Field_Agg
         fields = ['field_id', 'field_signal', 'field_latitude',
                   'field_longitude', 'field_date_received']
 
 
 class SensorAggFilter(django_filters.FilterSet):
     class Meta:
-        model = Sensor
+        model = Sensor_Agg
         fields = ['sensor_id', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
                   'sensor_date_received']
 
 
 class AreaAggFilter(django_filters.FilterSet):
     class Meta:
-        model = Crop_Area
+        model = Crop_Area_Agg
         fields = ['area_id', 'area_date_received']
 
 
 class ValveAggFilter(django_filters.FilterSet):
     class Meta:
-        model = Valve
+        model = Valve_Agg
         fields = ['valve_id',  'valve_flow', 'valve_pressure', 'valve_date_received']
 
 
 class StationAggFilter(django_filters.FilterSet):
     class Meta:
-        model = Weather_Station
+        model = Weather_Station_Agg
         fields = ['station_id', 'station_relative_humidity',
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                   'station_date_received']

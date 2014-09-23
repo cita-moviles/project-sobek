@@ -102,6 +102,40 @@ class StationFilter(django_filters.FilterSet):
                   'station_user_define2', 'fk_farm_field']
 
 
+#AggFilters
+class FieldAggFilter(django_filters.FilterSet):
+    class Meta:
+        model = Farm_Field
+        fields = ['field_id', 'field_signal', 'field_latitude',
+                  'field_longitude', 'field_date_received']
+
+
+class SensorAggFilter(django_filters.FilterSet):
+    class Meta:
+        model = Sensor
+        fields = ['sensor_id', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
+                  'sensor_date_received']
+
+
+class AreaAggFilter(django_filters.FilterSet):
+    class Meta:
+        model = Crop_Area
+        fields = ['area_id', 'area_date_received']
+
+
+class ValveAggFilter(django_filters.FilterSet):
+    class Meta:
+        model = Valve
+        fields = ['valve_id',  'valve_flow', 'valve_pressure', 'valve_date_received']
+
+
+class StationAggFilter(django_filters.FilterSet):
+    class Meta:
+        model = Weather_Station
+        fields = ['station_id', 'station_relative_humidity',
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation',
+                  'station_date_received']
+
 #LogFilters
 class AreaLogFilter(django_filters.FilterSet):
     year = django_filters.CharFilter(name='log_timestamp', lookup_type='startswith')
@@ -152,6 +186,7 @@ class FarmFieldLogFilter(django_filters.FilterSet):
     class Meta:
         model = Farm_Field_Log
         fields = ['field_id', 'field_date_received']
+
 
 
 #Viewsets
@@ -237,27 +272,32 @@ class Sensor_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Sensor_Agg.objects.all()
     serializer_class = Sensor_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = SensorAggFilter
 
 class Valve_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Valve_Agg.objects.all()
     serializer_class = Valve_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = ValveAggFilter
 
 class Crop_Area_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Crop_Area_Agg.objects.all()
     serializer_class = Crop_Area_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = AreaAggFilter
 
 class Weather_Station_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Weather_Station_Agg.objects.all()
     serializer_class = Weather_Station_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = StationAggFilter
+
 
 class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Farm_Field_Agg.objects.all()
     serializer_class = Farm_Field_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
+    filter_class = FieldAggFilter
 
 
 @api_view(('GET',))

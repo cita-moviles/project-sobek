@@ -104,6 +104,10 @@ class StationFilter(django_filters.FilterSet):
 
 #AggFilters
 class FieldAggFilter(django_filters.FilterSet):
+
+    max_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='gte')
+
     class Meta:
         model = Farm_Field_Agg
         fields = ['field_id', 'field_signal', 'field_latitude',
@@ -111,6 +115,10 @@ class FieldAggFilter(django_filters.FilterSet):
 
 
 class SensorAggFilter(django_filters.FilterSet):
+
+    max_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='gte')
+
     class Meta:
         model = Sensor_Agg
         fields = ['sensor_id', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
@@ -118,18 +126,30 @@ class SensorAggFilter(django_filters.FilterSet):
 
 
 class AreaAggFilter(django_filters.FilterSet):
+
+    max_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='gte')
+
     class Meta:
         model = Crop_Area_Agg
         fields = ['area_id', 'area_date_received']
 
 
 class ValveAggFilter(django_filters.FilterSet):
+
+    max_date = django_filters.DateTimeFilter(name='valve_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='valve_date_received', lookup_type='gte')
+
     class Meta:
         model = Valve_Agg
         fields = ['valve_id',  'valve_flow', 'valve_pressure', 'valve_date_received']
 
 
 class StationAggFilter(django_filters.FilterSet):
+
+    max_date = django_filters.DateTimeFilter(name='station_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='station_date_received', lookup_type='gte')
+
     class Meta:
         model = Weather_Station_Agg
         fields = ['station_id', 'station_relative_humidity',

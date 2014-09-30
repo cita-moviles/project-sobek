@@ -54,20 +54,6 @@ def get_sensor_log(sensorid):
 
 
         #Save to database
-        """
-        # * Socket model === Django Model
-        # 1. Build object for database.
-          # sensor_hl1
-          # sensor_hl2
-          # sensor_hl3
-          # sensor_temperature
-          # sensor_date_received = current_time
-
-        # 2. object.to_json() from model
-        # 3. object.upload_to_server() from model
-        # 4. Profit
-        """
-
         # * Socket model === Django Model
         # 1. Build object for database.
           # sensor_hl1
@@ -158,7 +144,7 @@ def get_valve_log(valveid):
     except urllib2.HTTPError, ex:
         print('Not found ')
 ##Weather_Station
-    def get_station_log(stationid):
+def get_station_log(stationid):
         print "Station: " + str(stationid)
         url = "http://riego.chi.itesm.mx/Station_Log/?station_id=" + str(stationid) + \
             str_today + "&ordering=-station_date_received"
@@ -205,7 +191,7 @@ def get_valve_log(valveid):
             print('Not found ')
 
 ##Farm_Field
-    def get_field_log(fieldid):
+def get_field_log(fieldid):
         print "Field: " + str(fieldid)
         url = "http://riego.chi.itesm.mx/Farm_Field_Log/?field_id=" + str(fieldid) + \
             str_today + "&ordering=-field_date_received"
@@ -250,6 +236,7 @@ def get_valve_log(valveid):
 
 ##Execute
 
+## Sensor exe
 request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
 request.add_header("Content-Type", "application/json")
@@ -266,6 +253,7 @@ try:
 except urllib2.HTTPError, ex:
     print('Not found ')
 
+## Area exe
 request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
 request.add_header("Content-Type", "application/json")
@@ -283,7 +271,7 @@ try:
 except urllib2.HTTPError, ex:
     print('Not found ')
 
-
+## Valve exe
 request = urllib2.Request("http://riego.chi.itesm.mx/Valve/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
 request.add_header("Content-Type", "application/json")
@@ -297,6 +285,41 @@ try:
     for valve in result2:
         valve_id = valve['valve_id']
         get_valve_log(valve_id)
+
+except urllib2.HTTPError, ex:
+    print('Not found ')
+
+## Station exe
+request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/")
+request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+request.add_header("Content-Type", "application/json")
+request.get_method = lambda: 'GET'
+
+try:
+    print "-----------"
+    result = urllib2.urlopen(request)
+    result2 = json.load(result)
+    for station in result2:
+        station_id = station['station_id']
+        get_station_log(station_id)
+
+
+except urllib2.HTTPError, ex:
+    print('Not found ')
+
+## Field exe
+request = urllib2.Request("http://riego.chi.itesm.mx/Farm_Field/")
+request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+request.add_header("Content-Type", "application/json")
+request.get_method = lambda: 'GET'
+
+try:
+    print "-----------"
+    result = urllib2.urlopen(request)
+    result2 = json.load(result)
+    for field in result2:
+        field_id = field['field_id']
+        get_field_log(field_id)
 
 except urllib2.HTTPError, ex:
     print('Not found ')

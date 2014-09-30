@@ -285,6 +285,8 @@ function initDatePickers(from_picker, to_picker) {
         }
     });
 
+    return [init_date, end_date]
+
 }
 
 /**
@@ -368,7 +370,6 @@ function weatherCallback(data) {
     var wind_speed = data.station_wind_speed;
     var battery_level = data.station_user_define1;
 
-
     // Selecting the tags
     var id_tag = $('#station_data');
     var date_tag = $('#date_data');
@@ -385,7 +386,15 @@ function weatherCallback(data) {
     date_tag.append(date_received);
     humidity_tag.append(relative_humidity);
     radiation_tag.append(radiation);
-    status_tag.append(status);
+
+    if(status === 0){
+        status_tag.append('OK');
+    }else{
+        status_tag.append('Communication Error');
+    }
+
+
+
     temperature_tag.append(temperature);
     wind_tag.append(wind_speed);
     battery_tag.append(battery_level);

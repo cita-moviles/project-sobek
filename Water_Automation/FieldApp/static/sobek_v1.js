@@ -146,7 +146,14 @@ function getStationCurrentData(select_id, search_id) {
 
                 options += '<option value="' + value.station_id + '">' + value.station_id + '</option>';
                 current_data += "<h4>Station: " + value.station_id + "</h4>";
-                current_data += "<p>Status: " + value.station_status + "<br/>";
+
+                if (value.station_status === 0) {
+                    current_data += "<p>Status: " + 'OK' + "<br/>";
+                } else {
+                    current_data += "<p>Status: " + 'Communication Error' + "<br/>";
+                }
+
+
                 current_data += "Relative Humidity: " + value.station_relative_humidity + "<br/>";
                 current_data += "Temperature: " + value.station_temperature + "<br/>";
                 current_data += "Wind Speed: " + value.station_wind_speed + "<br/>";
@@ -256,7 +263,14 @@ function getValves(select_id, search_id) {
                 options += '<option value="' + value.valve_id + '">' + value.valve_id + '</option>';
                 current_data += "<h4>Valve: " + value.valve_id + "</h4>";
                 current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
-                current_data += "Status: " + value.valve_status + "<br/>";
+
+                if (value.valve_status === 0) {
+                    current_data += "Status: " + 'OK' + "<br/>";
+                } else {
+                    current_data += "Status: " + 'Communication Error' + "<br/>";
+                }
+
+
                 current_data += "Flow: " + value.valve_flow + "<br/>";
                 current_data += "Pressure: " + value.valve_pressure + "<br/>";
                 current_data += "Date: " + date_received + "</p>";
@@ -297,7 +311,7 @@ function initDatePickers(from_picker, to_picker) {
 
         }
     });
-
+    return [init_date, end_date];
 }
 
 /**
@@ -356,55 +370,6 @@ function getAjaxWeatherData(station_id, callback) {
         url: '/Weather_Station/' + station_id,
 
         success: callback});
-}
-
-
-/**
- * Callback function in charge of processing and displaying the data on the corresponding tags
- *
- * @param data JSON Retreived from the web service
- * */
-function weatherCallback(data) {
-    var date_received = '';
-    if (data.station_date_received !== '') {
-        var dr = new Date(Date.parse(data.station_date_received));
-        date_received = dr.toLocaleString();
-
-    }
-
-    // Getting Data from received JSON
-    var station_id = data.station_id;
-    var station_name = data.station_name;
-    var relative_humidity = data.station_relative_humidity;
-    var radiation = data.station_solar_radiation;
-    var status = data.station_status;
-    var temperature = data.station_temperature;
-    var wind_speed = data.station_wind_speed;
-    var battery_level = data.station_user_define1;
-
-
-    // Selecting the tags
-    var id_tag = $('#station_data');
-    var date_tag = $('#date_data');
-    var humidity_tag = $('#humidity_data');
-    var radiation_tag = $('#radiation_data');
-    var status_tag = $('#status_data');
-    var temperature_tag = $('#temperature_data');
-    var wind_tag = $('#wind_data');
-    var battery_tag = $('#battery_data');
-
-
-    // Asign data received to tags
-    id_tag.append(station_id);
-    date_tag.append(date_received);
-    humidity_tag.append(relative_humidity);
-    radiation_tag.append(radiation);
-    status_tag.append(status);
-    temperature_tag.append(temperature);
-    wind_tag.append(wind_speed);
-    battery_tag.append(battery_level);
-
-
 }
 
 

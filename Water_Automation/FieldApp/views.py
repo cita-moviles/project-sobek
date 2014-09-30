@@ -153,7 +153,6 @@ class FarmFieldLogFilter(django_filters.FilterSet):
         model = Farm_Field_Log
         fields = ['field_id', 'field_date_received']
 
-
 #Viewsets
 class FieldSearch(generics.ListCreateAPIView):
     queryset = Farm_Field.objects.all()

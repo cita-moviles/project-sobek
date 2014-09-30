@@ -26,7 +26,7 @@
         <label>Area</label>
         <select id="area"
                 onchange="getSensorsOptions('sensor', 'area');"></select>
-        <label>Sensor</label>
+        <label>Node</label>
         <select id="sensor"></select>
 
         <p>Select the range of dates you wish to graph:</p>
@@ -88,9 +88,9 @@
 
             <div id="moisture_chart" height="400" width="1000"></div>
 
-            <h4>Temperature</h4>
-
-            <div id="temperature_chart" height="400" width="1000"></div>
+{#            <h4>Temperature</h4>#}
+            {##}
+            {#            <div id="temperature_chart" height="400" width="1000"></div>#}
         </section>
 
     </div>
@@ -107,8 +107,7 @@
 
     var from_picker = '#to_datetimepicker';
     var to_picker = '#from_datetimepicker';
-
-    initDatePickers(from_picker, to_picker);
+    initDatePickers(from_picker,to_picker);
 
     function graphLogs() {
 
@@ -129,8 +128,8 @@
                 var moisture_array = [];
                 moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
 
-                var temperature_array = [];
-                temperature_array.push(['Time', 'Temperature']);
+{#                var temperature_array = [];#}
+{#                temperature_array.push(['Time', 'Temperature']);#}
 
                 $.each(data, function (index, value) {
                     var date_received = new Date(Date.parse(value.sensor_date_received));
@@ -141,27 +140,27 @@
                     temp_array.push(value.sensor_hl3);
                     moisture_array.push(temp_array);
 
-                    var temp_array2 = [];
-                    temp_array2.push(date_received);
-                    temp_array2.push(value.sensor_temperature);
-                    temperature_array.push(temp_array2);
+{#                    var temp_array2 = [];#}
+{#                    temp_array2.push(date_received);#}
+{#                    temp_array2.push(value.sensor_temperature);#}
+{#                    temperature_array.push(temp_array2);#}
                 });
 
                 var data_moisture = google.visualization.arrayToDataTable(moisture_array);
-                var data_temperature = google.visualization.arrayToDataTable(temperature_array);
+{#                var data_temperature = google.visualization.arrayToDataTable(temperature_array);#}
 
                 //var options_moisture = {title: 'Soil Moisture'};
                 //var options_temperature = {title: 'Temperature'};
 
                 var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
-                var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));
+{#                var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));#}
 
                 var options = {
                     smoothLine: true
                 };
 
                 chart_moisture.draw(data_moisture, options);
-                chart_temperature.draw(data_temperature, options);
+{#                chart_temperature.draw(data_temperature, options);#}
 
             }
         });

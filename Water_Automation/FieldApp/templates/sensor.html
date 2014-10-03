@@ -116,7 +116,7 @@
         var sensor_id = $('#sensor').val();
 
         $.ajax({
-            url: "/Sensor_Log/",
+            url: "/Sensor_Agg/",
             data: {
                 sensor_id: sensor_id,
                 min_date: init_date.dateFormat('Y-m-d H:i:s'),

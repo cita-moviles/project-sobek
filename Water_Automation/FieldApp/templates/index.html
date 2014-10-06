@@ -256,7 +256,7 @@ init_date.setDate(end_date.getDate() - 10);
 var progressBar = $('#progress');
 
 function setInitDate(option) {
-    init_date = (getStartingDate(option));
+    init_date = getStartingDate(option);
     console.log('from: ' + init_date + ' to ' + end_date);
 
 }

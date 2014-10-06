@@ -486,3 +486,39 @@ function getCurrentValves(area_id, callback) {
         success: callback
     });
 }
+
+/**
+ * Return Final date
+ * */
+
+function getStartingDate(option) {
+
+    var init_date = new Date();
+    var end_date = new Date();
+
+    switch (option) {
+
+        case 1: //6 hours
+            init_date.setHours(end_date.getHours() - 6);
+            break;
+
+        case 2: //24 hours
+            init_date.setHours(end_date.getHours() - 24);
+            break;
+
+        case 3: //7 days
+            init_date.setDate(end_date.getDate() - 7);
+            break;
+
+        case 4: //15 days
+            init_date.setDate(end_date.getDate() - 15);
+            break;
+
+        case 5: //30 days
+            init_date.setDate(end_date.getDate() - 30);
+            break;
+    }
+
+    return init_date;
+}
+

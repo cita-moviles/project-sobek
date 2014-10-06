@@ -239,7 +239,7 @@ class Weather_Station:
         self.station_status = int(message[7:9])
         self.station_relative_humidity = float(message[9:11] + '.' + message[11])
         self.station_temperature = float(message[12:15] + '.' + message[15])
-        self.station_wind_speed = int(message[16:19])
+        self.station_wind_speed = float(message[16:18] + '.' + message[18:19])
         self.station_solar_radiation = int(message[19:23])
         #self.ev = float(message[23:25] + '.' + message[25])
         comma = message.index(",")

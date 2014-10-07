@@ -102,7 +102,7 @@ class StationFilter (django_filters.FilterSet):
                     'station_user_define2', 'fk_farm_field']
 
 
-#LogFilters
+# LogFilters
 class AreaLogFilter (django_filters.FilterSet):
      year = django_filters.CharFilter (name='log_timestamp', lookup_type='startswith')
      max_ev = django_filters.NumberFilter (name='area_ev', lookup_type='lte')
@@ -245,28 +245,24 @@ class Valve_Agg_ViewSet (generics.ListCreateAPIView):
      queryset = Valve_Agg.objects.all ()
      serializer_class = Valve_Agg_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-     filter_class = ValveLogFilter
-
+     
 
 class Crop_Area_Agg_ViewSet (generics.ListCreateAPIView):
      queryset = Crop_Area_Agg.objects.all ()
      serializer_class = Crop_Area_Agg_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-     filter_class = AreaLogFilter
 
 
 class Weather_Station_Agg_ViewSet (generics.ListCreateAPIView):
      queryset = Weather_Station_Agg.objects.all ()
      serializer_class = Weather_Station_Agg_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-     filter_class = StationFilter
 
 
 class Farm_Field_Agg_ViewSet (generics.ListCreateAPIView):
      queryset = Farm_Field_Agg.objects.all ()
      serializer_class = Farm_Field_Agg_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-     filter_class = FarmFieldLogFilter
 
 
 @api_view (('GET',))

@@ -153,6 +153,52 @@ class FarmFieldLogFilter(django_filters.FilterSet):
         model = Farm_Field_Log
         fields = ['field_id', 'field_date_received']
 
+#Aggregate Model Filters
+
+class SensorAggFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='gte')
+
+    class Meta:
+        model = Sensor_Agg
+        fields = ['sensor_id', 'sensor_hl1', 'sensor_hl2',
+                  'sensor_hl3', 'sensor_temperature', 'sensor_date_received']
+
+
+class ValveAggFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='valve_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='valve_date_received', lookup_type='gte')
+
+    class Meta:
+        model = Valve_Agg
+        fields = ['valve_id', 'valve_flow', 'valve_pressure', 'valve_date_received']
+
+class AreaAggFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='gte')
+
+    class Meta:
+        model = Crop_Area_Agg
+        fields = ['area_id', 'area_ev', 'area_date_received']
+
+class StationAggFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='station_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='station_date_received', lookup_type='gte')
+
+    class Meta:
+        model = Weather_Station_Agg
+        fields = ['station_id', 'station_relative_humidity',
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation',
+                  'station_date_received']
+
+class FieldAggFilter(django_filters.FilterSet):
+    max_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='lte')
+    min_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='gte')
+
+    class Meta:
+        model = Farm_Field_Agg
+        fields = ['field_id', 'field_signal', 'field_latitude', 'field_longitude', 'field_date_received']
+
 #Viewsets
 class FieldSearch(generics.ListCreateAPIView):
     queryset = Farm_Field.objects.all()
@@ -236,27 +282,31 @@ class Sensor_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Sensor_Agg.objects.all()
     serializer_class = Sensor_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = SensorAggFilter
 
 class Valve_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Valve_Agg.objects.all()
     serializer_class = Valve_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = ValveAggFilter
 
 class Crop_Area_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Crop_Area_Agg.objects.all()
     serializer_class = Crop_Area_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = AreaAggFilter
 
 class Weather_Station_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Weather_Station_Agg.objects.all()
     serializer_class = Weather_Station_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = StationAggFilter
 
 class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Farm_Field_Agg.objects.all()
     serializer_class = Farm_Field_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
+    filter_class = FieldAggFilter
 
 
 @api_view(('GET',))

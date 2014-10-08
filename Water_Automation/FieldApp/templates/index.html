@@ -60,9 +60,29 @@
             <label for="field">Field</label><select id="field"></select>
             <label for="area">Area</label><select id="area"></select>
             <label for="sensor">Sensor</label><select id="sensor"></select>
-            <button onclick="graphData()" class="button">Graph
-            </button>
 
+            <ul class="button-group [radius round]">
+                <li>
+                    <button onclick="setInitDate(1)" class="button">6 hours
+                    </button>
+                </li>
+                <li>
+                    <button onclick="setInitDate(2)" class="button">24 hours
+                    </button>
+                </li>
+                <li>
+                    <button onclick="setInitDate(3)" class="button">7 days
+                    </button>
+                </li>
+                <li>
+                    <button onclick="setInitDate(4)" class="button">15 days
+                    </button>
+                </li>
+                <li>
+                    <button onclick="setInitDate(5)" class="button">30 days
+                    </button>
+                </li>
+            </ul>
         </div>
 
     </div>
@@ -235,8 +255,17 @@ init_date.setDate(end_date.getDate() - 10);
 
 var progressBar = $('#progress');
 
+function setInitDate(option) {
+    init_date = getStartingDate(option);
+    console.log('from: ' + init_date + ' to ' + end_date);
+    graphData();
+
+}
+
 
 function graphData() {
+
+
     getSensorLogs(init_date, end_date, function (data) {
         var moisture_array = [];
         moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
@@ -262,7 +291,7 @@ function graphData() {
         var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
 
         var options = {
-            title: 'Soil Moisture (15 days)',
+            title: 'Soil Moisture',
             smoothLine: true
         };
 
@@ -298,7 +327,7 @@ function graphData() {
 
         var data_ev = google.visualization.arrayToDataTable(ev_array);
         var options = {
-            title: 'Evotranspiration (15 days)',
+            title: 'Evotranspiration',
             smoothLine: true
         };
 

@@ -155,7 +155,6 @@ class FarmFieldLogFilter (django_filters.FilterSet):
 
 
 #Aggregate Model Filters
-
 class SensorAggFilter(django_filters.FilterSet):
     max_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='lte')
     min_date = django_filters.DateTimeFilter(name='sensor_date_received', lookup_type='gte')
@@ -174,6 +173,7 @@ class ValveAggFilter(django_filters.FilterSet):
         model = Valve_Agg
         fields = ['valve_id', 'valve_flow', 'valve_pressure', 'valve_date_received']
 
+
 class AreaAggFilter(django_filters.FilterSet):
     max_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='lte')
     min_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='gte')
@@ -181,6 +181,7 @@ class AreaAggFilter(django_filters.FilterSet):
     class Meta:
         model = Crop_Area_Agg
         fields = ['area_id', 'area_ev', 'area_date_received']
+
 
 class StationAggFilter(django_filters.FilterSet):
     max_date = django_filters.DateTimeFilter(name='station_date_received', lookup_type='lte')
@@ -192,6 +193,7 @@ class StationAggFilter(django_filters.FilterSet):
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                   'station_date_received']
 
+
 class FieldAggFilter(django_filters.FilterSet):
     max_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='lte')
     min_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='gte')
@@ -199,6 +201,7 @@ class FieldAggFilter(django_filters.FilterSet):
     class Meta:
         model = Farm_Field_Agg
         fields = ['field_id', 'field_signal', 'field_latitude', 'field_longitude', 'field_date_received']
+
 
 #Viewsets
 class FieldSearch (generics.ListCreateAPIView):
@@ -250,7 +253,6 @@ class Area_Log_ViewSet (generics.ListCreateAPIView):
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = AreaLogFilter
 
-
 class Station_Log_ViewSet (generics.ListCreateAPIView):
      queryset = Weather_Station_Log.objects.all ()
      serializer_class = Weather_Station_Log_Serializer
@@ -278,6 +280,7 @@ class Farm_Field_Log_ViewSet (generics.ListCreateAPIView):
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = FarmFieldLogFilter
 
+
 #AggViewSets
 class Sensor_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Sensor_Agg.objects.all()
@@ -285,11 +288,13 @@ class Sensor_Agg_ViewSet(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = SensorAggFilter
 
+
 class Valve_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Valve_Agg.objects.all()
     serializer_class = Valve_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = ValveAggFilter
+
 
 class Crop_Area_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Crop_Area_Agg.objects.all()
@@ -297,11 +302,13 @@ class Crop_Area_Agg_ViewSet(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = AreaAggFilter
 
+
 class Weather_Station_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Weather_Station_Agg.objects.all()
     serializer_class = Weather_Station_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = StationAggFilter
+
 
 class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     queryset = Farm_Field_Agg.objects.all()
@@ -327,49 +334,3 @@ def api_root(request, format=None):
 class IndexView(TemplateView):
     template_name = 'index.html'
 
-class Sensor_Agg_ViewSet (generics.ListCreateAPIView):
-     queryset = Sensor_Agg.objects.all ()
-     serializer_class = Sensor_Agg_Serializer
-     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-     filter_class = SensorLogFilter
-
-
-class Valve_Agg_ViewSet (generics.ListCreateAPIView):
-     queryset = Valve_Agg.objects.all ()
-     serializer_class = Valve_Agg_Serializer
-     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-     
-
-class Crop_Area_Agg_ViewSet (generics.ListCreateAPIView):
-     queryset = Crop_Area_Agg.objects.all ()
-     serializer_class = Crop_Area_Agg_Serializer
-     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-
-class Weather_Station_Agg_ViewSet (generics.ListCreateAPIView):
-     queryset = Weather_Station_Agg.objects.all ()
-     serializer_class = Weather_Station_Agg_Serializer
-     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-
-class Farm_Field_Agg_ViewSet (generics.ListCreateAPIView):
-     queryset = Farm_Field_Agg.objects.all ()
-     serializer_class = Farm_Field_Agg_Serializer
-     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-
-
-@api_view (('GET',))
-def api_root (request, format=None):
-     return Response ({
-          'crop': reverse ('crop-list', request=request, format=format),
-          'field': reverse ('field-list', request=request, format=format),
-          'area': reverse ('area-list', request=request, format=format),
-          'valve': reverse ('valve-list', request=request, format=format),
-          'station': reverse ('station-list', request=request, format=format),
-          'sensor': reverse ('sensor-list', request=request, format=format),
-          'area-log': reverse ('area-log-list', request=request, format=format),
-          'area-configuration': reverse ('area-configuration-list', request=request, format=format)
-     })
-
-class IndexView (TemplateView):
-     template_name = 'index.html'

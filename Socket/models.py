@@ -342,7 +342,7 @@ class Farm_Field:
         pass
 
     def get_name_from_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Farm_Field/" + str(self.area_id) + "/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Farm_Field/" + str(self.field_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'GET'

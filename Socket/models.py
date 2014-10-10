@@ -497,7 +497,7 @@ class MessageProcessor:
 
                 elif msg[1:3] == "50":
                     field = Farm_Field(msg + "#")
-                    print field.to_json()
+                    #print field.to_json()
                     field.upload_to_server()
 
                 else:

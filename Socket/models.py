@@ -45,10 +45,10 @@ class Sensor:
 
         self.sensor_id = int(message[3:7])
         self.sensor_status = int(message[7:9])
-        self.sensor_hl1 = float(message[9:11] + "." + message[11])
-        self.sensor_hl2 = float(message[12:14] + "." + message[14])
-        self.sensor_hl3 = float(message[15:17] + "." + message[17])
-        self.sensor_temperature = float(message[18:21] + "." + message[21])
+        self.sensor_hl1 = float(message[9:11].join(".").join(message[11]))
+        self.sensor_hl2 = float(message[12:14].join(".").join(message[14]))
+        self.sensor_hl3 = float(message[15:17].join(".").join(message[17]))
+        self.sensor_temperature = float(message[18:21].join(".").join(message[21]))
         self.sensor_x_position = 0
         self.sensor_y_position = 0
         comma = message.index(',')

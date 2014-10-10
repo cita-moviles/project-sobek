@@ -286,6 +286,8 @@ class Farm_Field:
           #!50000101289600679420718-106.0925920028.6701220,0
         """
         self.field_id = int(message[3:7])
+        self.field_name = " "
+        self.field_description
         self.field_imei = int(message[7:22])
         self.field_signal = int(message[22:24])
         self.field_latitude = float(message[24:35])
@@ -337,6 +339,9 @@ class Farm_Field:
         print self.to_json()
         result = urllib2.urlopen(request, self.to_json())
         pass
+
+    def __unicode__(self):
+        return self.field_name
 
 class Sensor_Agg:
     def __init__(self, sensor_id, sensor_hl1, sensor_hl2, sensor_hl3, sensor_temperature, sensor_date_received):
@@ -492,7 +497,7 @@ class MessageProcessor:
 
                 elif msg[1:3] == "50":
                     field = Farm_Field(msg + "#")
-                    #print field.to_json()
+                    print field.to_json()
                     field.upload_to_server()
 
                 else:

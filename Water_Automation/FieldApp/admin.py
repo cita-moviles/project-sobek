@@ -95,13 +95,14 @@ class StationAdmin(admin.ModelAdmin):
 
         'station_id',
         'station_name',
+        'station_relative_humidity',
         'station_user_define1',
         'station_user_define2',
         'fk_farm_field'
 
     ]
 
-    list_display = ('station_id', 'station_name', 'fk_farm_field')
+    list_display = ('station_id', 'station_name', 'station_relative_humidity', 'fk_farm_field')
 
 
 class ConfigAdmin(admin.ModelAdmin):

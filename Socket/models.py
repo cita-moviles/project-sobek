@@ -286,8 +286,6 @@ class Farm_Field:
           #!50000101289600679420718-106.0925920028.6701220,0
         """
         self.field_id = int(message[3:7])
-        self.field_name = " "
-        self.field_description = " "
         self.field_imei = int(message[7:22])
         self.field_signal = int(message[22:24])
         self.field_latitude = float(message[24:35])

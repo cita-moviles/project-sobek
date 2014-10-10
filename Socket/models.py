@@ -304,6 +304,7 @@ class Farm_Field:
                 self.field_user_define2 = ' '
             else:
                 self.field_user_define2 = message[comma + 1: terminator]
+        self.get_name_from_server()
 
         global currentDate
         #TimeZone
@@ -340,8 +341,20 @@ class Farm_Field:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
-    def __unicode__(self):
-        return self.field_name
+    def get_name_from_server(self):
+        request = urllib2.Request("http://riego.chi.itesm.mx/Farm_Field/" + str(self.area_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'GET'
+        try:
+            result = urllib2.urlopen(request)
+            result2 = json.load(result)
+            self.field_name = result2['field_name']
+            self.field_description = result2['field_description']
+        except urllib2.HTTPError, ex:
+            #logging.exception("Something awful happened!")
+            print('Field names not found ' + str(self.field_id))
+        pass
 
 class Sensor_Agg:
     def __init__(self, sensor_id, sensor_hl1, sensor_hl2, sensor_hl3, sensor_temperature, sensor_date_received):

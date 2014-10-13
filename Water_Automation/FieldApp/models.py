@@ -108,7 +108,7 @@ class Sensor(models.Model):
     fk_area = models.ForeignKey('Crop_Area')
 
     def __unicode__(self):
-        return self.sensor_temperature
+        return str(self.sensor_temperature)
 
 
 # Logs

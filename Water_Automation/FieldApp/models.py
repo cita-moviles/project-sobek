@@ -52,7 +52,7 @@ class Area_Configuration(models.Model):
     area_configuration = models.TextField(max_length=250, null=True, blank=True)
 
     def __unicode__(self):
-        return self.area_id
+        return unicode(self.area_configuration)
 
 
 class Valve(models.Model):

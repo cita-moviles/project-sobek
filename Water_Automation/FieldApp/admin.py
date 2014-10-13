@@ -97,7 +97,7 @@ class StationAdmin(admin.ModelAdmin):
 
         'station_id',
         'station_name',
-        'station_date_received'
+        'station_date_received',
         'station_user_define1',
         'station_user_define2',
         'fk_farm_field'

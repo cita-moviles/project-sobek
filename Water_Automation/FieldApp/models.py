@@ -10,7 +10,7 @@ class Crop(models.Model):
     crop_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     crop_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.crop_name
 
 
@@ -26,7 +26,7 @@ class Farm_Field(models.Model):
     field_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     field_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.field_name
 
 
@@ -43,7 +43,7 @@ class Crop_Area(models.Model):
     fk_farm_field = models.ForeignKey('Farm_Field')
     fk_crop = models.ForeignKey('Crop')
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.area_name
 
 
@@ -51,7 +51,7 @@ class Area_Configuration(models.Model):
     area_id = models.ForeignKey('Crop_Area', primary_key=True)
     area_configuration = models.TextField(max_length=250, null=True, blank=True)
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.area_id
 
 
@@ -68,7 +68,7 @@ class Valve(models.Model):
     valve_user_define2 = models.TextField(max_length=250, null=True, blank=True)
     fk_area = models.ForeignKey('Crop_Area')
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.valve_name
 
 
@@ -87,7 +87,7 @@ class Weather_Station(models.Model):
                                             blank=True)
     fk_farm_field = models.ForeignKey('Farm_Field')
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.station_name
 
 
@@ -107,7 +107,7 @@ class Sensor(models.Model):
                                            blank=True)
     fk_area = models.ForeignKey('Crop_Area')
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.sensor_temperature
 
 
@@ -127,7 +127,7 @@ class Sensor_Log(models.Model):
     sensor_user_define2 = models.TextField(max_length=250, null=True,
                                            blank=True)
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.log_number
 
 
@@ -143,7 +143,7 @@ class Valve_Log(models.Model):
     valve_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     valve_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.log_number
 
 
@@ -156,7 +156,7 @@ class Crop_Area_Log(models.Model):
     area_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     area_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.log_number
 
 
@@ -175,7 +175,7 @@ class Weather_Station_Log(models.Model):
     station_user_define2 = models.TextField(max_length=250, null=True,
                                             blank=True)
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.log_number
 
 
@@ -191,7 +191,7 @@ class Farm_Field_Log(models.Model):
     field_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     field_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
-    def __unicode__ (self):
+    def __unicode__(self):
         return self.log_number
 
 ## Aggregated Models

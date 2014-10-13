@@ -29,6 +29,7 @@ class AreaAdmin(admin.ModelAdmin):
         'area_ev',
         'area_x_position',
         'area_y_position',
+        'area_date_received',
         'area_user_define1',
         'area_user_define2',
         'fk_farm_field',
@@ -36,7 +37,7 @@ class AreaAdmin(admin.ModelAdmin):
 
     ]
 
-    list_display = ('area_id', 'area_name', 'fk_farm_field', 'fk_crop')
+    list_display = ('area_id', 'area_name', 'area_date_received', 'fk_farm_field', 'fk_crop')
 
 
 class FieldAdmin(admin.ModelAdmin):

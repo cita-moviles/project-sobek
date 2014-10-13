@@ -93,6 +93,7 @@ class Weather_Station(models.Model):
 
 class Sensor(models.Model):
     sensor_id = models.IntegerField(primary_key=True)
+    sensor_name = models.CharField(max_length=59)
     sensor_status = models.SmallIntegerField(max_length=2)
     sensor_hl1 = models.FloatField(null=True, blank=True, default = 0)
     sensor_hl2 = models.FloatField(null=True, blank=True, default = 0)
@@ -108,7 +109,7 @@ class Sensor(models.Model):
     fk_area = models.ForeignKey('Crop_Area')
 
     def __unicode__(self):
-        return str(self.sensor_temperature)
+        return self.sensor_name, str(self.sensor_temperature)
 
 
 # Logs

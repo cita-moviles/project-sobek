@@ -61,6 +61,7 @@ class SensorAdmin(admin.ModelAdmin):
     fields = [
 
         'sensor_id',
+        'sensor_name',
         'sensor_status',
         'sensor_x_position',
         'sensor_y_position',
@@ -70,7 +71,7 @@ class SensorAdmin(admin.ModelAdmin):
         'fk_area'
 
     ]
-    list_display = ('sensor_id', 'sensor_status', 'sensor_date_received', 'fk_area')
+    list_display = ('sensor_id', 'sensor_name', 'sensor_status', 'sensor_date_received', 'fk_area')
 
 
 class ValveAdmin(admin.ModelAdmin):

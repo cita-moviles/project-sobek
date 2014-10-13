@@ -66,10 +66,11 @@ class SensorAdmin(admin.ModelAdmin):
         'sensor_y_position',
         'sensor_user_define1',
         'sensor_user_define2',
+        'sensor_date_received',
         'fk_area'
 
     ]
-    list_display = ('sensor_id', 'sensor_status', 'fk_area')
+    list_display = ('sensor_id', 'sensor_status', 'sensor_date_received', 'fk_area')
 
 
 class ValveAdmin(admin.ModelAdmin):
@@ -81,13 +82,14 @@ class ValveAdmin(admin.ModelAdmin):
         'valve_ideal',
         'valve_status',
         'valve_flow',
+        'valve_date_received',
         'valve_user_define1',
         'valve_user_define2',
         'fk_area',
 
     ]
 
-    list_display = ('valve_id', 'valve_name', 'valve_limit', 'valve_ideal', 'fk_area')
+    list_display = ('valve_id', 'valve_name', 'valve_limit', 'valve_ideal', 'valve_date_received', 'fk_area')
 
 
 class StationAdmin(admin.ModelAdmin):

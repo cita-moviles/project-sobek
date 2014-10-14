@@ -184,7 +184,10 @@ class Crop_Area:
                 self.area_user_define2 = ' '
             else:
                 self.area_user_define2 = message[comma + 1: terminator]
-        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/" + str(int(message[3:5])) + "/"
+
+        self.fk_farm_field = " "
+        self.get_field_from_server()
+
         self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
         global currentDate
         self.area_date_received = str(currentDate)
@@ -245,6 +248,16 @@ class Crop_Area:
             print('Area configuration not found ' + str(self.area_id))
         return area_cfg
 
+    def get_field_from_server(self):
+        request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/" + str(self.area_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'GET'
+
+        try:
+            result = urllib2.urlopen(request)
+            result2 = json.load(result)
+            self.fk_farm_field = result2['fk_farm_field']
 
 #40
 class Weather_Station:

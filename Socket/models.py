@@ -62,9 +62,13 @@ class Sensor:
                 self.sensor_user_define2 = ' '
             else:
                 self.sensor_user_define2 = message[comma + 1: terminator]
-        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
+
+        self.fk_area = " "
+        self.get_area_from_server()
+
         global currentDate
         self.sensor_date_received = str(currentDate)
+
         self.sensor_name = " "
         self.get_name_from_server()
 
@@ -91,6 +95,20 @@ class Sensor:
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
             print('Sensor names not found ' + str(self.sensor_id))
+        pass
+
+    def get_area_from_server(self):
+        request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/" + str(self.sensor_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'GET'
+
+        try:
+            result = urllib2.urlopen(request)
+            result2 = json.load(result)
+            self.fk_area = result2['fk_area']
+        except urllib2.HTTPError, ex:
+            print('Area ID not found ' + str(self.sensor_id))
         pass
 
 #20
@@ -123,7 +141,10 @@ class Valve:
                 self.valve_user_define2 = ' '
             else:
                 self.valve_user_define2 = message[comma + 1: terminator]
-        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
+
+        self.fk_area = " "
+        self.get_area_from_server()
+
         global currentDate
         self.valve_date_received = str(currentDate)
         #self.limit = int(message[21:26])
@@ -156,6 +177,20 @@ class Valve:
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
             print('Valve names not found ' + str(self.valve_id))
+        pass
+
+    def get_area_from_server(self):
+        request = urllib2.Request("http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'GET'
+
+        try:
+            result = urllib2.urlopen(request)
+            result2 = json.load(result)
+            self.fk_area = result2['fk_area']
+        except urllib2.HTTPError, ex:
+            print('Area ID not found ' + str(self.valve_id))
         pass
 
 #30

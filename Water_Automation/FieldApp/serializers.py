@@ -75,7 +75,7 @@ class Sensor_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Sensor
         fields = (
-            'sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
+            'sensor_id', 'sensor_name', 'sensor_status', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
             'sensor_x_position', 'sensor_y_position', 'sensor_date_received',
             'sensor_user_define1', 'sensor_user_define2', 'fk_area'
         )

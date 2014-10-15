@@ -223,13 +223,17 @@ class Crop_Area:
         self.fk_farm_field = " "
         self.get_field_from_server()
 
-        self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
+        self.fk_crop = " "
+        self.get_crop_from_server()
+
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
+
         self.area_name = " "
         self.area_description = " "
         self.get_name_from_server()
+
         area_cfg = self.get_from_server()
 
     def to_json(self):
@@ -271,6 +275,20 @@ class Crop_Area:
             self.fk_farm_field = result2['fk_farm_field']
         except urllib2.HTTPError, ex:
             print('Field ID not found ' + str(self.area_id))
+        pass
+
+    def get_crop_from_server(self):
+        request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/" + str(self.area_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'GET'
+
+        try:
+            result = urllib2.urlopen(request)
+            result2 = json.load(result)
+            self.fk_crop = result2['fk_crop']
+        except urllib2.HTTPError, ex:
+            print('Crop ID not found ' + str(self.area_id))
         pass
 
     def get_from_server(self):

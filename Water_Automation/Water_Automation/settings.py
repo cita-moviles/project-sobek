@@ -2,6 +2,7 @@
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),

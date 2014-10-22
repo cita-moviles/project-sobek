@@ -108,7 +108,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'Water_Automation.urls'
 
-INTERNAL_IPS = ('207.244.78.11')
+INTERNAL_IPS = ('201.174.17.114')
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'Water_Automation.wsgi.application'

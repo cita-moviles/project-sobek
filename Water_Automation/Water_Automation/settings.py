@@ -2,7 +2,6 @@
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -41,9 +40,6 @@ LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
-def show_toolbar(request):
-    return True
-SHOW_TOOLBAR_CALLBACK = show_toolbar
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
@@ -103,6 +99,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
@@ -110,6 +107,8 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'Water_Automation.urls'
+
+INTERNAL_IPS =('201.174.17.114')
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'Water_Automation.wsgi.application'

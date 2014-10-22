@@ -41,6 +41,9 @@ LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
+def show_toolbar(request):
+    return True
+SHOW_TOOLBAR_CALLBACK = show_toolbar
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True

@@ -148,7 +148,7 @@ class Valve:
         pass
 
     def get_from_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/" + str(self.sensor_id) + "/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'GET'
@@ -198,6 +198,7 @@ class Crop_Area:
         self.area_name = " "
         self.area_description = " "
         self.get_from_server()
+        self.get_name_from_server()
 
         area_cfg = self.get_from_server()
 
@@ -213,6 +214,23 @@ class Crop_Area:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
+
+    def get_name_from_server(self):
+        request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/" + str(self.area_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'GET'
+        try:
+            result = urllib2.urlopen(request)
+            result2 = json.load(result)
+            self.area_name = result2['area_name']
+            self.area_description = result2['area_description']
+            self.fk_crop = result2['fk_crop']
+            self.fk_farm_field = result2['fk_farm_field']
+        except urllib2.HTTPError, ex:
+            #logging.exception("Something awful happened!")
+            print('Area names not found ' + str(self.area_id))
+            pass
 
     def get_from_server(self):
         area_cfg = ''
@@ -232,11 +250,6 @@ class Crop_Area:
             else:
                 area_cfg += "CFG" + str(self.area_id).zfill(4) + str(result2['area_configuration']) + "#"
                 print "Sending pending configuration"
-
-            self.fk_crop = result2['fk_crop']
-            self.fk_farm_field = result2['fk_farm_field']
-            self.area_name = result2['area_name']
-            self.area_description = result2['area_description']
 
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")

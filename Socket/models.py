@@ -190,15 +190,13 @@ class Crop_Area:
 
         self.fk_farm_field = " "
         self.fk_crop = " "
+        self.area_name = " "
+        self.area_description = " "
+        self.get_name_from_server()
 
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
-
-        self.area_name = " "
-        self.area_description = " "
-        self.get_from_server()
-        self.get_name_from_server()
 
         area_cfg = self.get_from_server()
 

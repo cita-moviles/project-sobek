@@ -127,6 +127,8 @@ class Sensor_Log(models.Model):
                                            blank=True)
     sensor_user_define2 = models.TextField(max_length=250, null=True,
                                            blank=True)
+    class Meta:
+        unique_together = ["sensor_id", "sensor_date_received"]
 
     def __unicode__(self):
         return self.log_number
@@ -144,6 +146,9 @@ class Valve_Log(models.Model):
     valve_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     valve_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
+    class Meta:
+        unique_together = ["valve_id", "valve_date_received"]
+
     def __unicode__(self):
         return self.log_number
 
@@ -156,6 +161,9 @@ class Crop_Area_Log(models.Model):
     area_date_received = models.DateTimeField(db_index=True)
     area_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     area_user_define2 = models.TextField(max_length=250, null=True, blank=True)
+
+    class Meta:
+        unique_together = ["area_id", "area_date_received"]
 
     def __unicode__(self):
         return self.log_number
@@ -176,6 +184,9 @@ class Weather_Station_Log(models.Model):
     station_user_define2 = models.TextField(max_length=250, null=True,
                                             blank=True)
 
+    class Meta:
+        unique_together = ["station_id", "station_date_received"]
+
     def __unicode__(self):
         return self.log_number
 
@@ -191,6 +202,9 @@ class Farm_Field_Log(models.Model):
     field_date_received = models.DateTimeField(db_index=True)
     field_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     field_user_define2 = models.TextField(max_length=250, null=True, blank=True)
+
+    class Meta:
+        unique_together = ["field_id", "field_date_received"]
 
     def __unicode__(self):
         return self.log_number

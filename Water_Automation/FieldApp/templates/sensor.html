@@ -21,11 +21,9 @@
             Select the Sensor you wish to graph:
         </h3>
         <label>Field</label>
-        <select id="field"
-                onchange="getAreasOptions('area', 'field');"></select>
+         <select id="field" onchange="getAreasOptions('area','field'),getSensorsForFieldSelected()"></select>
         <label>Area</label>
-        <select id="area"
-                onchange="getSensorsOptions('sensor', 'area');"></select>
+        <select id="area" onchange="getSensorForArea()" ></select>
         <label>Node</label>
         <select id="sensor"></select>
 
@@ -108,6 +106,90 @@
     var from_picker = '#to_datetimepicker';
     var to_picker = '#from_datetimepicker';
     initDatePickers(from_picker,to_picker);
+
+    var field_selector = $('#field');
+    var area_selector = $('#area');
+    var sensor_selector = $('#sensor');
+
+    PopulateFields();
+function PopulateFields() {
+    var current_field;
+    $.ajax({
+        url: "/Farm_Field",
+        data: {},
+        success: function (data) {
+            var options = "";
+            $.each(data, function (index, value) {
+                options += '<option value="' + value.field_id + '">' + value.field_name + '</option>';
+            });
+            field_selector.html(options);
+            current_field = $("#field").val();
+            //console.log(current_field);
+            PopulateAreaForField(current_field);
+        }
+    });
+}
+function PopulateAreaForField(field){
+    var current_area;
+    $.ajax({
+        url: "Area_Search",
+        data: {fk_farm_field: field},
+        success: function (data){
+            var options ="";
+            $.each(data, function(index,value){
+                options += '<option value=" '+ value.area_id+ '">' + value.area_name + '</option>';
+            });
+            area_selector.html(options);
+            current_area=$("#area").val();
+            PopulateSensorForArea(current_area);
+        }
+    });
+}
+function PopulateSensorForArea(area){
+    $.ajax({
+        url: "/Sensor_Search/",
+        data: {fk_area:area},
+        success: function (data){
+           var options;
+            $.each(data, function(index, value){
+           options += '<option value=" '+ value.sensor_id+ '">' + value.sensor_id + '</option>';
+        });
+    }});
+}
+function getSensorsForFieldSelected () {
+    var current_field=$("#field").val();
+    $.ajax({
+        url: "/Area_Search/",
+        data: {fk_farm_field: current_field },
+        success: function (data) {
+            options = "";
+            $.each(data, function (index, value) {
+                options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
+            });
+            $('#area').html(options);
+            getSensorForArea('area');
+        }
+    });
+}
+function getSensorForArea(area_selector){
+  var current_area=$('#'+area_selector).val();
+  if(current_area===null){
+      $("#sensor").html("");
+      return false;
+  }
+  //console.log(current_area);
+    $.ajax({
+        url:"/Sensor_Search",
+        data: {fk_area:current_area },
+        success:function(data) {
+            var options= "";
+            $.each(data, function (index, value) {
+               options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
+            });
+            $('#sensor').html(options);
+        }
+    });
+}
 
     function graphLogs() {
 

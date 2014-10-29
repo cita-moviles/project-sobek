@@ -13,7 +13,7 @@
 <div class="row">&nbsp;</div>
 <div class="row">
     <!-- Weather Information Current Data -->
-    <div class="large-6 columns">
+    <div class="large-3 columns">
         <h3 class="show-for-small">Sensor 0 Moisture Graph
             <hr/>
         </h3>
@@ -34,23 +34,70 @@
             <p id="temperature_data">Temperature: </p>
 
             <p id="wind_data">Wind Speed: </p>
-
-            <p id="battery_data">Battery: </p>
         </div>
     </div>
 
-    <!-- Sensor Graph-->
+    <div class="large-9 columns">
+        <br/>
+        <br/>
 
-    <div class="large-6 columns">
-        <!-- Sensor 0 Graph -->
-        <div class="progress round">
+
+        <div class="row">
+            <div class="small-5 columns">
+                <label for="field">Field</label>
+                <select id="field" onchange="getAreasOptions('area','field'),getConsolidatedSensorForFieldSelected()"></select>
+            </div>
+            <div class="small-5 columns">
+                <label for="area">Area</label>
+                <select id="area" onchange="getConsolidatedSensorForFieldSelected()" ></select>
+            </div>
+        </div>
+
+        <div class="large-12 columns">
+            <ul class="button-group [radius round]">
+                <li>
+                    <button onclick="quick_date(1)" class="button">6 hours
+                    </button>
+                </li>
+                <li>
+                    <button onclick="quick_date(2)" class="button">24 hours
+                    </button>
+                </li>
+                <li>
+                    <button onclick="quick_date(3)" class="button">7 days
+                    </button>
+                </li>
+                <li>
+                    <button onclick="quick_date(4)" class="button">15 days
+                    </button>
+                </li>
+                <li>
+                    <button onclick="quick_date(5)" class="button">30 days
+                    </button>
+                </li>
+            </ul>
+           </div>
+
+       <div class="progress round">
             <p id="progress_message" style="float: left; margin-right:
             5px"></p>
             <span id="progress" class="meter"
                   style="width: 0; float: left"></span>
+        <br/>
+       </div>
 
 
+        <div class="row">
+            <div class="small-4 columns">
+                <label for="from_datetimepicker" >From</label>
+                <input id="from_datetimepicker" type="text"/>
+             </div>
+            <div class="small-4 columns">
+                 <label for="to_datetimepicker" >to</label>
+                <input id="to_datetimepicker" type="text"/>
+            </div>
         </div>
+
         <br>
 
         <div id="moisture_chart" height="500" width="500"></div>
@@ -93,32 +140,16 @@
     &nbsp;
 </div>
 
+        <div class="large-21 columns">
 
-<div class="row">
-    <div class="large-12 columns">
-        <h3>Area Evapotranspiration</h3>
-        <hr>
-    </div>
-    <div id="sensors_information" class="large-12 columns">
+            <div id="default_sensor"></div>
 
-    </div>
+            <div id="moisture_chart" ></div>
 
-</div>
+            <div id="ev_chart"></div>
 
-<div class="row">
-    &nbsp;
-</div>
-
-<div class="row">
-
-    <div class="large-12 columns"></div>
-
-    <div id="graph_container" class="large-12">
-        <h4 id="ev_header"></h4>
-
-        <div id="ev_chart" height="500" width="500"></div>
-    </div>
-
+            <div id="flow_chart" ></div>
+          </div>
 
 </div>
 
@@ -126,57 +157,9 @@
     &nbsp;
 </div>
 
-<div class="row">
-
-    <div class="large-12 columns">
-        <h3>Current Sensor Information</h3>
-        <hr>
-    </div>
-
-    <div class="large-12 columns">
-        <div class="large-6 columns">
-            <label for="valve">Valve</label><select id="valve"></select>
-            <button onclick="graphValveData()" class="button">Graph
-            </button>
-        </div>
-        <div class="large-6 columns">
-            <h4>Actuator & Status</h4>
-
-            <div id="valve_actuator_graph" height="400" width="1000"></div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="large-12 columns">
-        <div class="large-6 columns">
-            <h4>Flow</h4>
-
-            <div id="valve_flow_graph" height="400" width="1000"></div>
-        </div>
-
-        <div class="large-6 columns">
-            <h4>Pressure</h4>
-
-            <div id="valve_pressure_graph" height="400" width="1000"></div>
-
-        </div>
-
-
-    </div>
-</div>
 
 <div class="row">
     &nbsp;
-</div>
-
-<div class="row">
-    <div class="large-12 columns">
-        <h3>Current Valves Information</h3>
-        <hr>
-    </div>
-    <div id="current_valves" class="large-12 columns">
-    </div>
 </div>
 
 
@@ -193,32 +176,81 @@ var area_selector = $('#area');
 var sensor_selector = $('#sensor');
 var valve_selector = $('#valve');
 
-getFarmFields(function (data) {
-    var options = "";
 
-    $.each(data, function (index, value) {
-        options += '<option value="' + value.field_id + '">' + value.field_name + '</option>';
+var from_picker = '#to_datetimepicker';
+var to_picker = '#from_datetimepicker';
+initDatePickers(from_picker,to_picker);
+
+PopulateFields();
+function PopulateFields() {
+    var current_field;
+    $.ajax({
+        url: "/Farm_Field",
+        data: {},
+        success: function (data) {
+            var options = "";
+            $.each(data, function (index, value) {
+                options += '<option value="' + value.field_id + '">' + value.field_name + '</option>';
+            });
+            field_selector.html(options);
+            current_field = $("#field").val();
+            //console.log(current_field);
+            PopulateAreaForField(current_field);
+        }
     });
+}
+function PopulateAreaForField(field){
+    $.ajax({
+        url: "Area_Search",
+        data: {fk_farm_field: field},
+        success: function (data){
+            var options ="";
+            $.each(data, function(index,value){
+                options += '<option value=" '+ value.area_id+ '">' + value.area_name + '</option>';
+            });
+            area_selector.html(options);
+        }
+    });
+}
+function getConsolidatedSensorForFieldSelected () {
+    var current_field=$("#field").val();
+    $.ajax({
+        url: "/Area_Search/",
+        data: {fk_farm_field: current_field },
+        success: function (data) {
+            options = "";
+            $.each(data, function (index, value) {
+                options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
+            });
+            $('#area').html(options);
+            getSensorForArea('area');
+        }
+    });
+}
+function getSensorForArea(area_selector){
+  var current_area=$('#'+area_selector).val();
+  if(current_area===null){
+      $("#default_sensor").html("");
+      return false;
+  }
+  //console.log(current_area);
+    $.ajax({
+        url:"/Sensor_Search",
+        data: {fk_area:current_area,
+               sensor_id: 0 },
+        success:function(data) {
+            var default_sensor = "";
 
-    field_selector.html(options);
+            $.each(data, function (index, value) {
+                if(data.isEmptyObject){default_sensor=" ";}
+                default_sensor += "<p>Sensor: " + value.sensor_id + "</p>";
+            });
+            $('#default_sensor').html(default_sensor);
+        }
+    });
+}
 
-});
 
-
-field_selector.change(
-        getAreasForField(field_selector.val(), function (data) {
-
-
-                    var options = '';
-                    $.each(data, function (index, value) {
-                                options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
-                            }
-                    );
-                    area_selector.html(options);
-                }
-        ));
-
-area_selector.change(populateSensorAndValves(area_selector.val()));
 
 function populateSensorAndValves(area_id) {
     getSensorsForArea(area_id, function (data) {
@@ -262,41 +294,53 @@ function setInitDate(option) {
 
 }
 
+function graphLogs() {
+    var default_sensor_id = 0;
+    $.ajax({
+        url: "/Sensor_Log/",
+        data: {
+            sensor_id: default_sensor_id,
+            min_date: init_date.dateFormat('Y-m-d H:i:s'),
+            max_date: end_date.dateFormat('Y-m-d H:i:s'),
+            ordering: "-sensor_date_received"
+        },
+        beforeSend: displayLoading,
+        success: function (data) {
+            var current_sensor = "";
+            var moisture_array = [];
+            //console.log(data);
+            moisture_array.push(['Time', 'HL0']);
 
-function graphData() {
-
-
-    getSensorLogs(init_date, end_date, function (data) {
-        var moisture_array = [];
-        moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
-
-        if (data.length == 0) {
-            moisture_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                0, 0, 0]);
-        } else {
             $.each(data, function (index, value) {
                 var date_received = new Date(Date.parse(value.sensor_date_received));
+                current_sensor += "<div class='panel large-12'>";
+                current_sensor += "<h4>Sensor: 0 </h4>";
+                current_sensor += "<p>Status: " + value.sensor_status + "<br/>";
+                current_sensor += "HL0: " + value.sensor_hl1 + "<br/>";
+                current_sensor += "Temperature: " + value.sensor_temperature + "<br/>";
+                ;
+                current_sensor += "Date: " + date_received + "</p>";
+                current_sensor += "</div>";
                 var temp_array = [];
                 temp_array.push(date_received);
                 temp_array.push(value.sensor_hl1);
-                temp_array.push(value.sensor_hl2);
-                temp_array.push(value.sensor_hl3);
                 moisture_array.push(temp_array);
-
             });
+
+            $('#current_sensor').html(current_sensor);
+            var data_moisture = google.visualization.arrayToDataTable(moisture_array);
+
+            var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
+
+            var options = {
+                title: 'Soil Moisture',
+                smoothLine: true
+            };
+
+
+            hideLoading();
+            chart_moisture.draw(data_moisture, options);
         }
-
-        var data_moisture = google.visualization.arrayToDataTable(moisture_array);
-
-        var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
-
-        var options = {
-            title: 'Soil Moisture',
-            smoothLine: true
-        };
-
-        hideLoading();
-        chart_moisture.draw(data_moisture, options);
     });
 
 
@@ -304,14 +348,11 @@ function graphData() {
     getEvotranspirationLog(area_id, init_date, end_date, function (data) {
         var ev_array = [];
         ev_array.push(['Time', 'EV']);
-
         if (data.length == 0) {
-
             ev_array.push([end_date.dateFormat('Y-m-d H:i:s'), 0]);
-
         } else {
             $.each(data, function (index, value) {
-
+                        console.log(data);
                         var date_received = new Date(Date.parse(value.area_date_received));
 
                         var tmp_array = [];
@@ -320,11 +361,7 @@ function graphData() {
                         ev_array.push(tmp_array);
                     }
             );
-
-
         }
-
-
         var data_ev = google.visualization.arrayToDataTable(ev_array);
         var options = {
             title: 'Evotranspiration',
@@ -334,61 +371,35 @@ function graphData() {
         var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
         chart_ev.draw(data_ev, options);
     });
-    getCurrentValves(area_id, function (data) {
-
-
-        var current_data = "";
-
-        $.each(data, function (index, value) {
-
-            var date_received = "";
-            if (value.valve_date_received !== "") {
-                var dr = new Date(Date.parse(value.valve_date_received));
-                date_received = dr.toLocaleString();
-            }
-            current_data += '<div class="panel large-4 small-6 ' +
-                    'columns">';
-            current_data += "<h4>Valve: " + value.valve_id + "</h4>";
-            current_data += "<p>Actuator: " + value.valve_user_define1 + "<br/>";
-            current_data += "Status: " + value.valve_status + "<br/>";
-            current_data += "Flow: " + value.valve_flow + "<br/>";
-            current_data += "Pressure: " + value.valve_pressure + "<br/>";
-            current_data += "Date: " + date_received + "</p>";
-            current_data += "</div>";
-        });
-
-        console.log(current_data);
-        $('#current_valves').html(current_data);
-    });
-    $('#ev_header').text('Ev for Area: ' + area_id);
-
+    var current_valve=getValveForSensor();
+    graphValveData(current_valve);
 }
 
+    function getValveForSensor(){
+     var current_area=area_selector.val();
+     var current_valve;
+        $.ajax({
+            url:"Valve_Search",
+            data: {fk_area: current_area},
+            success: function(data){
 
-function graphValveData() {
+                $.each(data,function(index, value){
+                    current_valve=value.valve_id;
+                });
+            }
+        });
+        return current_valve;
+    }
+    function graphValveData(current_valve) {
 
-    var sensor_id = $('#sensor').val();
-
-    getValveLog(sensor_id, init_date, end_date, function (data) {
-
-        var valve_actuator_array = [
-            ['Time', 'Actuator', 'Status']
-        ];
+    getValveLog(current_valve, init_date, end_date, function (data) {
+        //console.log(data);
         var valve_flow_array = [
             ['Time', 'Flow']
         ];
-        var valve_pressure_array = [
-            ['Time', 'Pressure']
-        ];
 
         if (data.length == 0) {
-
-            valve_actuator_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                0, 0]);
             valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                0]);
-
-            valve_pressure_array.push([end_date.dateFormat('Y-m-d H:i:s'),
                 0]);
 
         } else {
@@ -397,41 +408,30 @@ function graphValveData() {
 
                 var temp_array = [];
                 temp_array.push(date_received);
-                temp_array.push(parseInt(value.valve_user_define_1));
-                temp_array.push(parseInt(value.valve_status));
-                valve_actuator_array.push(temp_array);
-
-                temp_array = [];
-                temp_array.push(date_received);
                 temp_array.push(value.valve_flow);
                 valve_flow_array.push(temp_array);
-
-                temp_array = [];
-                temp_array.push(date_received);
-                temp_array.push(value.valve_pressure);
-                valve_pressure_array.push(temp_array);
             });
         }
 
-        var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
+       /* var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);*/
         var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
-        var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
+        /*var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);*/
 
         var options = {
-            smoothLine: true
+            smoothLine: true,
+            title: 'Flow'
         };
 
-        var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
-        chart_actuator.draw(data_actuator, options);
+        /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
+        chart_actuator.draw(data_actuator, options);*/
 
-        var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
+        var chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
         chart_flow.draw(data_flow, options);
 
-        var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
-        chart_pressure.draw(data_pressure, options);
+        /*var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
+        chart_pressure.draw(data_pressure, options);*/
 
     });
-
 }
 
 

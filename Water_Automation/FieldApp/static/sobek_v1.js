@@ -5,7 +5,6 @@
 var from; // picker variables
 var to; // picker variables
 
-
 function hideTag(container) {
     $('#' + container).css('display', 'none')
 }
@@ -53,20 +52,49 @@ function getAjaxFarmFields(select_id, field2, field3) {
     });
 }
 
-function getAreasOptions(select_id) {
+function getFarmFields(){
+
     $.ajax({
-        url: "/Crop_Area/",
+        url: "/Farm_Field/",
         data: { },
+        success: function (data) {
+            var current_data= "";
+            options="";
+            $.each(data, function (index, value) {
+                options += value.field_id + '>' + value.field_name;
+
+                current_data += "<div class='panel left' style='margin-left: 5px;'><h4>Field: " +
+                                 value.field_name + "</h4>";
+                current_data += "<p>Imei: " + value.field_imei + "<br/>";
+                current_data += "Latitude: " + value.field_latitude + "<br/>";
+                current_data += "Longitude: " + value.field_longitude + "<br/>";
+                current_data += "Signal: " + value.field_signal + "</p><button class='button tiny' id='"+value.field_id+"'onclick='graphLogs(this.id)'>Signal Graph</button></br><button id='"+value.field_id+"'class='button tiny' onclick='showGoogleMaps(this.id)'>Show In Map</button></div>";
+                $('#current_field').html(current_data);
+
+            });
+           console.log(options);
+
+        }
+    });
+}
+function getAreasOptions(select_id,search_id) {
+    $.ajax({
+        url: "/Area_Search/",
+        data: {fk_farm_field: $('#' + search_id).val() },
         success: function (data) {
             options = "";
 
             $.each(data, function (index, value) {
                 options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
             });
-
             $('#' + select_id).html(options);
+            getCurrentArea('area');
         }
     });
+}
+function getCurrentArea(area_selector){
+  var current_area=$('#'+area_selector).val();
+ return current_area;
 }
 
 function getAreas(select_id, search_id, field2) {
@@ -90,8 +118,9 @@ function getAreas(select_id, search_id, field2) {
                 current_data += "Evotranspiration: " + value.area_ev + "<br/>";
                 current_data += "Date: " + date_received + "</p>";
             });
-
+            $.holdReady(true);
             $('#' + select_id).html(options);
+            $.holdReady(false);
 
             if (field2 === 'sensor') {
                 $('#current_sensor').html("");
@@ -106,7 +135,7 @@ function getAreas(select_id, search_id, field2) {
             if (field2 === '') {
                 $('#current_area').html(current_data);
             }
-
+        return area;
         }
     });
 }
@@ -169,11 +198,13 @@ function getStationCurrentData(select_id, search_id) {
     return current_data;
 }
 
-function getSensorsOptions(select_id) {
+function getSensorsOptions(search_id,select_id) {
+
     $.ajax({
-        url: "/Sensor/",
-        data: { },
+        url: "/Sensor_Search/",
+        data: {fk_area: $('#' + search_id).val() },
         success: function (data) {
+            console.log(data);
             var options = "";
 
             $.each(data, function (index, value) {
@@ -187,7 +218,7 @@ function getSensorsOptions(select_id) {
 
 function getSensors(select_id, search_id) {
     area = $('#' + search_id).val();
-
+    console.log(area);
     if (area === null) {
         $('#' + select_id).html("");
         return
@@ -198,6 +229,7 @@ function getSensors(select_id, search_id) {
         success: function (data) {
             var options = "";
             var current_data = "";
+            var current_sensor="";
 
             $.each(data, function (index, value) {
 
@@ -208,6 +240,7 @@ function getSensors(select_id, search_id) {
                 }
 
                 options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
+                current_sensor+="<p>Sensor: </p>"+ value.sensor_id;
                 current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
                 current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
                 current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
@@ -218,6 +251,7 @@ function getSensors(select_id, search_id) {
 
             $('#' + select_id).html(options);
             $('#current_sensor').html(current_data);
+            $('#default_sensor').html(current_sensor);
         }
     });
 }
@@ -271,8 +305,8 @@ function getValves(select_id, search_id) {
                 }
 
 
-                current_data += "Flow: " + value.valve_flow + "<br/>";
-                current_data += "Pressure: " + value.valve_pressure + "<br/>";
+                current_data += "Flow: " + value.valve_flow + " m<sup>3</sup>&frasl;s<br/>";
+                current_data += "Pressure: " + value.valve_pressure + " Pa<br/>";
                 current_data += "Date: " + date_received + "</p>";
             });
 
@@ -371,5 +405,6 @@ function getAjaxWeatherData(station_id, callback) {
 
         success: callback});
 }
+
 
 

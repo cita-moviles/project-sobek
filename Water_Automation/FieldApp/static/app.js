@@ -187,7 +187,7 @@ function getValvesForArea(area_id, callback) {
  * @param {Function} success_callback Callback function that process and displays the information retrieved from ajax
  *
  * */
-function getSensorLog(sensor_id, start_date, end_date, before_callback, success_callback) {
+function getSensorLog(sensor_id, start_date, end_date,before_callback, success_callback) {
 
     $.ajax({
         url: "/Sensor_Agg/",
@@ -224,7 +224,7 @@ function getSensorLog(sensor_id, start_date, end_date, before_callback, success_
             var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
 
             var options = {
-                title: 'Soil Moisture (15 days)',
+                title: 'Soil Moisture',
                 smoothLine: true
             };
 
@@ -296,9 +296,9 @@ function initDatePickers(from_picker, to_picker) {
  * */
 
 function quick_date(option) {
-
     init_date = new Date();
     end_date = new Date();
+
 
     switch (option) {
 
@@ -363,11 +363,11 @@ function weatherCallback(data) {
     // Getting Data from received JSON
     var station_id = data.station_id;
     var station_name = data.station_name;
-    var relative_humidity = data.station_relative_humidity;
-    var radiation = data.station_solar_radiation;
+    var relative_humidity = (data.station_relative_humidity + ' %');
+    var radiation = (data.station_solar_radiation + " W&frasl;m<sup>2</sup>");
     var status = data.station_status;
-    var temperature = data.station_temperature;
-    var wind_speed = data.station_wind_speed;
+    var temperature = (data.station_temperature+ ' ºC');
+    var wind_speed = (data.station_wind_speed + " m&frasl;s");
     var battery_level = data.station_user_define1;
 
     // Selecting the tags
@@ -458,12 +458,12 @@ function getEvotranspirationLog(area_id, start_date, end_date, callback) {
  * @param {String} end_date The final date for the request, most of the time is the current date.
  * @param {Function} callback Function that will handle the data retrieved from the web service
  * */
-function getValveLog(sensor_id, start_date, end_date, callback) {
+function getValveLog(valve_id, start_date, end_date, callback) {
 
     $.ajax({
         url: "/Valve_Log/",
         data: {
-            sensor_id: sensor_id,
+            valve_id: valve_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),
             max_date: end_date.dateFormat('Y-m-d H:i:s'),
             ordering: "-valve_date_received"

@@ -413,7 +413,7 @@ function getSensorLogs(start, end, callback) {
     var sensor_id = $('#sensor').val();
 
     $.ajax({
-        url: "/Sensor_Agg/",
+        url: "/Sensor_Log/",
         data: {
             sensor_id: sensor_id,
             min_date: start.dateFormat('Y-m-d H:i:s'),
@@ -437,7 +437,7 @@ function getSensorLogs(start, end, callback) {
 function getEvotranspirationLog(area_id, start_date, end_date, callback) {
 
     $.ajax({
-        url: "/Crop_Area_Agg/",
+        url: "/Crop_Area_Log/",
         data: {
             area_id: area_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),
@@ -461,7 +461,7 @@ function getEvotranspirationLog(area_id, start_date, end_date, callback) {
 function getValveLog(sensor_id, start_date, end_date, callback) {
 
     $.ajax({
-        url: "/Valve_Agg/",
+        url: "/Valve_Log/",
         data: {
             sensor_id: sensor_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),

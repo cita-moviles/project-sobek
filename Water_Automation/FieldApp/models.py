@@ -95,11 +95,9 @@ class Sensor(models.Model):
     sensor_id = models.IntegerField(primary_key=True)
     sensor_name = models.CharField(max_length=59)
     sensor_status = models.SmallIntegerField(max_length=2)
-
     sensor_hl1 = models.FloatField(null=True, blank=True, default = 0)
     sensor_hl2 = models.FloatField(null=True, blank=True, default = 0)
     sensor_hl3 = models.FloatField(null=True, blank=True, default = 0)
-
     sensor_temperature = models.FloatField(null=True, blank=True, default = 0)
     sensor_x_position = models.IntegerField(null=True, blank=True)
     sensor_y_position = models.IntegerField(null=True, blank=True)
@@ -111,7 +109,6 @@ class Sensor(models.Model):
     fk_area = models.ForeignKey('Crop_Area')
 
     def __unicode__(self):
-
         return self.sensor_name
 
 # Logs

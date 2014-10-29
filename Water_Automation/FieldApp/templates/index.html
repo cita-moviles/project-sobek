@@ -97,8 +97,7 @@
                 <input id="to_datetimepicker" type="text"/>
             </div>
         </div>
-<<<<<<< HEAD
-=======
+
         <br>
 
         <div id="moisture_chart" height="500" width="500"></div>
@@ -140,9 +139,6 @@
 <div class="row">
     &nbsp;
 </div>
-
->>>>>>> db615d10c71041996bd0fac2aaee84c0009dc247
-
 
         <div class="large-21 columns">
 
@@ -298,8 +294,6 @@ function setInitDate(option) {
 
 }
 
-
-<<<<<<< HEAD
 function graphLogs() {
     var default_sensor_id = 0;
     $.ajax({
@@ -316,14 +310,6 @@ function graphLogs() {
             var moisture_array = [];
             //console.log(data);
             moisture_array.push(['Time', 'HL0']);
-=======
-function graphData() {
-
-
-    getSensorLogs(init_date, end_date, function (data) {
-        var moisture_array = [];
-        moisture_array.push(['Time', 'HL1', 'HL2', 'HL3']);
->>>>>>> db615d10c71041996bd0fac2aaee84c0009dc247
 
             $.each(data, function (index, value) {
                 var date_received = new Date(Date.parse(value.sensor_date_received));
@@ -346,17 +332,10 @@ function graphData() {
 
             var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
 
-<<<<<<< HEAD
             var options = {
                 title: 'Soil Moisture',
                 smoothLine: true
             };
-=======
-        var options = {
-            title: 'Soil Moisture',
-            smoothLine: true
-        };
->>>>>>> db615d10c71041996bd0fac2aaee84c0009dc247
 
             hideLoading();
             chart_moisture.draw(data_moisture, options);
@@ -392,7 +371,7 @@ function graphData() {
         chart_ev.draw(data_ev, options);
     });
     var current_valve=getValveForSensor();
-    graphValveData();
+    graphValveData(current_valve);
 }
 
     function getValveForSensor(){

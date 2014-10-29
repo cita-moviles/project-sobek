@@ -160,9 +160,6 @@ class Crop_Area_Log(models.Model):
     area_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     area_user_define2 = models.TextField(max_length=250, null=True, blank=True)
 
-    class Meta:
-        unique_together = ["area_id", "area_date_received"]
-
     def __unicode__(self):
         return self.log_number
 

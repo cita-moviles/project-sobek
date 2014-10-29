@@ -74,6 +74,13 @@
     <div class="medium-4 columns">
         <h3>Graphs</h3>
         <section id="graphs">
+<<<<<<< HEAD
+=======
+            <h4>Actuator & Status</h4>
+
+            <div id="valve_actuator_graph" height="400" width="1000"></div>
+
+>>>>>>> db615d10c71041996bd0fac2aaee84c0009dc247
             <h4>Flow</h4>
 
             <div id="valve_flow_graph" height="400" width="1000"></div>
@@ -105,7 +112,7 @@
         var sensor_id = $('#sensor').val();
 
         $.ajax({
-            url: "/Valve_Log/",
+            url: "/Valve_Agg/",
             data: {
                 sensor_id: sensor_id,
                 min_date: init_date.dateFormat('Y-m-d H:i:s'),
@@ -114,9 +121,9 @@
             },
             success: function (data) {
 
-{#                var valve_actuator_array = [#}
-{#                    ['Time', 'Actuator', 'Status']#}
-{#                ];#}
+                var valve_actuator_array = [
+                    ['Time', 'Actuator', 'Status']
+                ];
                 var valve_flow_array = [
                     ['Time', 'Flow']
                 ];
@@ -127,11 +134,11 @@
                 $.each(data, function (index, value) {
                     var date_received = new Date(Date.parse(value.valve_date_received));
 
-{#                    var temp_array = [];#}
-{#                    temp_array.push(date_received);#}
-{#                    temp_array.push(parseInt(value.valve_user_define_1));#}
-{#                    temp_array.push(parseInt(value.valve_status));#}
-{#                    valve_actuator_array.push(temp_array);#}
+                    var temp_array = [];
+                    temp_array.push(date_received);
+                    temp_array.push(parseInt(value.valve_user_define_1));
+                    temp_array.push(parseInt(value.valve_status));
+                    valve_actuator_array.push(temp_array);
 
                     temp_array = [];
                     temp_array.push(date_received);
@@ -144,7 +151,7 @@
                     valve_pressure_array.push(temp_array);
                 });
 
-{#                var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);#}
+                var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);
                 var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
                 var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
 
@@ -152,8 +159,8 @@
                     smoothLine: true
                 };
 
-{#                var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));#}
-{#                chart_actuator.draw(data_actuator, options);#}
+                var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
+                chart_actuator.draw(data_actuator, options);
 
                 var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
                 chart_flow.draw(data_flow, options);

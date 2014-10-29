@@ -29,6 +29,7 @@ class AreaAdmin(admin.ModelAdmin):
         'area_ev',
         'area_x_position',
         'area_y_position',
+        'area_date_received',
         'area_user_define1',
         'area_user_define2',
         'fk_farm_field',
@@ -36,7 +37,7 @@ class AreaAdmin(admin.ModelAdmin):
 
     ]
 
-    list_display = ('area_id', 'area_name', 'fk_farm_field', 'fk_crop')
+    list_display = ('area_id', 'area_name', 'area_date_received', 'fk_farm_field', 'fk_crop')
 
 
 class FieldAdmin(admin.ModelAdmin):
@@ -61,15 +62,17 @@ class SensorAdmin(admin.ModelAdmin):
     fields = [
 
         'sensor_id',
+        'sensor_name',
         'sensor_status',
         'sensor_x_position',
         'sensor_y_position',
         'sensor_user_define1',
         'sensor_user_define2',
+        'sensor_date_received',
         'fk_area'
 
     ]
-    list_display = ('sensor_id', 'sensor_status', 'fk_area')
+    list_display = ('sensor_id', 'sensor_name', 'sensor_status', 'sensor_date_received', 'fk_area')
 
 
 class ValveAdmin(admin.ModelAdmin):
@@ -81,13 +84,14 @@ class ValveAdmin(admin.ModelAdmin):
         'valve_ideal',
         'valve_status',
         'valve_flow',
+        'valve_date_received',
         'valve_user_define1',
         'valve_user_define2',
         'fk_area',
 
     ]
 
-    list_display = ('valve_id', 'valve_name', 'valve_limit', 'valve_ideal', 'fk_area')
+    list_display = ('valve_id', 'valve_name', 'valve_limit', 'valve_ideal', 'valve_date_received', 'fk_area')
 
 
 class StationAdmin(admin.ModelAdmin):
@@ -95,13 +99,14 @@ class StationAdmin(admin.ModelAdmin):
 
         'station_id',
         'station_name',
+        'station_date_received',
         'station_user_define1',
         'station_user_define2',
         'fk_farm_field'
 
     ]
 
-    list_display = ('station_id', 'station_name', 'fk_farm_field')
+    list_display = ('station_id', 'station_name', 'station_date_received', 'fk_farm_field')
 
 
 class ConfigAdmin(admin.ModelAdmin):

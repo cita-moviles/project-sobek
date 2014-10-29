@@ -190,7 +190,7 @@ function getValvesForArea(area_id, callback) {
 function getSensorLog(sensor_id, start_date, end_date,before_callback, success_callback) {
 
     $.ajax({
-        url: "/Sensor_Log/",
+        url: "/Sensor_Agg/",
         data: {
             sensor_id: sensor_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),
@@ -387,12 +387,11 @@ function weatherCallback(data) {
     humidity_tag.append(relative_humidity);
     radiation_tag.append(radiation);
 
-    if(status === 0){
+    if (status === 0) {
         status_tag.append('OK');
-    }else{
+    } else {
         status_tag.append('Communication Error');
     }
-
 
 
     temperature_tag.append(temperature);
@@ -414,7 +413,7 @@ function getSensorLogs(start, end, callback) {
     var sensor_id = $('#sensor').val();
 
     $.ajax({
-        url: "/Sensor_Log/",
+        url: "/Sensor_Agg/",
         data: {
             sensor_id: sensor_id,
             min_date: start.dateFormat('Y-m-d H:i:s'),
@@ -438,7 +437,7 @@ function getSensorLogs(start, end, callback) {
 function getEvotranspirationLog(area_id, start_date, end_date, callback) {
 
     $.ajax({
-        url: "/Crop_Area_Log/",
+        url: "/Crop_Area_Agg/",
         data: {
             area_id: area_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),
@@ -462,7 +461,7 @@ function getEvotranspirationLog(area_id, start_date, end_date, callback) {
 function getValveLog(valve_id, start_date, end_date, callback) {
 
     $.ajax({
-        url: "/Valve_Log/",
+        url: "/Valve_Agg/",
         data: {
             valve_id: valve_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),
@@ -487,3 +486,39 @@ function getCurrentValves(area_id, callback) {
         success: callback
     });
 }
+
+/**
+ * Return Final date
+ * */
+
+function getStartingDate(option) {
+
+    var init_date = new Date();
+    var end_date = new Date();
+
+    switch (option) {
+
+        case 1: //6 hours
+            init_date.setHours(end_date.getHours() - 6);
+            break;
+
+        case 2: //24 hours
+            init_date.setHours(end_date.getHours() - 24);
+            break;
+
+        case 3: //7 days
+            init_date.setDate(end_date.getDate() - 7);
+            break;
+
+        case 4: //15 days
+            init_date.setDate(end_date.getDate() - 15);
+            break;
+
+        case 5: //30 days
+            init_date.setDate(end_date.getDate() - 30);
+            break;
+    }
+
+    return init_date;
+}
+

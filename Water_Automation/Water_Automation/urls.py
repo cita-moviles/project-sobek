@@ -8,6 +8,7 @@ from django.contrib import admin
 admin.autodiscover ()
 
 # Create a router and register our viewsets with it.
+
 router = DefaultRouter()
 router.register(r'Crop', views.Crop_ViewSet)
 router.register(r'Farm_Field', views.Field_ViewSet)
@@ -50,11 +51,7 @@ urlpatterns = patterns(
     url(r'^GPRSs.html', TemplateView.as_view(template_name="GPRSs.html")),
     url(r'^chart.html', TemplateView.as_view(template_name="testChartGoogle.html")),
     url(r'^admin/', include(admin.site.urls))
-=======
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
+
 router = DefaultRouter ()
 router.register (r'Crop', views.Crop_ViewSet)
 router.register (r'Farm_Field', views.Field_ViewSet)
@@ -97,11 +94,5 @@ urlpatterns = patterns (
      url (r'^configuration.html', TemplateView.as_view (template_name="configuration.html")),
      url (r'^chart.html', TemplateView.as_view (template_name="testChartGoogle.html")),
      url (r'^admin/', include (admin.site.urls))
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> db615d10c71041996bd0fac2aaee84c0009dc247
-=======
->>>>>>> FETCH_HEAD
-=======
->>>>>>> FETCH_HEAD
+
 )

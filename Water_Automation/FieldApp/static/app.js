@@ -437,7 +437,7 @@ function getSensorLogs(start, end, callback) {
 function getEvotranspirationLog(area_id, start_date, end_date, callback) {
 
     $.ajax({
-        url: "/Crop_Area_Log/",
+        url: "/Crop_Area_Agg/",
         data: {
             area_id: area_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),

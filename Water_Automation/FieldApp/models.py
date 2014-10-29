@@ -110,7 +110,6 @@ class Sensor(models.Model):
 
     def __unicode__(self):
         return self.sensor_name
-
 # Logs
 class Sensor_Log(models.Model):
     log_number = models.AutoField(primary_key=True)

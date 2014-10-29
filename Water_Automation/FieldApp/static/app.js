@@ -190,7 +190,7 @@ function getValvesForArea(area_id, callback) {
 function getSensorLog(sensor_id, start_date, end_date, before_callback, success_callback) {
 
     $.ajax({
-        url: "/Sensor_Agg/",
+        url: "/Sensor_Log/",
         data: {
             sensor_id: sensor_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),

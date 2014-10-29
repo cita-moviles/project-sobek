@@ -97,7 +97,7 @@ class Sensor(models.Model):
     sensor_hl1 = models.FloatField(null=True, blank=True)
     sensor_hl2 = models.FloatField(null=True, blank=True)
     sensor_hl3 = models.FloatField(null=True, blank=True)
-    sensor_temperature = models.FloatField(null=True, blank=True)
+    sensor_temperature = models.FloatField(null=True, blank=True, default = 0)
     sensor_x_position = models.IntegerField(null=True, blank=True)
     sensor_y_position = models.IntegerField(null=True, blank=True)
     sensor_date_received = models.DateTimeField(null=True, blank=True)
@@ -107,8 +107,8 @@ class Sensor(models.Model):
                                            blank=True)
     fk_area = models.ForeignKey('Crop_Area')
 
-    def __unicode__ (self):
-        return self.sensor_temperature
+    def __unicode__(self):
+        return str(self.sensor_temperature)
 
 
 # Logs

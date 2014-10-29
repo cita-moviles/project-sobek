@@ -126,7 +126,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'FieldApp',
-    'rest_framework'
+    'rest_framework',
+    'debug_toolbar',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GPRSs - Proyect Sobek</title>
+     {% include 'includeScripts.html' %}
+</head>
+<body>
+
+{% include 'nav.html' %}
+<div class="row">
+    <div class="medium-12 columns">
+        <h1>GPRS's</h1>
+    </div>
+</div>
+
+<div class="row">
+        <h3>Current data</h3>
+        <div id="current_field" class="clearfix"></div>
+        <div id="signal_chart" height="400" width="5000"></div>
+</div>
+
+{% include 'footer.html' %}
+</body>
+
+
+
+<script>
+getFarmFields();
+google.load("visualization", "1", {packages: ["corechart"]});
+    function graphLogs(clicked_id) {
+        var field_id = clicked_id;
+        console.log(clicked_id);
+        $.ajax({
+            url: ("/Farm_Field/"+field_id+"/?format=json"),
+            data: {
+
+                  },
+            success:  function (data) {
+                //console.log(data);
+                var signal_array = [];
+                var temp_array = [];
+                signal_array.push(['Time', 'signal']);
+                var date_received = new Date(Date.parse(data.field_date_received));
+                var signal = data.field_signal;
+                temp_array.push(date_received,signal);
+                signal_array.push(temp_array);
+                console.log(date_received, signal);
+                console.log(signal_array);
+                var data_signal = google.visualization.arrayToDataTable(signal_array);
+                var chart_signal = new google.visualization.LineChart(document.getElementById('signal_chart'));
+                var options = { smoothLine: true };
+
+                chart_signal.draw(data_signal, options);
+            }
+        });
+    }
+    function showGoogleMaps(clicked_id) {
+        var field_id = clicked_id;
+        var latitude;
+        var longitude;
+        //console.log(clicked_id);
+        $.ajax({
+            url: "Farm_Field",
+            data: {
+                field_id: field_id
+            },
+            success: function (data) {
+                console.log('AJAX SUCCESS');
+                $.each(data, function (index, value) {
+                    latitude = value.field_latitude;
+                    longitude = value.field_longitude;
+                });
+            window.location.href= ("http://maps.google.com/?ll="+latitude+","+longitude);
+            //console.log("http://maps.google.com/?ll="+latitude+","+longitude);
+            }
+        });
+    }
+
+</script>
+</html>

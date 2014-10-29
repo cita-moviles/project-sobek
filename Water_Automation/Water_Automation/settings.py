@@ -133,6 +133,14 @@ INSTALLED_APPS = (
     'rest_framework'
 )
 
+#Cache Configuration
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '10.32.70.126:80',
+    }
+}
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.

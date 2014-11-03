@@ -52,3 +52,5 @@ urlpatterns = patterns(
     url(r'^chart.html', TemplateView.as_view(template_name="testChartGoogle.html")),
     url(r'^admin/', include(admin.site.urls))
 )
+
+

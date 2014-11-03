@@ -130,7 +130,8 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'debug_toolbar',
     'FieldApp',
-    'rest_framework'
+    'rest_framework',
+    'debug_toolbar',
 )
 
 

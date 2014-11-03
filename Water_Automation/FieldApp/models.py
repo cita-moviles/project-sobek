@@ -120,11 +120,13 @@ class Sensor_Log(models.Model):
     sensor_hl2 = models.FloatField()
     sensor_hl3 = models.FloatField()
     sensor_temperature = models.FloatField()
-    sensor_date_received = models.DateTimeField()
+    sensor_date_received = models.DateTimeField(db_index=True)
     sensor_user_define1 = models.TextField(max_length=250, null=True,
                                            blank=True)
     sensor_user_define2 = models.TextField(max_length=250, null=True,
                                            blank=True)
+    class Meta:
+        unique_together = ["sensor_id", "sensor_date_received"]
 
     def __unicode__(self):
         return self.log_number
@@ -138,9 +140,12 @@ class Valve_Log(models.Model):
     valve_flow = models.FloatField()
     valve_pressure = models.FloatField()
     valve_limit = models.FloatField()
-    valve_date_received = models.DateTimeField()
+    valve_date_received = models.DateTimeField(db_index=True)
     valve_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     valve_user_define2 = models.TextField(max_length=250, null=True, blank=True)
+
+    class Meta:
+        unique_together = ["valve_id", "valve_date_received"]
 
     def __unicode__(self):
         return self.log_number
@@ -151,9 +156,12 @@ class Crop_Area_Log(models.Model):
     log_timestamp = models.DateTimeField(auto_now=True)
     area_id = models.ForeignKey('Crop_Area')
     area_ev = models.FloatField()
-    area_date_received = models.DateTimeField()
+    area_date_received = models.DateTimeField(db_index=True)
     area_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     area_user_define2 = models.TextField(max_length=250, null=True, blank=True)
+
+    class Meta:
+        unique_together = ["area_id", "area_date_received"]
 
     def __unicode__(self):
         return self.log_number
@@ -168,11 +176,14 @@ class Weather_Station_Log(models.Model):
     station_temperature = models.FloatField()
     station_wind_speed = models.FloatField()
     station_solar_radiation = models.FloatField()
-    station_date_received = models.DateTimeField()
+    station_date_received = models.DateTimeField(db_index=True)
     station_user_define1 = models.TextField(max_length=250, null=True,
                                             blank=True)
     station_user_define2 = models.TextField(max_length=250, null=True,
                                             blank=True)
+
+    class Meta:
+        unique_together = ["station_id", "station_date_received"]
 
     def __unicode__(self):
         return self.log_number
@@ -186,9 +197,12 @@ class Farm_Field_Log(models.Model):
     field_signal = models.FloatField()
     field_latitude = models.FloatField()
     field_longitude = models.FloatField()
-    field_date_received = models.DateTimeField()
+    field_date_received = models.DateTimeField(db_index=True)
     field_user_define1 = models.TextField(max_length=250, null=True, blank=True)
     field_user_define2 = models.TextField(max_length=250, null=True, blank=True)
+
+    class Meta:
+        unique_together = ["field_id", "field_date_received"]
 
     def __unicode__(self):
         return self.log_number
@@ -202,7 +216,7 @@ class Sensor_Agg(models.Model):
     sensor_hl2 = models.FloatField()
     sensor_hl3 = models.FloatField()
     sensor_temperature = models.FloatField()
-    sensor_date_received = models.DateTimeField()
+    sensor_date_received = models.DateTimeField(db_index=True)
 
 
 class Valve_Agg(models.Model):
@@ -211,14 +225,14 @@ class Valve_Agg(models.Model):
     valve_id = models.ForeignKey('Valve')
     valve_flow = models.FloatField()
     valve_pressure = models.FloatField()
-    valve_date_received = models.DateTimeField()
+    valve_date_received = models.DateTimeField(db_index=True)
 
 class Crop_Area_Agg(models.Model):
     agg_id = models.AutoField(primary_key=True)
     agg_date = models.DateTimeField(auto_now=True)
     area_id = models.ForeignKey('Crop_Area')
     area_ev = models.FloatField()
-    area_date_received = models.DateTimeField()
+    area_date_received = models.DateTimeField(db_index=True)
 
 class Weather_Station_Agg(models.Model):
     agg_id = models.AutoField(primary_key=True)
@@ -228,7 +242,7 @@ class Weather_Station_Agg(models.Model):
     station_temperature = models.FloatField()
     station_wind_speed = models.FloatField()
     station_solar_radiation = models.FloatField()
-    station_date_received = models.DateTimeField()
+    station_date_received = models.DateTimeField(db_index=True)
 
 class Farm_Field_Agg(models.Model):
     agg_id = models.AutoField(primary_key=True)
@@ -237,4 +251,4 @@ class Farm_Field_Agg(models.Model):
     field_signal = models.FloatField()
     field_latitude = models.FloatField()
     field_longitude = models.FloatField()
-    field_date_received = models.DateTimeField()
+    field_date_received = models.DateTimeField(db_index=True)

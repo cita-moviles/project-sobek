@@ -62,11 +62,12 @@ class Sensor:
                 self.sensor_user_define2 = ' '
             else:
                 self.sensor_user_define2 = message[comma + 1: terminator]
-        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
+
         global currentDate
         self.sensor_date_received = str(currentDate)
-        self.valve_name = " "
-        self.get_name_from_server()
+        self.fk_area = " "
+        self.sensor_name = " "
+        self.get_from_server()
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -79,7 +80,7 @@ class Sensor:
         print self.to_json()
         result = urllib2.urlopen(request, self.to_json())
 
-    def get_name_from_server(self):
+    def get_from_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/" + str(self.sensor_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
@@ -87,10 +88,10 @@ class Sensor:
         try:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
+            self.fk_area = result2['fk_area']
             self.sensor_name = result2['sensor_name']
-        except urllib2.HTTPError, ex:
-            #logging.exception("Something awful happened!")
-            print('Sensor names not found ' + str(self.sensor_id))
+        except urllib2.HTTPError:
+            print('There was an error retrieving server info')
         pass
 
 #20
@@ -123,13 +124,15 @@ class Valve:
                 self.valve_user_define2 = ' '
             else:
                 self.valve_user_define2 = message[comma + 1: terminator]
-        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + str(int(message[3:5])) + "/"
+
+
         global currentDate
         self.valve_date_received = str(currentDate)
         #self.limit = int(message[21:26])
 
+        self.fk_area = " "
         self.valve_name = " "
-        self.get_name_from_server()
+        self.get_from_server()
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -144,7 +147,7 @@ class Valve:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
-    def get_name_from_server(self):
+    def get_from_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
@@ -152,10 +155,10 @@ class Valve:
         try:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
+            self.fk_area = result2['fk_area']
             self.valve_name = result2['valve_name']
-        except urllib2.HTTPError, ex:
-            #logging.exception("Something awful happened!")
-            print('Valve names not found ' + str(self.valve_id))
+        except urllib2.HTTPError:
+            print('There was an error retrieving server info')
         pass
 
 #30
@@ -184,14 +187,17 @@ class Crop_Area:
                 self.area_user_define2 = ' '
             else:
                 self.area_user_define2 = message[comma + 1: terminator]
-        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/" + str(int(message[3:5])) + "/"
-        self.fk_crop = "http://riego.chi.itesm.mx/Crop/0/"
-        global currentDate
-        self.area_date_received = str(currentDate)
-        global area_cfg
+
+        self.fk_farm_field = " "
+        self.fk_crop = " "
         self.area_name = " "
         self.area_description = " "
         self.get_name_from_server()
+
+        global currentDate
+        self.area_date_received = str(currentDate)
+        global area_cfg
+
         area_cfg = self.get_from_server()
 
     def to_json(self):
@@ -206,6 +212,7 @@ class Crop_Area:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
+
     def get_name_from_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/" + str(self.area_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
@@ -216,10 +223,12 @@ class Crop_Area:
             result2 = json.load(result)
             self.area_name = result2['area_name']
             self.area_description = result2['area_description']
+            self.fk_crop = result2['fk_crop']
+            self.fk_farm_field = result2['fk_farm_field']
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
             print('Area names not found ' + str(self.area_id))
-        pass
+            pass
 
     def get_from_server(self):
         area_cfg = ''
@@ -282,12 +291,12 @@ class Weather_Station:
                 self.station_user_define2 = ' '
             else:
                 self.station_user_define2 = message[comma + 1: terminator]
-        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/0/"
+
         global currentDate
         self.station_date_received = str(currentDate)
-
+        self.fk_farm_field = " "
         self.station_name = " "
-        self.get_name_from_server()
+        self.get_from_server()
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -301,19 +310,21 @@ class Weather_Station:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
-    def get_name_from_server(self):
+    def get_from_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/" + str(self.station_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'GET'
+
         try:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
+            self.fk_farm_field = result2['fk_farm_field']
             self.station_name = result2['station_name']
         except urllib2.HTTPError, ex:
-            #logging.exception("Something awful happened!")
-            print('Station names not found ' + str(self.station_id))
+            print('Field ID not found ' + str(self.station_id))
         pass
+
 
 
 #50
@@ -351,7 +362,7 @@ class Farm_Field:
 
         self.field_name = " "
         self.field_description = " "
-        self.get_name_from_server()
+        self.get_from_server()
 
         global currentDate
         #TimeZone
@@ -388,7 +399,7 @@ class Farm_Field:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
-    def get_name_from_server(self):
+    def get_from_server(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Farm_Field/" + str(self.field_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")

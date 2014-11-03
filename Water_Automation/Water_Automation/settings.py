@@ -99,6 +99,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
@@ -106,6 +107,8 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'Water_Automation.urls'
+
+INTERNAL_IPS = ('201.174.17.114')
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'Water_Automation.wsgi.application'
@@ -125,9 +128,12 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'debug_toolbar',
     'FieldApp',
-    'rest_framework'
+    'rest_framework',
+    'debug_toolbar',
 )
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

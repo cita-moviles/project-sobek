@@ -50,8 +50,7 @@ urlpatterns = patterns(
     url(r'^configuration.html', TemplateView.as_view(template_name="configuration.html")),
     url(r'^GPRSs.html', TemplateView.as_view(template_name="GPRSs.html")),
     url(r'^chart.html', TemplateView.as_view(template_name="testChartGoogle.html")),
-    url(r'^admin/', include(admin.site.urls)))
-
-
+    url(r'^admin/', include(admin.site.urls))
+)
 
 

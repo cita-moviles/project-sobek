@@ -13,7 +13,7 @@
 <div class="row">&nbsp;</div>
 <div class="row">
     <!-- Weather Information Current Data -->
-    <div class="large-3 columns">
+    <div class="small-3 columns">
         <h3 class="show-for-small">Sensor 0 Moisture Graph
             <hr/>
         </h3>
@@ -101,17 +101,7 @@
 
         <br>
 
-
-
-    </div>
-
-</div>
-
-<div class="row">
-    &nbsp;
-</div>
-
-        <div class="large-21 columns">
+         <div class="large-12 columns">
 
             <div id="default_sensor"></div>
 
@@ -122,7 +112,15 @@
             <div id="flow_chart" ></div>
           </div>
 
+    </div>
+
 </div>
+
+<div class="row">
+    &nbsp;
+</div>
+
+
 
 <div class="row">
     &nbsp;
@@ -136,9 +134,6 @@
 
 {% include 'footer.html' %}
 <script>
-
-
-// Load the Visualization API library and the piechart library.
 google.load('visualization', '1.0', {'packages': ['corechart']});
 {#getAjaxFarmFields('field', 'area', 'sensor');#}
 
@@ -200,6 +195,7 @@ function getConsolidatedSensorForFieldSelected () {
 }
 function getSensorForArea(area_selector){
   var current_area=$('#'+area_selector).val();
+    getConsolidatedSensorNameForArea(current_area);
   if(current_area===null){
       $("#default_sensor").html("");
       return false;
@@ -217,11 +213,28 @@ function getSensorForArea(area_selector){
                 default_sensor += "<p>Sensor: " + value.sensor_id + "</p>";
             });
             $('#default_sensor').html(default_sensor);
+            getConsolidatedSensorNameForArea();
         }
     });
 }
 
-
+function getConsolidatedSensorNameForArea (current_area){
+    current_area=+1;
+    var sensor_name;
+    if (current_area<100){
+        sensor_name= '"NS0'+current_area+'"';
+    }else{
+        sensor_name="NS"+current_area;
+    }
+    console.log(sensor_name);
+    $.ajax({
+        url: "/Sensor_Search",
+        data: {sensor_name:sensor_name},
+        success: function (data){
+            console.log(data);
+        }
+    });
+}
 
 function populateSensorAndValves(area_id) {
     getSensorsForArea(area_id, function (data) {
@@ -267,9 +280,14 @@ function setInitDate(option) {
 
 function graphLogs() {
     var default_sensor_id = 0;
+    var current_area=parseInt($('#area').val());
+    getConsolidatedSensorNameForArea(current_area);
+    //PRUEBA:
+    console.log(current_area);
     $.ajax({
         url: "/Sensor_Agg/",
         data: {
+            fk_area: current_area,
             sensor_id: default_sensor_id,
             min_date: init_date.dateFormat('Y-m-d H:i:s'),
             max_date: end_date.dateFormat('Y-m-d H:i:s'),
@@ -281,6 +299,8 @@ function graphLogs() {
             var moisture_array = [];
             //console.log(data);
             moisture_array.push(['Time', 'HL0']);
+            if (data.length == 0) {
+            moisture_array.push([end_date.dateFormat('Y-m-d H:i:s'), 0]);}
 
             $.each(data, function (index, value) {
                 var date_received = new Date(Date.parse(value.sensor_date_received));
@@ -298,6 +318,9 @@ function graphLogs() {
                 moisture_array.push(temp_array);
             });
 
+            //PRUEBA SENSOR:
+               console.log (moisture_array);
+            //
             $('#current_sensor').html(current_sensor);
             var data_moisture = google.visualization.arrayToDataTable(moisture_array);
 
@@ -323,7 +346,7 @@ function graphLogs() {
             ev_array.push([end_date.dateFormat('Y-m-d H:i:s'), 0]);
         } else {
             $.each(data, function (index, value) {
-                        console.log(data);
+                       // PRUEBAS: console.log(data);
                         var date_received = new Date(Date.parse(value.area_date_received));
 
                         var tmp_array = [];
@@ -333,6 +356,8 @@ function graphLogs() {
                     }
             );
         }
+        //PRUEBAS:
+        console.log(ev_array);
         var data_ev = google.visualization.arrayToDataTable(ev_array);
         var options = {
             title: 'Evotranspiration',

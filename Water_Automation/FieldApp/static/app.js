@@ -363,7 +363,7 @@ function weatherCallback(data) {
     // Getting Data from received JSON
     var station_id = data.station_id;
     var station_name = data.station_name;
-    var relative_humidity = (data.station_relative_humidity + ' %');
+    var relative_humidity = (data.station_relative_humidity + '%');
     var radiation = (data.station_solar_radiation + " W&frasl;m<sup>2</sup>");
     var status = data.station_status;
     var temperature = (data.station_temperature+ ' ºC');

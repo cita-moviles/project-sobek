@@ -4,6 +4,9 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
+from rest_framework_extensions.cache.decorators import (
+    cache_response
+)
 from rest_framework import viewsets
 from django.views.generic import TemplateView
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
@@ -112,7 +115,7 @@ class AreaLogFilter (django_filters.FilterSet):
      class Meta:
           model = Crop_Area_Log
           fields = ['area_id', 'log_timestamp', 'area_ev', 'area_date_received']
-
+          order_by = ['area_date_received']
 
 class StationLogFilter (django_filters.FilterSet):
      max_date = django_filters.DateTimeFilter (name='station_date_received', lookup_type='lte')
@@ -123,7 +126,7 @@ class StationLogFilter (django_filters.FilterSet):
           fields = ['station_id', 'station_status', 'station_relative_humidity',
                     'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                     'station_date_received']
-
+          order_by = ['station_date_received']
 
 class SensorLogFilter (django_filters.FilterSet):
      max_date = django_filters.DateTimeFilter (name='sensor_date_received', lookup_type='lte')
@@ -133,7 +136,7 @@ class SensorLogFilter (django_filters.FilterSet):
           model = Sensor_Log
           fields = ['sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2',
                     'sensor_hl3', 'sensor_temperature', 'sensor_date_received']
-
+          order_by = ['sensor_date_received']
 
 class ValveLogFilter (django_filters.FilterSet):
      max_date = django_filters.DateTimeFilter (name='valve_date_received', lookup_type='lte')
@@ -143,6 +146,7 @@ class ValveLogFilter (django_filters.FilterSet):
           model = Valve_Log
           fields = ['valve_id', 'valve_status', 'valve_flow', 'valve_pressure',
                     'valve_limit', 'valve_date_received']
+          order_by = ['valve_date_received']
 
 
 class FarmFieldLogFilter (django_filters.FilterSet):
@@ -152,7 +156,7 @@ class FarmFieldLogFilter (django_filters.FilterSet):
      class Meta:
           model = Farm_Field_Log
           fields = ['field_id', 'field_date_received']
-
+          order_by = ['field_date_received']
 
 #Aggregate Model Filters
 class SensorAggFilter(django_filters.FilterSet):
@@ -163,7 +167,7 @@ class SensorAggFilter(django_filters.FilterSet):
         model = Sensor_Agg
         fields = ['sensor_id', 'sensor_hl1', 'sensor_hl2',
                   'sensor_hl3', 'sensor_temperature', 'sensor_date_received']
-
+        order_by = ['sensor_date_received']
 
 class ValveAggFilter(django_filters.FilterSet):
     max_date = django_filters.DateTimeFilter(name='valve_date_received', lookup_type='lte')
@@ -172,7 +176,7 @@ class ValveAggFilter(django_filters.FilterSet):
     class Meta:
         model = Valve_Agg
         fields = ['valve_id', 'valve_flow', 'valve_pressure', 'valve_date_received']
-
+        order_by = ['valve_date_received']
 
 class AreaAggFilter(django_filters.FilterSet):
     max_date = django_filters.DateTimeFilter(name='area_date_received', lookup_type='lte')
@@ -181,7 +185,7 @@ class AreaAggFilter(django_filters.FilterSet):
     class Meta:
         model = Crop_Area_Agg
         fields = ['area_id', 'area_ev', 'area_date_received']
-
+        order_by = ['area_date_received']
 
 class StationAggFilter(django_filters.FilterSet):
     max_date = django_filters.DateTimeFilter(name='station_date_received', lookup_type='lte')
@@ -192,7 +196,7 @@ class StationAggFilter(django_filters.FilterSet):
         fields = ['station_id', 'station_relative_humidity',
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                   'station_date_received']
-
+        order_by = ['station_date_received']
 
 class FieldAggFilter(django_filters.FilterSet):
     max_date = django_filters.DateTimeFilter(name='field_date_received', lookup_type='lte')
@@ -201,7 +205,7 @@ class FieldAggFilter(django_filters.FilterSet):
     class Meta:
         model = Farm_Field_Agg
         fields = ['field_id', 'field_signal', 'field_latitude', 'field_longitude', 'field_date_received']
-
+        order_by = ['field_date_received']
 
 #Viewsets
 class FieldSearch (generics.ListCreateAPIView):

@@ -134,20 +134,31 @@
 
 {% include 'footer.html' %}
 <script>
+/*NOTA: Existen "Pruebas de control" que imprimen en la consola de los navegadores, descomentarlas para usarlas, recuerda
+volver a comentarlas de ya no necesitarlas. De modificar el código, sigue el mismo formato de comentarios.
+Trabajado por: Enrique Ramirez, Alejandro Rodriguez, Carla Prieto (Agregate si colaboraste). Propiedad del CITA.
+ */
+
+//PAQUETE PARA GRAFICAS DE GOOGLE:
 google.load('visualization', '1.0', {'packages': ['corechart']});
 {#getAjaxFarmFields('field', 'area', 'sensor');#}
 
+//SELECTORS:
 var field_selector = $('#field');
 var area_selector = $('#area');
 var sensor_selector = $('#sensor');
 var valve_selector = $('#valve');
 
-
+//DATE PICKERS:
 var from_picker = '#to_datetimepicker';
 var to_picker = '#from_datetimepicker';
 initDatePickers(from_picker,to_picker);
 
+//POPULATE SELECTORS:
 PopulateFields();
+
+/*Nombre: PopulateFields
+ Tarea: Poblar el selector de Fields con los Fields existentes. Este mismo se encargará de llamar a la población de áreas.*/
 function PopulateFields() {
     var current_field;
     $.ajax({
@@ -160,11 +171,15 @@ function PopulateFields() {
             });
             field_selector.html(options);
             current_field = $("#field").val();
-            //console.log(current_field);
+            //PRUEBA DE CONTROL: console.log(current_field);
             PopulateAreaForField(current_field);
         }
     });
 }
+
+/*Nombre: PopulateAreaForField
+ Tarea: Poblar el selector de Area de acuerdo a Field que este en el selector de Field
+ Parametro: Recibe de la función PopulateFields el Field actual en el selector de Field*/
 function PopulateAreaForField(field){
     $.ajax({
         url: "Area_Search",
@@ -178,8 +193,10 @@ function PopulateAreaForField(field){
         }
     });
 }
+
 function getConsolidatedSensorForFieldSelected () {
     var current_field=$("#field").val();
+    var current_area;
     $.ajax({
         url: "/Area_Search/",
         data: {fk_farm_field: current_field },
@@ -189,13 +206,24 @@ function getConsolidatedSensorForFieldSelected () {
                 options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
             });
             $('#area').html(options);
-            getSensorForArea('area');
+            current_area= $('#area').val();
+            console.log(current_area);
+            getConsolidatedSensorIDForArea(current_area, 0);
         }
     });
 }
-function getSensorForArea(area_selector){
+
+
+/*Esta función esta actualmente sin uso, sin embargo, la deje en código porque puede ser útil para recabar los sensores
+que hay en un área.
+Nombre: getSensorForArea
+Tarea: Poner en elemento con id #current_sensor los sensores de un área.
+Parametros: Recibe el nombre del selector de area. Puede ser sustituido por la variable global area_selector, pero habrá que
+modificar la definición de la variable local current_area.
+*/
+/*function getSensorForArea(area_selector){
   var current_area=$('#'+area_selector).val();
-    getConsolidatedSensorNameForArea(current_area);
+ getConsolidatedSensorIDForArea(current_area,0);
   if(current_area===null){
       $("#default_sensor").html("");
       return false;
@@ -203,37 +231,94 @@ function getSensorForArea(area_selector){
   //console.log(current_area);
     $.ajax({
         url:"/Sensor_Search",
-        data: {fk_area:current_area,
-               sensor_id: 0 },
+        data: {fk_area:current_area, },
         success:function(data) {
             var default_sensor = "";
 
             $.each(data, function (index, value) {
                 if(data.isEmptyObject){default_sensor=" ";}
-                default_sensor += "<p>Sensor: " + value.sensor_id + "</p>";
+                default_sensor += "<p>Sensors: " + value.sensor_id + "</p>";
             });
             $('#default_sensor').html(default_sensor);
-            getConsolidatedSensorNameForArea();
         }
     });
-}
+}*/
 
-function getConsolidatedSensorNameForArea (current_area){
-    current_area=+1;
+
+function getConsolidatedSensorIDForArea (current_area, getSensorLog) {
+    current_area = parseInt(current_area)+1;
+    var Consolidated_Sensor_id;
     var sensor_name;
-    if (current_area<100){
-        sensor_name= '"NS0'+current_area+'"';
-    }else{
-        sensor_name="NS"+current_area;
+    if (current_area < 10) {
+        sensor_name = 'NS0' + current_area;
+    } else {
+        sensor_name = "NS" + current_area;
     }
     console.log(sensor_name);
     $.ajax({
         url: "/Sensor_Search",
-        data: {sensor_name:sensor_name},
-        success: function (data){
-            console.log(data);
+        data: {sensor_name: sensor_name},
+        success: function (data) {
+            $.each(data, function (index, value) {
+                $.each(data, function (index, value) {
+                   /* if (data.isEmptyObject) {
+                        Consolidated_Sensor_id = "";
+                        return false;
+                    }*/
+                    Consolidated_Sensor_id = value.sensor_id;
+                });
+            });
+            if (getSensorLog===1){
+               getSensorLogGraph(Consolidated_Sensor_id);
+            }
         }
     });
+}
+function getSensorLogGraph(Consolidate_sensor_id) {
+    var sensor_id = Consolidate_sensor_id;
+
+    //PRUEBA:
+    console.log(sensor_id);
+    $.ajax({
+        url: "/Sensor_Agg/",
+        data: {
+            sensor_id: sensor_id,
+            min_date: init_date.dateFormat('Y-m-d H:i:s'),
+            max_date: end_date.dateFormat('Y-m-d H:i:s'),
+            ordering: "-sensor_date_received"
+        },
+        beforeSend: displayLoading,
+        success: function (data) {
+            var moisture_array = [];
+            //PRUEBA console.log(data);
+            moisture_array.push(['Time', 'HL0']);
+            if (data.length == 0) {
+                moisture_array.push([end_date.dateFormat('Y-m-d H:i:s'), 0]);
+            }
+
+            $.each(data, function (index, value) {
+                var date_received = new Date(Date.parse(value.sensor_date_received));
+                var temp_array = [];
+                temp_array.push(date_received);
+                temp_array.push(value.sensor_hl1);
+                moisture_array.push(temp_array);
+            });
+
+
+            //PRUEBA SENSOR:
+            console.log(moisture_array);
+            //
+            var data_moisture = google.visualization.arrayToDataTable(moisture_array);
+
+            var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
+
+            var options = {
+                title: 'Soil Moisture',
+                smoothLine: true
+            };
+            hideLoading();
+            chart_moisture.draw(data_moisture, options);
+        }});
 }
 
 function populateSensorAndValves(area_id) {
@@ -279,66 +364,8 @@ function setInitDate(option) {
 }
 
 function graphLogs() {
-    var default_sensor_id = 0;
-    var current_area=parseInt($('#area').val());
-    getConsolidatedSensorNameForArea(current_area);
-    //PRUEBA:
-    console.log(current_area);
-    $.ajax({
-        url: "/Sensor_Agg/",
-        data: {
-            fk_area: current_area,
-            sensor_id: default_sensor_id,
-            min_date: init_date.dateFormat('Y-m-d H:i:s'),
-            max_date: end_date.dateFormat('Y-m-d H:i:s'),
-            ordering: "-sensor_date_received"
-        },
-        beforeSend: displayLoading,
-        success: function (data) {
-            var current_sensor = "";
-            var moisture_array = [];
-            //console.log(data);
-            moisture_array.push(['Time', 'HL0']);
-            if (data.length == 0) {
-            moisture_array.push([end_date.dateFormat('Y-m-d H:i:s'), 0]);}
-
-            $.each(data, function (index, value) {
-                var date_received = new Date(Date.parse(value.sensor_date_received));
-                current_sensor += "<div class='panel large-12'>";
-                current_sensor += "<h4>Sensor: 0 </h4>";
-                current_sensor += "<p>Status: " + value.sensor_status + "<br/>";
-                current_sensor += "HL0: " + value.sensor_hl1 + "<br/>";
-                current_sensor += "Temperature: " + value.sensor_temperature + "<br/>";
-                ;
-                current_sensor += "Date: " + date_received + "</p>";
-                current_sensor += "</div>";
-                var temp_array = [];
-                temp_array.push(date_received);
-                temp_array.push(value.sensor_hl1);
-                moisture_array.push(temp_array);
-            });
-
-            //PRUEBA SENSOR:
-               console.log (moisture_array);
-            //
-            $('#current_sensor').html(current_sensor);
-            var data_moisture = google.visualization.arrayToDataTable(moisture_array);
-
-            var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
-
-            var options = {
-                title: 'Soil Moisture',
-                smoothLine: true
-            };
-
-
-            hideLoading();
-            chart_moisture.draw(data_moisture, options);
-        }
-    });
-
-
     var area_id = $('#area').val();
+    getConsolidatedSensorIDForArea(area_id,1);
     getEvotranspirationLog(area_id, init_date, end_date, function (data) {
         var ev_array = [];
         ev_array.push(['Time', 'EV']);
@@ -367,11 +394,10 @@ function graphLogs() {
         var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
         chart_ev.draw(data_ev, options);
     });
-    var current_valve=getValveForSensor();
-    graphValveData(current_valve);
+        getValveForArea();
 }
 
-    function getValveForSensor(){
+    function getValveForArea(){
      var current_area=area_selector.val();
      var current_valve;
         $.ajax({
@@ -382,55 +408,116 @@ function graphLogs() {
                 $.each(data,function(index, value){
                     current_valve=value.valve_id;
                 });
+            graphValveData(current_valve);
             }
         });
-        return current_valve;
     }
     function graphValveData(current_valve) {
+    var valve_id= current_valve;
+        if (use_agg==0) {
+            $.ajax({
+                url: "/Valve_Log/",
+                data: {
+                    valve_id: valve_id,
+                    min_date: init_date.dateFormat('Y-m-d H:i:s'),
+                    max_date: end_date.dateFormat('Y-m-d H:i:s'),
+                    ordering: "-valve_date_received"
+                },
+                success: function (data) {
+                    var valve_flow_array = [
+                        ['Time', 'Flow']
+                    ];
 
-    getValveLog(current_valve, init_date, end_date, function (data) {
-        //console.log(data);
-        var valve_flow_array = [
-            ['Time', 'Flow']
-        ];
+                    if (data.length == 0) {
+                        valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                            0]);
 
-        if (data.length == 0) {
-            valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                0]);
+                    } else {
+                        $.each(data, function (index, value) {
+                            var date_received = new Date(Date.parse(value.valve_date_received));
 
-        } else {
-            $.each(data, function (index, value) {
-                var date_received = new Date(Date.parse(value.valve_date_received));
+                            var temp_array = [];
+                            temp_array.push(date_received);
+                            temp_array.push(value.valve_flow);
+                            valve_flow_array.push(temp_array);
+                        });
+                    }
 
-                var temp_array = [];
-                temp_array.push(date_received);
-                temp_array.push(value.valve_flow);
-                valve_flow_array.push(temp_array);
-            });
-        }
 
-       /* var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);*/
-        var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
-        /*var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);*/
+                    /* var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);*/
+                    var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
+                    /*var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);*/
 
-        var options = {
-            smoothLine: true,
-            title: 'Flow'
-        };
-
-        /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
+                    var options = {
+                        smoothLine: true,
+                        title: 'Flow'
+                    };
+                    /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
         chart_actuator.draw(data_actuator, options);*/
 
-        var chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
-        chart_flow.draw(data_flow, options);
+        var
 
-        /*var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
+                chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
+        chart_flow.
+                draw(data_flow, options);
+                    /*var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
         chart_pressure.draw(data_pressure, options);*/
 
+    }
     });
+    }else{
+            $.ajax({
+                url: "/Valve_Agg/",
+                data: {
+                    valve_id: valve_id,
+                    min_date: init_date.dateFormat('Y-m-d H:i:s'),
+                    max_date: end_date.dateFormat('Y-m-d H:i:s'),
+                    ordering: "-valve_date_received"
+                },
+                success: function (data) {
+                    var valve_flow_array = [
+                        ['Time', 'Flow']
+                    ];
+
+                    if (data.length == 0) {
+                        valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
+                            0]);
+
+                    } else {
+                        $.each(data, function (index, value) {
+                            var date_received = new Date(Date.parse(value.valve_date_received));
+
+                            var temp_array = [];
+                            temp_array.push(date_received);
+                            temp_array.push(value.valve_flow);
+                            valve_flow_array.push(temp_array);
+                        });
+                    }
+
+
+                    /* var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);*/
+                    var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
+                    /*var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);*/
+
+                    var options = {
+                        smoothLine: true,
+                        title: 'Flow'
+                    };
+                    /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
+        chart_actuator.draw(data_actuator, options);*/
+
+        var
+
+                chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
+        chart_flow.
+                draw(data_flow, options);
+                    /*var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
+        chart_pressure.draw(data_pressure, options);*/
+
+    }
+    });
+  }
 }
-
-
 </script>
 </body>
 </html>

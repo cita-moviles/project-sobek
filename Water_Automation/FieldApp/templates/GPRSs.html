@@ -70,7 +70,7 @@ google.load("visualization", "1", {packages: ["corechart"]});
                     latitude = value.field_latitude;
                     longitude = value.field_longitude;
                 });
-            window.location.href= ("http://maps.google.com/?ll="+latitude+","+longitude);
+            window.open= ("'http://maps.google.com/?ll="+latitude+","+longitude+"'", '_blank');
             //console.log("http://maps.google.com/?ll="+latitude+","+longitude);
             }
         });

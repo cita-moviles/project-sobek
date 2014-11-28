@@ -1,7 +1,7 @@
 /**
  * Created by Enrique Ramírez on 8/20/14.
  */
-
+var use_agg;
 
 /**
  * Helper Function that hides an element from the page.
@@ -299,30 +299,33 @@ function quick_date(option) {
     init_date = new Date();
     end_date = new Date();
 
-
     switch (option) {
 
         case 1: //6 hours
             init_date.setHours(end_date.getHours() - 6);
+            use_agg=0;
             break;
 
         case 2: //24 hours
             init_date.setHours(end_date.getHours() - 24);
+            use_agg=0;
             break;
 
         case 3: //7 days
             init_date.setDate(end_date.getDate() - 7);
+            use_agg=0;
             break;
 
         case 4: //15 days
             init_date.setDate(end_date.getDate() - 15);
+            use_agg=1;
             break;
 
         case 5: //30 days
             init_date.setDate(end_date.getDate() - 30);
+            use_agg=1;
             break;
     }
-
     from.datetimepicker({
         value: init_date.dateFormat('Y-m-d H:i:s')
     });
@@ -363,7 +366,7 @@ function weatherCallback(data) {
     // Getting Data from received JSON
     var station_id = data.station_id;
     var station_name = data.station_name;
-    var relative_humidity = (data.station_relative_humidity + ' %');
+    var relative_humidity = (data.station_relative_humidity + '%');
     var radiation = (data.station_solar_radiation + " W&frasl;m<sup>2</sup>");
     var status = data.station_status;
     var temperature = (data.station_temperature+ ' ºC');

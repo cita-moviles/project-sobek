@@ -4,9 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
-from rest_framework_extensions.cache.decorators import (
-    cache_response
-)
+
 from rest_framework import viewsets
 from django.views.generic import TemplateView
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
@@ -72,7 +70,7 @@ class FieldFilter (django_filters.FilterSet):
 class SensorFilter (django_filters.FilterSet):
      class Meta:
           model = Sensor
-          fields = ['sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
+          fields = ['sensor_id', 'sensor_name', 'sensor_status', 'sensor_hl1', 'sensor_hl2', 'sensor_hl3', 'sensor_temperature',
                     'sensor_date_received', 'sensor_user_define1', 'sensor_user_define2', 'fk_area']
 
 
@@ -99,7 +97,7 @@ class AreaConfigurationFilter (django_filters.FilterSet):
 class StationFilter (django_filters.FilterSet):
      class Meta:
           model = Weather_Station
-          fields = ['station_id', 'station_status', 'station_relative_humidity',
+          fields = ['station_id', 'station_name', 'station_status', 'station_relative_humidity',
                     'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                     'station_date_received', 'station_user_define1',
                     'station_user_define2', 'fk_farm_field']

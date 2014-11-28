@@ -414,7 +414,6 @@ function graphLogs() {
     }
     function graphValveData(current_valve) {
     var valve_id= current_valve;
-        if (use_agg==0) {
             $.ajax({
                 url: "/Valve_Log/",
                 data: {
@@ -455,68 +454,13 @@ function graphLogs() {
                     /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
         chart_actuator.draw(data_actuator, options);*/
 
-        var
-
-                chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
-        chart_flow.
-                draw(data_flow, options);
+        var chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
+        chart_flow.draw(data_flow, options);
                     /*var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
         chart_pressure.draw(data_pressure, options);*/
 
     }
     });
-    }else{
-            $.ajax({
-                url: "/Valve_Agg/",
-                data: {
-                    valve_id: valve_id,
-                    min_date: init_date.dateFormat('Y-m-d H:i:s'),
-                    max_date: end_date.dateFormat('Y-m-d H:i:s'),
-                    ordering: "-valve_date_received"
-                },
-                success: function (data) {
-                    var valve_flow_array = [
-                        ['Time', 'Flow']
-                    ];
-
-                    if (data.length == 0) {
-                        valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                            0]);
-
-                    } else {
-                        $.each(data, function (index, value) {
-                            var date_received = new Date(Date.parse(value.valve_date_received));
-
-                            var temp_array = [];
-                            temp_array.push(date_received);
-                            temp_array.push(value.valve_flow);
-                            valve_flow_array.push(temp_array);
-                        });
-                    }
-
-
-                    /* var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);*/
-                    var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
-                    /*var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);*/
-
-                    var options = {
-                        smoothLine: true,
-                        title: 'Flow'
-                    };
-                    /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
-        chart_actuator.draw(data_actuator, options);*/
-
-        var
-
-                chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
-        chart_flow.
-                draw(data_flow, options);
-                    /*var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
-        chart_pressure.draw(data_pressure, options);*/
-
-    }
-    });
-  }
 }
 </script>
 </body>

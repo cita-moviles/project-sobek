@@ -11,9 +11,9 @@
 {% include 'nav.html' %}
 
 <div class="row">&nbsp;</div>
-<div class="row">
+<div class="row card">
     <!-- Weather Information Current Data -->
-    <div class="small-3 columns">
+    <div class="medium-4 columns">
         <h3 class="show-for-small">Sensor 0 Moisture Graph
             <hr/>
         </h3>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <div class="large-9 columns">
+    <div class="medium-8 columns">
         <br/>
         <br/>
 
@@ -56,35 +56,43 @@
         <div class="large-12 columns">
             <ul class="button-group [radius round]">
                 <li>
-                    <button onclick="quick_date(1)" class="button">6 hours
+                    <button onclick="quick_date(1)" class="button small">6 hours
                     </button>
                 </li>
                 <li>
-                    <button onclick="quick_date(2)" class="button">24 hours
+                    <button onclick="quick_date(2)" class="button small">24 hours
                     </button>
                 </li>
                 <li>
-                    <button onclick="quick_date(3)" class="button">7 days
+                    <button onclick="quick_date(3)" class="button small">7 days
                     </button>
                 </li>
                 <li>
-                    <button onclick="quick_date(4)" class="button">15 days
+                    <button onclick="quick_date(4)" class="button small">15 days
                     </button>
                 </li>
                 <li>
-                    <button onclick="quick_date(5)" class="button">30 days
+                    <button onclick="quick_date(5)" class="button small">30 days
                     </button>
                 </li>
             </ul>
            </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
 
        <div class="progress round">
-            <p id="progress_message" style="float: left; margin-right:
-            5px"></p>
-            <span id="progress" class="meter"
-                  style="width: 0; float: left"></span>
-        <br/>
+            <p id="progress_message" style="float: left; margin-right:5px"></p>
+            <span id="progress" class="meter" style="width: 0; float: left">
+           </span>
+
        </div>
+       <br/>
+       <br/>
+       <br/>
 
 
         <div class="row">

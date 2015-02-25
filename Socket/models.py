@@ -173,20 +173,11 @@ class Crop_Area:
         """
         self.area_id = int(message[1])
         #self.area_ev = float(message[7:9] + "." + message[9])
-        """self.area_x_position = 0
+        self.area_x_position = 0
         self.area_y_position = 0
         comma = message.index(",")
-        if comma == 10:
-            self.area_user_define1 = ' '
-            self.area_user_define2 = ' '
-        else:
-            self.area_user_define1 = message[10: comma]
-            terminator = message.index("#")
-            if (comma + 1) == terminator:
-                self.area_user_define2 = ' '
-            else:
-                self.area_user_define2 = message[comma + 1: terminator]
-        """
+        self.area_user_define1 = ' '
+        self.area_user_define2 = ' '
         self.fk_farm_field = " "
         self.fk_crop = " "
         self.area_name = " "
@@ -196,8 +187,7 @@ class Crop_Area:
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
-
-        #area_cfg = self.get_from_server()
+        area_cfg = self.get_from_server()
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -245,7 +235,7 @@ class Crop_Area:
                 area_cfg += 'ROK'
                 print "No configuration pending"
             else:
-                area_cfg += "CFG" + str(self.area_id).zfill(4) + str(result2['area_configuration']) + "#"
+                area_cfg += "G" + str(self.area_id).zfill(70)
                 print "Sending pending configuration"
 
         except urllib2.HTTPError, ex:
@@ -624,8 +614,6 @@ class MessageProcessor:
                             #actuator.upload_to_server()
                 else:
                     print "Nothing cool > " + msg
-
-
 
             except ValueError:
                 print('Non-numeric data: ' + msg)

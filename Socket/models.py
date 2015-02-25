@@ -575,48 +575,55 @@ class MessageProcessor:
                 else:
                     print "Nothing cool > " + msg
                 """
-                f_data = msg[0:4]
-                w_data = msg[4:21]
+                if msg[1:3] == "50":
+                    field = Farm_Field(msg + "#")
+                    print field.to_json()
+                    #field.upload_to_server()
+
+                elif msg[0] == "F":
+                    f_data = msg[0:4]
+                    w_data = msg[4:21]
 
 
-                #msg -> Farm_Field
-                field_id = f_data[1:3]
-                no_of_areas = f_data[3]
+                    #msg -> Farm_Field
+                    field_id = f_data[1:3]
+                    no_of_areas = f_data[3]
 
-                #w_data -> Weather
-                print "STATIONS"
-                station = Weather_Station(w_data, field_id[1])
-                print station.to_json()
-                #station.upload_to_server()
+                    #w_data -> Weather
+                    print "STATIONS"
+                    station = Weather_Station(w_data, field_id[1])
+                    print station.to_json()
+                    #station.upload_to_server()
 
 
-                #r_data -> Area
-                for index in xrange(int(no_of_areas)):
-                    r_data = msg[(21 + (index*27)):24 + (index*27)]
-                    print "AREAS"
-                    area = Crop_Area(r_data, field_id[1])
-                    print area.to_json()
-                    #area.upload_to_server()
-                    sc_data = msg[24+(index*27):28+(index*27)]
-                    area_id = r_data[1]
-                    print "CONSOLIDATED SENSORS"
-                    sensor = Sensor(sc_data, area_id)
-                    print sensor.to_json()
-                    #sensor.upload_to_server()
-                    no_of_sensors = int(r_data[2])
-                    for index2 in xrange(index,int(no_of_sensors)+index):
-                        s_data = msg[(28+(index2*27)):(39+(index2*27))]
+                    #r_data -> Area
+                    for index in xrange(int(no_of_areas)):
+                        r_data = msg[(21 + (index*27)):24 + (index*27)]
+                        print "AREAS"
+                        area = Crop_Area(r_data, field_id[1])
+                        print area.to_json()
+                        #area.upload_to_server()
+                        sc_data = msg[24+(index*27):28+(index*27)]
                         area_id = r_data[1]
-                        print "SENSORS"
-                        sensor = Sensor(s_data, area_id)
+                        print "CONSOLIDATED SENSORS"
+                        sensor = Sensor(sc_data, area_id)
                         print sensor.to_json()
                         #sensor.upload_to_server()
-                        a_data = msg[39+(index2*27):47+(index2*27)]
-                        print "ACTUATORS"
-                        actuator = Valve(a_data, area_id)
-                        print actuator.to_json()
-                        #actuator.upload_to_server()
-
+                        no_of_sensors = int(r_data[2])
+                        for index2 in xrange(index,int(no_of_sensors)+index):
+                            s_data = msg[(28+(index2*27)):(39+(index2*27))]
+                            area_id = r_data[1]
+                            print "SENSORS"
+                            sensor = Sensor(s_data, area_id)
+                            print sensor.to_json()
+                            #sensor.upload_to_server()
+                            a_data = msg[39+(index2*27):47+(index2*27)]
+                            print "ACTUATORS"
+                            actuator = Valve(a_data, area_id)
+                            print actuator.to_json()
+                            #actuator.upload_to_server()
+                else:
+                    print "Nothing cool > " + msg
 
 
 

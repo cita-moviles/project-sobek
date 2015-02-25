@@ -24,31 +24,31 @@ def instantiate_cfg():
 
 #10
 class Sensor:
-    def __init__(self, message):
-        """ Class that process and creates objects in order to be uploaded to the server
-        Pos[0] = ! Start of message
-        Pos[1:2] = header
-        Pos[3:4] = Area ID
-        Pos[5:6] = Sensor iD
-        Pos[7:8] = Status
-        Pos[9:10] = HL1 integers
-        Pos[11] = HL1 Decimals
-        Pos[12:13] = HL1 integers
-        Pos[14] = HL1 Decimals
-        Pos[15:16] = HL1 integers
-        Pos[17] = HL1 Decimals
-        Pos[18] = Temp Sign
-        Pos[19:20] = Temp integers
-        Pos[21] = Temp Decimals
-        Pos[-1] = # end of message
+    def __init__(self, message, id):
         """
+        Pos[0] = 'S' or 'C' Start of message
+        Pos[1] = Sensor ID
+        Pos[2:4] = SM1
+        Pos[4:6] = SM2
+        Pos[6:8] = SM3
+        Pos[8] = Battery
+        Pos[9] = RSSI
+        Pos[10] = Error code
+        """
+        if message[0] == 'S':
+            self.sensor_id = int(message[1])
+            #self.sensor_status = int(message[7:9])
+            self.sensor_hl1 = float(message[2:4]) # + "." + message[11])
+            self.sensor_hl2 = float(message[4:6]) #+ "." + message[14])
+            self.sensor_hl3 = float(message[6:8]) #+ "." + message[17])
+        elif message[0] == 'C':
+            self.sensor_id = int(message[1])
+            self.sensor_hl1 = float(message[2:4])
+            self.sensor_hl2 = 0
+            self.sensor_hl3 = 0
 
-        self.sensor_id = int(message[3:7])
-        self.sensor_status = int(message[7:9])
-        self.sensor_hl1 = float(message[9:11] + "." + message[11])
-        self.sensor_hl2 = float(message[12:14] + "." + message[14])
-        self.sensor_hl3 = float(message[15:17] + "." + message[17])
-        self.sensor_temperature = float(message[18:21] + "." + message[21])
+
+        """self.sensor_temperature = float(message[18:21] + "." + message[21])
         self.sensor_x_position = 0
         self.sensor_y_position = 0
         comma = message.index(',')
@@ -62,12 +62,12 @@ class Sensor:
                 self.sensor_user_define2 = ' '
             else:
                 self.sensor_user_define2 = message[comma + 1: terminator]
-
+        """
         global currentDate
         self.sensor_date_received = str(currentDate)
         self.fk_area = " "
         self.sensor_name = " "
-        self.get_from_server()
+        self.get_from_server(id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -80,7 +80,7 @@ class Sensor:
         print self.to_json()
         result = urllib2.urlopen(request, self.to_json())
 
-    def get_from_server(self):
+    def get_from_server(self, id):
         request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/" + str(self.sensor_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
@@ -88,31 +88,32 @@ class Sensor:
         try:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
-            self.fk_area = result2['fk_area']
+            self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + id + "/"
             self.sensor_name = result2['sensor_name']
         except urllib2.HTTPError:
             print('There was an error retrieving server info')
         pass
 
+
 #20
 class Valve:
-    def __init__(self, message):
-        """ Class that process and creates objects in order to be uploaded to the server
-        Pos[0] = ! Start of message
-        Pos[1:2] = header
-        Pos[3:7] = Valve ID
-        Pos[7:9] = Status
-        Pos[9:15] = Flow
-        Pos[15:21] = Pressure
-        Pos[21:26] = Limit
-        Pos[-1] = # end of message
+    def __init__(self, message, id):
         """
-        self.valve_id = int(message[3:7])
-        self.valve_status = int(message[7:9])
-        self.valve_flow = int(message[9:14])
-        self.valve_pressure = int(message[14:19])
+        Pos[0] = 'A' Start of message
+        Pos[1] = Valve ID
+        Pos[2] = Valve Status
+        Pos[3:5] = Flow
+        Pos[5] = Battery
+        Pos[6] = RSSI
+        Pos[7] = Error code
+        """
+        self.valve_id = int(message[1])
+        self.valve_status = int(message[2])
+        self.valve_flow = int(message[3:5])
+        self.valve_pressure = 0
         self.valve_limit = 0
         self.valve_ideal = 0
+        """
         comma = message.index(',')
         if (comma is not None) and comma == 19:
             self.valve_user_define1 = ' '
@@ -124,7 +125,7 @@ class Valve:
                 self.valve_user_define2 = ' '
             else:
                 self.valve_user_define2 = message[comma + 1: terminator]
-
+        """
 
         global currentDate
         self.valve_date_received = str(currentDate)
@@ -132,7 +133,7 @@ class Valve:
 
         self.fk_area = " "
         self.valve_name = " "
-        self.get_from_server()
+        self.get_from_server(id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -147,15 +148,16 @@ class Valve:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
-    def get_from_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/")
+    def get_from_server(self, id):
+        #request = urllib2.Request("http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Valve/21/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'GET'
         try:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
-            self.fk_area = result2['fk_area']
+            self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + id + "/"
             self.valve_name = result2['valve_name']
         except urllib2.HTTPError:
             print('There was an error retrieving server info')
@@ -163,18 +165,15 @@ class Valve:
 
 #30
 class Crop_Area:
-    def __init__(self, message):
-        """ Class that process and creates objects in order to be uploaded to the server
-          Pos[0] = ! Start of message
-          Pos[1:2] = header
-          Pos[3:7] = Area ID
-          Pos[7:9] = Integers EV
-          Pos[9] = Decimals EV
-          Pos[-1] = #End of message
-          """
-        self.area_id = int(message[3:7])
-        self.area_ev = float(message[7:9] + "." + message[9])
-        self.area_x_position = 0
+    def __init__(self, message, id):
+        """
+          Pos[0] = 'R' Start of message
+          Pos[1] = Area ID
+          Pos[2] = Number of sensors
+        """
+        self.area_id = int(message[1])
+        #self.area_ev = float(message[7:9] + "." + message[9])
+        """self.area_x_position = 0
         self.area_y_position = 0
         comma = message.index(",")
         if comma == 10:
@@ -187,18 +186,18 @@ class Crop_Area:
                 self.area_user_define2 = ' '
             else:
                 self.area_user_define2 = message[comma + 1: terminator]
-
+        """
         self.fk_farm_field = " "
         self.fk_crop = " "
         self.area_name = " "
         self.area_description = " "
-        self.get_name_from_server()
+        self.get_name_from_server(id)
 
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
 
-        area_cfg = self.get_from_server()
+        #area_cfg = self.get_from_server()
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -213,7 +212,7 @@ class Crop_Area:
         pass
 
 
-    def get_name_from_server(self):
+    def get_name_from_server(self, id):
         request = urllib2.Request("http://riego.chi.itesm.mx/Crop_Area/" + str(self.area_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
@@ -224,7 +223,7 @@ class Crop_Area:
             self.area_name = result2['area_name']
             self.area_description = result2['area_description']
             self.fk_crop = result2['fk_crop']
-            self.fk_farm_field = result2['fk_farm_field']
+            self.fk_farm_field =  "http://riego.chi.itesm.mx/Farm_Field/" + id + "/"
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
             print('Area names not found ' + str(self.area_id))
@@ -257,29 +256,29 @@ class Crop_Area:
 
 #40
 class Weather_Station:
-    def __init__(self, message):
-        """ Class that process and creates objects in order to be uploaded to the server
-          Pos[0] = ! Start of message
-          Pos[1:2] = header
-          Pos[3:7] = Weather Station's ID
-          Pos[7:9] = Status
-          Pos[9:11] = Relative humidity integers
-          Pos[11] = Relative humidity decimals
-          Pos[12:16] = Temperature Integers
-          Pos[16] = Temperature decimals
-          Pos[17:20] = Wind speed
-          Pos[21:24] = Solar Radiation
-          Pos[25:27] = EV Integers
-          Pos[27] = EV Decimals
-          Pos[-1] = #End of message
-          """
-        self.station_id = int(message[3:7])
-        self.station_status = int(message[7:9])
-        self.station_relative_humidity = float(message[9:11] + '.' + message[11])
-        self.station_temperature = float(message[12:15] + '.' + message[15])
-        self.station_wind_speed = float(message[16:18] + '.' + message[18:19])
-        self.station_solar_radiation = int(message[19:23])
+    def __init__(self, message, id):
+        """
+        Pos[0] = 'W' Start of message
+        Pos[1] = Weather node ID
+        Pos[2:4] = Radiation
+        Pos[4:6] = Humidity
+        Pos[6:8] = Temperature
+        Pos[8:10] = Wind
+        Pos[10:12] = Rain
+        Pos[12:14] = Eto
+        Pos[14] = Battery
+        Pos[15] = RSSI
+        Pos[16] = Error code
+        """
+        self.station_id = int(message[1])
+        self.station_name = " "
+        self.station_status = int(message[14])
+        self.station_relative_humidity = float(message[4:6]) # + '.' + message[11])
+        self.station_temperature = float(message[6:8]) # + '.' + message[15])
+        self.station_wind_speed = float(message[8:10]) # + '.' + message[18:19])
+        self.station_solar_radiation = int(message[2:4])
         #self.ev = float(message[23:25] + '.' + message[25])
+        """
         comma = message.index(",")
         if comma == 23:
             self.station_user_define1 = ' '
@@ -291,12 +290,13 @@ class Weather_Station:
                 self.station_user_define2 = ' '
             else:
                 self.station_user_define2 = message[comma + 1: terminator]
+        """
 
         global currentDate
         self.station_date_received = str(currentDate)
         self.fk_farm_field = " "
         self.station_name = " "
-        self.get_from_server()
+        self.get_from_server(id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -310,8 +310,9 @@ class Weather_Station:
         result = urllib2.urlopen(request, self.to_json())
         pass
 
-    def get_from_server(self):
-        request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/" + str(self.station_id) + "/")
+    def get_from_server(self, id):
+        #request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/" + str(self.station_id) + "/")
+        request = urllib2.Request("http://riego.chi.itesm.mx/Weather_Station/31/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'GET'
@@ -319,7 +320,7 @@ class Weather_Station:
         try:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
-            self.fk_farm_field = result2['fk_farm_field']
+            self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/" + id + "/"
             self.station_name = result2['station_name']
         except urllib2.HTTPError, ex:
             print('Field ID not found ' + str(self.station_id))
@@ -543,7 +544,7 @@ class MessageProcessor:
             try:
                 print("------" + msg + "-------")
 
-                if msg[1:3] == "00":
+                """if msg[1:3] == "00":
                     print("KEEP ALIVE")
 
                 elif msg[1:3] == "10":
@@ -573,6 +574,51 @@ class MessageProcessor:
 
                 else:
                     print "Nothing cool > " + msg
+                """
+                f_data = msg[0:4]
+                w_data = msg[4:21]
+
+
+                #msg -> Farm_Field
+                field_id = f_data[1:3]
+                no_of_areas = f_data[3]
+
+                #w_data -> Weather
+                print "STATIONS"
+                station = Weather_Station(w_data, field_id[1])
+                print station.to_json()
+                #station.upload_to_server()
+
+
+                #r_data -> Area
+                for index in xrange(int(no_of_areas)):
+                    r_data = msg[(21 + (index*27)):24 + (index*27)]
+                    print "AREAS"
+                    area = Crop_Area(r_data, field_id[1])
+                    print area.to_json()
+                    #area.upload_to_server()
+                    sc_data = msg[24+(index*27):28+(index*27)]
+                    area_id = r_data[1]
+                    print "CONSOLIDATED SENSORS"
+                    sensor = Sensor(sc_data, area_id)
+                    print sensor.to_json()
+                    #sensor.upload_to_server()
+                    no_of_sensors = int(r_data[2])
+                    for index2 in xrange(index,int(no_of_sensors)+index):
+                        s_data = msg[(28+(index2*27)):(39+(index2*27))]
+                        area_id = r_data[1]
+                        print "SENSORS"
+                        sensor = Sensor(s_data, area_id)
+                        print sensor.to_json()
+                        #sensor.upload_to_server()
+                        a_data = msg[39+(index2*27):47+(index2*27)]
+                        print "ACTUATORS"
+                        actuator = Valve(a_data, area_id)
+                        print actuator.to_json()
+                        #actuator.upload_to_server()
+
+
+
 
             except ValueError:
                 print('Non-numeric data: ' + msg)

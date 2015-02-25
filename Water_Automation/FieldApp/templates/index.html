@@ -11,9 +11,9 @@
 {% include 'nav.html' %}
 
 <div class="row">&nbsp;</div>
-<div class="row">
+<div class="row card">
     <!-- Weather Information Current Data -->
-    <div class="small-3 columns">
+    <div class="medium-4 columns">
         <h3 class="show-for-small">Sensor 0 Moisture Graph
             <hr/>
         </h3>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <div class="large-9 columns">
+    <div class="medium-8 columns">
         <br/>
         <br/>
 
@@ -56,35 +56,38 @@
         <div class="large-12 columns">
             <ul class="button-group [radius round]">
                 <li>
-                    <button onclick="quick_date(1)" class="button">6 hours
+                    <button onclick="quick_date(1)" class="button small">6 hours
                     </button>
                 </li>
                 <li>
-                    <button onclick="quick_date(2)" class="button">24 hours
+                    <button onclick="quick_date(2)" class="button small">24 hours
                     </button>
                 </li>
                 <li>
-                    <button onclick="quick_date(3)" class="button">7 days
+                    <button onclick="quick_date(3)" class="button small">7 days
                     </button>
                 </li>
                 <li>
-                    <button onclick="quick_date(4)" class="button">15 days
+                    <button onclick="quick_date(4)" class="button small">15 days
                     </button>
                 </li>
                 <li>
-                    <button onclick="quick_date(5)" class="button">30 days
+                    <button onclick="quick_date(5)" class="button small">30 days
                     </button>
                 </li>
             </ul>
            </div>
+        <br/><br/><br/><br/><br/><br/><br/><br/>
 
        <div class="progress round">
-            <p id="progress_message" style="float: left; margin-right:
-            5px"></p>
-            <span id="progress" class="meter"
-                  style="width: 0; float: left"></span>
-        <br/>
+            <p id="progress_message" style="float: left; margin-right:5px"></p>
+            <span id="progress" class="meter" style="width: 0; float: left">
+           </span>
+
        </div>
+       <br/><br/>
+       <br/>
+       <br/>
 
 
         <div class="row">
@@ -414,7 +417,6 @@ function graphLogs() {
     }
     function graphValveData(current_valve) {
     var valve_id= current_valve;
-        if (use_agg==0) {
             $.ajax({
                 url: "/Valve_Log/",
                 data: {
@@ -455,68 +457,13 @@ function graphLogs() {
                     /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
         chart_actuator.draw(data_actuator, options);*/
 
-        var
-
-                chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
-        chart_flow.
-                draw(data_flow, options);
+        var chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
+        chart_flow.draw(data_flow, options);
                     /*var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
         chart_pressure.draw(data_pressure, options);*/
 
     }
     });
-    }else{
-            $.ajax({
-                url: "/Valve_Agg/",
-                data: {
-                    valve_id: valve_id,
-                    min_date: init_date.dateFormat('Y-m-d H:i:s'),
-                    max_date: end_date.dateFormat('Y-m-d H:i:s'),
-                    ordering: "-valve_date_received"
-                },
-                success: function (data) {
-                    var valve_flow_array = [
-                        ['Time', 'Flow']
-                    ];
-
-                    if (data.length == 0) {
-                        valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
-                            0]);
-
-                    } else {
-                        $.each(data, function (index, value) {
-                            var date_received = new Date(Date.parse(value.valve_date_received));
-
-                            var temp_array = [];
-                            temp_array.push(date_received);
-                            temp_array.push(value.valve_flow);
-                            valve_flow_array.push(temp_array);
-                        });
-                    }
-
-
-                    /* var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);*/
-                    var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
-                    /*var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);*/
-
-                    var options = {
-                        smoothLine: true,
-                        title: 'Flow'
-                    };
-                    /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
-        chart_actuator.draw(data_actuator, options);*/
-
-        var
-
-                chart_flow = new google.visualization.LineChart(document.getElementById('flow_chart'));
-        chart_flow.
-                draw(data_flow, options);
-                    /*var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
-        chart_pressure.draw(data_pressure, options);*/
-
-    }
-    });
-  }
 }
 </script>
 </body>

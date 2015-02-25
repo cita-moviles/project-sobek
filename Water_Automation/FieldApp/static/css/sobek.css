@@ -3301,7 +3301,7 @@ ul.pagination {
   .progress.round {
     border-radius: 1000px; }
     .progress.round .meter {
-      border-radius: 999px; }
+      border-radius: 100px; }
 
 .range-slider {
   display: block;

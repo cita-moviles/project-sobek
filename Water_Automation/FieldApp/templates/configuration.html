@@ -19,7 +19,7 @@
         <h3>Select the area to configure</h3>
 
         <label>Field</label>
-        <select id="field" onchange="getAreasOptions('area', 'field');"></select>
+        <select id="field" onchange="getAreasOptions('area', 'field')"></select>
         <label>Area</label>
         <select id="area" onchange="hideOperations();"></select>
 
@@ -71,10 +71,47 @@
 
 <script>
     var strConfig;
+var field_selector = $('#field');
+var area_selector = $('#area');
+//POPULATE SELECTORS:
+PopulateFields();
 
-    $(function () {
-        getAjaxFarmFields('field', 'area', '');
+/*Nombre: PopulateFields
+ Tarea: Poblar el selector de Fields con los Fields existentes. Este mismo se encargará de llamar a la población de áreas.*/
+function PopulateFields() {
+    var current_field;
+    $.ajax({
+        url: "/Farm_Field",
+        data: {},
+        success: function (data) {
+            var options = "";
+            $.each(data, function (index, value) {
+                options += '<option value="' + value.field_id + '">' + value.field_name + '</option>';
+            });
+            field_selector.html(options);
+            current_field = $("#field").val();
+            //PRUEBA DE CONTROL: console.log(current_field);
+            PopulateAreaForField(current_field);
+        }
     });
+}
+
+/*Nombre: PopulateAreaForField
+ Tarea: Poblar el selector de Area de acuerdo a Field que este en el selector de Field
+ Parametro: Recibe de la función PopulateFields el Field actual en el selector de Field*/
+function PopulateAreaForField(field){
+    $.ajax({
+        url: "Area_Search",
+        data: {fk_farm_field: field},
+        success: function (data){
+            var options ="";
+            $.each(data, function(index,value){
+                options += '<option value=" '+ value.area_id+ '">' + value.area_name + '</option>';
+            });
+            area_selector.html(options);
+        }
+    });
+}
 
     function getConfigurations() {
         var area_id = $('#area').val();

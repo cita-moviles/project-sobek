@@ -170,5 +170,5 @@ class Farm_Field_Agg_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Farm_Field_Agg
-        fields = ('agg_id', 'agg_date', 'field_id', 'field_imei', 'field_signal', 'field_latitude',
+        fields = ('agg_id', 'agg_date', 'field_id', 'field_signal', 'field_latitude',
                   'field_longitude', 'field_date_received')

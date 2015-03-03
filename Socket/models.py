@@ -636,3 +636,4 @@ class MessageProcessor:
             return areas_config
         else:
             return 'ROK'
+

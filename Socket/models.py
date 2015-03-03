@@ -42,7 +42,7 @@ class Sensor:
             self.sensor_hl2 = float(message[4:6]) #+ "." + message[14])
             self.sensor_hl3 = float(message[6:8]) #+ "." + message[17])
         elif message[0] == 'C':
-            self.sensor_id = 'C'+message[1]
+            self.sensor_id = 0
             self.sensor_hl1 = float(message[2:4])
             self.sensor_hl2 = 0
             self.sensor_hl3 = 0

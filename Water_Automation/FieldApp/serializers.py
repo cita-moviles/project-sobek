@@ -36,13 +36,14 @@ class Area_Serializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class Area_Configuration_Serializer(serializers.ModelSerializer):
-    area_id = serializers.RelatedField()
+class Area_Configuration_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='config-detail')
+    area_id = serializers.PrimaryKeyRelatedField()
 
     class Meta:
         model = Area_Configuration
         fields = (
-            'area_id', 'area_configuration'
+           'area_id', 'area_configuration', 'field_id'
         )
 
 
@@ -64,7 +65,7 @@ class Station_Serializer(serializers.HyperlinkedModelSerializer):
         model = Weather_Station
         fields = (
             'station_id', 'station_name', 'station_status', 'station_relative_humidity', 'station_temperature',
-            'station_wind_speed', 'station_solar_radiation', 'station_date_received',
+            'station_wind_speed', 'station_solar_radiation','station_ev', 'station_date_received',
             'station_user_define1', 'station_user_define2', 'fk_farm_field'
         )
 
@@ -106,7 +107,7 @@ class Weather_Station_Log_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Weather_Station_Log
         fields = ('log_number', 'log_timestamp', 'station_id', 'station_status', 'station_relative_humidity',
-                  'station_temperature', 'station_wind_speed', 'station_solar_radiation',
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_ev',
                   'station_date_received', 'station_user_define1', 'station_user_define2')
 
 
@@ -160,8 +161,8 @@ class Weather_Station_Agg_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Weather_Station_Agg
-        fields = ('agg_id', 'agg_date', 'station_id', 'station_status', 'station_relative_humidty',
-                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_date_received')
+        fields = ('agg_id', 'agg_date', 'station_id', 'station_status', 'station_relative_humidity',
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_ev', 'station_date_received')
 
 
 class Farm_Field_Agg_Serializer(serializers.HyperlinkedModelSerializer):

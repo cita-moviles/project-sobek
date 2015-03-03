@@ -19,7 +19,7 @@ def instantiate_date():
 
 def instantiate_cfg():
     global area_cfg
-    area_cfg = 'ROK'
+    area_cfg = ''
 
 
 #10
@@ -36,13 +36,13 @@ class Sensor:
         Pos[10] = Error code
         """
         if message[0] == 'S':
-            self.sensor_id = int(message[1])
+            self.sensor_id = message[1]
             #self.sensor_status = int(message[7:9])
             self.sensor_hl1 = float(message[2:4]) # + "." + message[11])
             self.sensor_hl2 = float(message[4:6]) #+ "." + message[14])
             self.sensor_hl3 = float(message[6:8]) #+ "." + message[17])
         elif message[0] == 'C':
-            self.sensor_id = int(message[1])
+            self.sensor_id = 'C'+message[1]
             self.sensor_hl1 = float(message[2:4])
             self.sensor_hl2 = 0
             self.sensor_hl3 = 0
@@ -175,7 +175,6 @@ class Crop_Area:
         #self.area_ev = float(message[7:9] + "." + message[9])
         self.area_x_position = 0
         self.area_y_position = 0
-        comma = message.index(",")
         self.area_user_define1 = ' '
         self.area_user_define2 = ' '
         self.fk_farm_field = " "
@@ -231,18 +230,28 @@ class Crop_Area:
             result2 = json.load(result)
             print result2['area_configuration']
             print self.area_user_define1
-            if result2['area_configuration'] == self.area_user_define1:
+            if result2['area_configuration'] == "ROK":
                 area_cfg += 'ROK'
                 print "No configuration pending"
             else:
-                area_cfg += "G" + str(self.area_id).zfill(70)
+                str_data = ''
+                #str_field_id = str(result[field_id])
+                area_cfg += '01' + str(self.area_id) + str_data.zfill(6)
                 print "Sending pending configuration"
-
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
             print('Area configuration not found ' + str(self.area_id))
         return area_cfg
 
+    def normalize_cfg(self):
+        request = urllib2.Request("http://riego.chi.itesm.mx/Area_Configuration/" + str(self.area_id) + "/")
+        request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
+        request.add_header("Content-Type", "application/json")
+        request.get_method = lambda: 'PUT'
+        rok = {"area_id": self.area_id, "area_configuration": "ROK"}
+        rok_json = json.dumps(rok, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+        result = urllib2.urlopen(request,rok_json)
+        pass
 
 #40
 class Weather_Station:
@@ -267,7 +276,7 @@ class Weather_Station:
         self.station_temperature = float(message[6:8]) # + '.' + message[15])
         self.station_wind_speed = float(message[8:10]) # + '.' + message[18:19])
         self.station_solar_radiation = int(message[2:4])
-        #self.ev = float(message[23:25] + '.' + message[25])
+        self.station_ev = float(message[12:14])
         """
         comma = message.index(",")
         if comma == 23:
@@ -470,13 +479,15 @@ class Crop_Area_Agg:
 
 class Weather_Station_Agg:
     def __init__(self, station_id, station_relative_humidity, station_temp, station_wind_speed,
-                 station_solar_radiation, station_date_received):
+                 station_solar_radiation, station_ev, station_date_received):
+        self.station_ev = station_ev
         self.station_relative_humidity = station_relative_humidity
         self.station_temperature = station_temp
         self.station_wind_speed = station_wind_speed
         self.station_solar_radiation = station_solar_radiation
         self.station_date_received = station_date_received
         self.station_id = station_id
+
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -528,6 +539,7 @@ class MessageProcessor:
 
         print currentDate
         area_configuration = "ROK"
+        areas_config = 'G'
         msglist = message.split('#')
 
         for msg in msglist:
@@ -574,7 +586,6 @@ class MessageProcessor:
                     f_data = msg[0:4]
                     w_data = msg[4:21]
 
-
                     #msg -> Farm_Field
                     field_id = f_data[1:3]
                     no_of_areas = f_data[3]
@@ -585,12 +596,17 @@ class MessageProcessor:
                     print station.to_json()
                     #station.upload_to_server()
 
-
                     #r_data -> Area
                     for index in xrange(int(no_of_areas)):
                         r_data = msg[(21 + (index*27)):24 + (index*27)]
                         print "AREAS"
                         area = Crop_Area(r_data, field_id[1])
+                        global area_cfg
+                        print "--" + area_cfg + "---"
+                        if area_configuration != area_cfg:
+                            area_configuration = area_cfg
+                            areas_config += area_configuration
+                            area.normalize_cfg()
                         print area.to_json()
                         #area.upload_to_server()
                         sc_data = msg[24+(index*27):28+(index*27)]
@@ -622,9 +638,8 @@ class MessageProcessor:
                 logging.exception("Something awful happened!")
                 print('Unexpected error: ' + msg)
 
-        global area_cfg
-        print "--" + area_cfg + "---"
-        if area_configuration != area_cfg:
-            area_configuration = area_cfg
+        if areas_config != 'G':
+            return areas_config
+        else:
+            return 'ROK'
 
-        return area_configuration

@@ -161,7 +161,7 @@ class Weather_Station_Agg_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Weather_Station_Agg
-        fields = ('agg_id', 'agg_date', 'station_id', 'station_status', 'station_relative_humidity',
+        fields = ('agg_id', 'agg_date', 'station_id', 'station_relative_humidity',
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_date_received')
 
 

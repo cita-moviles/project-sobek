@@ -94,7 +94,7 @@ class Weather_Station(models.Model):
 
 
 class Sensor(models.Model):
-    sensor_id = models.CharField(primary_key=True, max_length=10)
+    sensor_id = models.IntegerField(primary_key=True)
     sensor_name = models.CharField(max_length=59)
     sensor_status = models.SmallIntegerField(max_length=2)
     sensor_hl1 = models.FloatField(null=True, blank=True, default = 0)

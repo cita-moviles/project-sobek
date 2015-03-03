@@ -91,14 +91,14 @@ class ValveFilter (django_filters.FilterSet):
 class AreaConfigurationFilter (django_filters.FilterSet):
      class Meta:
           model = Area_Configuration
-          fields = ['area_id', 'area_configuration','field_id']
+          fields = ['config_id', 'area_id', 'area_configuration']
 
 
 class StationFilter (django_filters.FilterSet):
      class Meta:
           model = Weather_Station
           fields = ['station_id', 'station_name', 'station_status', 'station_relative_humidity',
-                    'station_temperature', 'station_wind_speed', 'station_solar_radiation','station_ev',
+                    'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                     'station_date_received', 'station_user_define1',
                     'station_user_define2', 'fk_farm_field']
 
@@ -122,7 +122,7 @@ class StationLogFilter (django_filters.FilterSet):
      class Meta:
           model = Weather_Station_Log
           fields = ['station_id', 'station_status', 'station_relative_humidity',
-                    'station_temperature', 'station_wind_speed', 'station_solar_radiation','station_ev',
+                    'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                     'station_date_received']
           order_by = ['station_date_received']
 
@@ -192,7 +192,7 @@ class StationAggFilter(django_filters.FilterSet):
     class Meta:
         model = Weather_Station_Agg
         fields = ['station_id', 'station_relative_humidity',
-                  'station_temperature', 'station_wind_speed', 'station_solar_radiation','station_ev',
+                  'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                   'station_date_received']
         order_by = ['station_date_received']
 

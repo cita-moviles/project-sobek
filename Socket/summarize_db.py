@@ -160,7 +160,6 @@ def get_station_log(stationid):
             station_temperature = 0
             station_wind_speed = 0
             station_solar_radiation = 0
-            station_ev = 0
 
             for station_detail in res2_station:
                 #print station_detail
@@ -169,15 +168,14 @@ def get_station_log(stationid):
                 station_temperature += station_detail['station_temperature']
                 station_wind_speed += station_detail['station_wind_speed']
                 station_solar_radiation += station_detail['station_solar_radiation']
-                station_ev += station_detail['station_ev']
+
             if len(res2_station) > 0:
                 avg_station_humidity = station_relative_humidity / len(res2_station)
                 avg_station_temp = station_temperature / len(res2_station)
                 avg_station_wind = station_wind_speed / len(res2_station)
                 avg_station_radiation = station_solar_radiation / len (res2_station)
-                avg_station_ev = station_ev / len(station_ev)
                 station = Weather_Station_Agg(station_id, avg_station_humidity,avg_station_temp,avg_station_wind,
-                                          avg_station_radiation,avg_station_ev,current_time)
+                                          avg_station_radiation,current_time)
                 station.to_json()
                 station.upload_to_server(stationid)
             else:

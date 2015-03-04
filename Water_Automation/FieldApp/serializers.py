@@ -43,7 +43,7 @@ class Area_Configuration_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Area_Configuration
         fields = (
-           'area_id', 'area_configuration', 'field_id'
+           'area_id', 'area_configuration'
         )
 
 

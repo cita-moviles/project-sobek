@@ -189,7 +189,7 @@ function PopulateAreaForField(field){
         $.ajax({
             url: url,
             type: 'PUT',
-            data: { area_configuration: strConfig },
+            data: {area_id:area_id, area_configuration: strConfig },
             success: function(data) {
                 $('.result').html(data);
                 alert('Configuration was sent');

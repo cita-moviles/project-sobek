@@ -37,7 +37,6 @@ class Sensor:
         """
         if message[0] == 'S':
             self.sensor_id = int(id+message[1])
-
             self.sensor_hl1 = float(message[2:4]) # + "." + message[11])
             self.sensor_hl2 = float(message[4:6]) #+ "." + message[14])
             self.sensor_hl3 = float(message[6:8]) #+ "." + message[17])
@@ -573,8 +572,8 @@ class MessageProcessor:
                 """
                 if msg[1:3] == "50":
                     field = Farm_Field(msg + "#")
-                    #print field.to_json()
-                    field.upload_to_server()
+                    print field.to_json()
+                    #field.upload_to_server()
 
                 elif msg[0] == "F":
                     f_data = msg[0:4]
@@ -587,41 +586,49 @@ class MessageProcessor:
                     #w_data -> Weather
                     print "STATIONS"
                     station = Weather_Station(w_data, field_id[1])
-                    #print station.to_json()
-                    station.upload_to_server()
+                    print station.to_json()
+                    #station.upload_to_server()
 
                     #r_data -> Area
                     for index in xrange(int(no_of_areas)):
+                        #gets the data for the areas
                         r_data = msg[(21 + (index*27)):24 + (index*27)]
                         print "AREAS"
                         area = Crop_Area(r_data, field_id[1])
+                        #area configuration setup
                         global area_cfg
                         print "--" + area_cfg + "---"
+                        """
                         if area_configuration != area_cfg:
                             area_configuration = area_cfg
                             areas_config += area_configuration
+                            #normalize the db to ROK
                             area.normalize_cfg()
-                        #print area.to_json()
-                        area.upload_to_server()
+                        """
+                        print area.to_json()
+                        #area.upload_to_server()
+                        #gets the data for the consolidated sensor
                         sc_data = msg[24+(index*27):28+(index*27)]
                         area_id = r_data[1]
                         print "CONSOLIDATED SENSORS"
                         sensor = Sensor(sc_data, area_id)
-                        #print sensor.to_json()
-                        sensor.upload_to_server()
+                        print sensor.to_json()
+                        #sensor.upload_to_server()
                         no_of_sensors = int(r_data[2])
+                        #gets the data for all the sensors
                         for index2 in xrange(index,int(no_of_sensors)+index):
                             s_data = msg[(28+(index2*27)):(39+(index2*27))]
                             area_id = r_data[1]
                             print "SENSORS"
                             sensor = Sensor(s_data, area_id)
-                            #print sensor.to_json()
-                            sensor.upload_to_server()
+                            print sensor.to_json()
+                            #sensor.upload_to_server()
+                            #gets the data for the actuators
                             a_data = msg[39+(index2*27):47+(index2*27)]
                             print "ACTUATORS"
                             actuator = Valve(a_data, area_id)
-                            #print actuator.to_json()
-                            actuator.upload_to_server()
+                            print actuator.to_json()
+                            #actuator.upload_to_server()
                 else:
                     print "Nothing cool > " + msg
 
@@ -631,9 +638,11 @@ class MessageProcessor:
             except Exception, ex:
                 logging.exception("Something awful happened!")
                 print('Unexpected error: ' + msg)
-
+        #if the area config has been changed, return it
+        """
         if areas_config != 'G':
             return areas_config
         else:
             return 'ROK'
-
+        """
+        return 'ROK'

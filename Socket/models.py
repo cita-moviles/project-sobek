@@ -36,16 +36,18 @@ class Sensor:
         Pos[10] = Error code
         """
         if message[0] == 'S':
+            print "Normal Sensor"
             self.sensor_id = int(field_id+area_id+message[1])
             self.sensor_hl1 = float(message[2:4]) # + "." + message[11])
             self.sensor_hl2 = float(message[4:6]) #+ "." + message[14])
             self.sensor_hl3 = float(message[6:8]) #+ "." + message[17])
         elif message[0] == 'C':
+            print "Consolidated"
             self.sensor_id = int(field_id+area_id+'0')
             self.sensor_hl1 = float(message[2:4])
             self.sensor_hl2 = 0
             self.sensor_hl3 = 0
-
+        print self.sensor_id
         self.sensor_status = 0
         self.sensor_temperature = 0
         self.sensor_x_position = 0
@@ -622,7 +624,7 @@ class MessageProcessor:
                         no_of_sensors = int(r_data[2])
                         #gets the data for all the sensors
                         for index2 in xrange(index,int(no_of_sensors)+index):
-                            s_data = msg[(28+(index2*27)):(39+(index2*27))]
+                            s_data = msg[(29+(index2*27)):(39+(index2*27))]
                             area_id = r_data[1]
                             print "SENSORS"
                             sensor = Sensor(s_data, field_id[1], area_id)

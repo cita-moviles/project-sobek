@@ -9,6 +9,7 @@ from datetime import timedelta
 from dateutil.parser import parse
 import requests
 from HexConverter import HexConverter
+import re
 currentDate = None
 
 
@@ -36,18 +37,16 @@ class Sensor:
         Pos[10] = Error code
         """
         if message[0] == 'S':
-            print "Normal Sensor"
             self.sensor_id = int(field_id+area_id+message[1])
             self.sensor_hl1 = float(message[2:4]) # + "." + message[11])
             self.sensor_hl2 = float(message[4:6]) #+ "." + message[14])
             self.sensor_hl3 = float(message[6:8]) #+ "." + message[17])
         elif message[0] == 'C':
-            print "Consolidated"
             self.sensor_id = int(field_id+area_id+'0')
             self.sensor_hl1 = float(message[2:4])
             self.sensor_hl2 = 0
             self.sensor_hl3 = 0
-        print self.sensor_id
+        #print self.sensor_id
         self.sensor_status = 0
         self.sensor_temperature = 0
         self.sensor_x_position = 0
@@ -582,8 +581,8 @@ class MessageProcessor:
                 elif msg[0] == "F":
 
                     msg = converter.convert(msg)
-                    f_data = msg[0:4]
-                    w_data = msg[4:21]
+                    f_data = re.split('W', msg)[0]
+                    w_data = 'W'+re.split('W', msg)[1].split('R')[0]
 
                     #msg -> Farm_Field
                     field_id = f_data[1:3]
@@ -598,7 +597,7 @@ class MessageProcessor:
                     #r_data -> Area
                     for index in xrange(int(no_of_areas)):
                         #gets the data for the areas
-                        r_data = msg[(21 + (index*27)):24 + (index*27)]
+                        r_data = 'R'+re.split('W', msg)[1].split('R')[index+1].split('C')[0]
                         print "AREAS"
                         area = Crop_Area(r_data, field_id[1])
                         #area configuration setup
@@ -615,7 +614,7 @@ class MessageProcessor:
                         print area.to_json()
                         #area.upload_to_server()
                         #gets the data for the consolidated sensor
-                        sc_data = msg[24+(index*27):28+(index*27)]
+                        sc_data = 'C'+re.split('W', msg)[1].split('R')[index+1].split('C')[1].split('S')[0]
                         area_id = r_data[1]
                         print "CONSOLIDATED SENSORS"
                         sensor = Sensor(sc_data, field_id[1], area_id)
@@ -624,14 +623,14 @@ class MessageProcessor:
                         no_of_sensors = int(r_data[2])
                         #gets the data for all the sensors
                         for index2 in xrange(index,int(no_of_sensors)+index):
-                            s_data = msg[(29+(index2*27)):(39+(index2*27))]
+                            s_data = 'S'+re.split('W', msg)[1].split('R')[index2+1].split('C')[1].split('S')[1].split('A')[0]
                             area_id = r_data[1]
                             print "SENSORS"
                             sensor = Sensor(s_data, field_id[1], area_id)
                             print sensor.to_json()
                             #sensor.upload_to_server()
                             #gets the data for the actuators
-                            a_data = msg[39+(index2*27):47+(index2*27)]
+                            a_data = 'A'+re.split('W', msg)[1].split('R')[index2+1].split('C')[1].split('S')[1].split('A')[1]
                             print "ACTUATORS"
                             actuator = Valve(a_data, field_id[1], area_id)
                             print actuator.to_json()

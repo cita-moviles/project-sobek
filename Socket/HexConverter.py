@@ -1,4 +1,4 @@
-
+import re
 __author__ = 'ardzoht'
 
 class HexConverter():
@@ -51,7 +51,5 @@ class HexConverter():
             data = int(pair, 16)
             new_str += str(data)
         return new_str
-message = 'F000202W01000000000000000000000000000000R0101C010022S01000000000000000000A0B000000000000R0201C020022S01000000000000000000A0C000000000000'
-converter = HexConverter()
-converter.convert(message)
+
 

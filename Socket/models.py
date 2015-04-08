@@ -47,7 +47,7 @@ class Sensor:
             self.sensor_hl1 = float(message[2:4])
             self.sensor_hl2 = 0
             self.sensor_hl3 = 0
-        print self.sensor_id
+
         self.sensor_status = 0
         self.sensor_temperature = 0
         self.sensor_x_position = 0
@@ -542,7 +542,7 @@ class MessageProcessor:
         for msg in msglist:
             try:
                 print("------" + msg + "-------")
-
+		print type(msg)
                 """if msg[1:3] == "00":
                     print("KEEP ALIVE")
 
@@ -617,7 +617,7 @@ class MessageProcessor:
                         #gets the data for the consolidated sensor
                         sc_data = msg[24+(index*27):28+(index*27)]
                         area_id = r_data[1]
-                        print "CONSOLIDATED SENSORS"
+                        print "CONSOLIDATED SENSORS" + sc_data
                         sensor = Sensor(sc_data, field_id[1], area_id)
                         print sensor.to_json()
                         #sensor.upload_to_server()
@@ -626,7 +626,7 @@ class MessageProcessor:
                         for index2 in xrange(index,int(no_of_sensors)+index):
                             s_data = msg[(29+(index2*27)):(39+(index2*27))]
                             area_id = r_data[1]
-                            print "SENSORS"
+                            print "SENSORS" + s_data
                             sensor = Sensor(s_data, field_id[1], area_id)
                             print sensor.to_json()
                             #sensor.upload_to_server()

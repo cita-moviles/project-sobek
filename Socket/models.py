@@ -177,7 +177,7 @@ class Crop_Area:
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
-        area_cfg = self.get_from_server()
+        area_cfg = self.get_from_server(field_id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -209,7 +209,7 @@ class Crop_Area:
             print('Area names not found ' + str(self.area_id))
             pass
 
-    def get_from_server(self):
+    def get_from_server(self, field_id):
         area_cfg = ''
         request = urllib2.Request("http://riego.chi.itesm.mx/Area_Configuration/" + str(self.area_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
@@ -219,15 +219,15 @@ class Crop_Area:
         try:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
-            print result2['area_configuration']
-            print self.area_user_define1
+            print "Server Config: " + result2['area_configuration']
+            print "Local Config: " + self.area_user_define1
             if result2['area_configuration'] == "ROK":
                 area_cfg += 'ROK'
                 print "No configuration pending"
             else:
                 str_data = ''
-                #str_field_id = str(result[field_id])
-                area_cfg += '01' + str(self.area_id) + str_data.zfill(6)
+                #str_field_id = str(result2['fk_farm_field'])
+                area_cfg += '0' + field_id + str(self.area_id) + str_data.zfill(73)
                 print "Sending pending configuration"
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
@@ -371,11 +371,8 @@ class Farm_Field:
         #Time Diff
         elapsed_time = date_now - var_current_date
         #If the timediff > 1 month, use the Server Date
-        if abs(elapsed_time.total_seconds()) > (3600 * 24 * 31):
-            var_current_date = date_now
-        else:
-            #Substract the timezone from the date
-            date_c = var_current_date + timedelta(hours=int(str_timezone_diff[0] + str_timezone_diff[2]))
+
+        date_c = var_current_date + timedelta(hours=int(str_timezone_diff[0] + str_timezone_diff[2]))
         #Format String
         currentDate = date_c.strftime("%Y-%m-%dT%H:%M:%S.000000") + str_timezone_diff
         self.field_date_received = str(currentDate)
@@ -601,7 +598,7 @@ class MessageProcessor:
                         print "AREAS"
                         area = Crop_Area(r_data, field_id[1])
                         #area configuration setup
-                        """
+
                         global area_cfg
                         print "--" + area_cfg + "---"
 
@@ -610,7 +607,7 @@ class MessageProcessor:
                             areas_config += area_configuration
                             #normalize the db to ROK
                             area.normalize_cfg()
-                        """
+
                         print area.to_json()
                         #area.upload_to_server()
                         #gets the data for the consolidated sensor
@@ -645,10 +642,8 @@ class MessageProcessor:
                 logging.exception("Something awful happened!")
                 print('Unexpected error: ' + msg)
         #if the area config has been changed, return it
-        """
+
         if areas_config != 'G':
             return areas_config
         else:
             return 'ROK'
-        """
-        return 'ROK'

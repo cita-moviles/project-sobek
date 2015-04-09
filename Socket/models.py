@@ -220,14 +220,13 @@ class Crop_Area:
             result = urllib2.urlopen(request)
             result2 = json.load(result)
             print "Server Config: " + result2['area_configuration']
-            print "Local Config: " + self.area_user_define1
             if result2['area_configuration'] == "ROK":
                 area_cfg += 'ROK'
                 print "No configuration pending"
             else:
                 str_data = ''
                 #str_field_id = str(result2['fk_farm_field'])
-                area_cfg += '0' + field_id + str(self.area_id) + str_data.zfill(73)
+                area_cfg += '0' + field_id + str(self.area_id)[1] + str_data.zfill(7)
                 print "Sending pending configuration"
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
@@ -264,6 +263,7 @@ class Weather_Station:
         Pos[15] = RSSI
         Pos[16] = Error code
         """
+        """
         self.station_id = int(field_id+message[1])
         self.station_name = " "
         self.station_status = int(message[14])
@@ -271,7 +271,17 @@ class Weather_Station:
         self.station_temperature = float(message[6:8]) # + '.' + message[15])
         self.station_wind_speed = float(message[8:10]) # + '.' + message[18:19])
         self.station_solar_radiation = int(message[2:4])
-        self.station_ev = float(message[12:14])
+        self.station_ev = float(message[12:14])"""
+        msg = message.split('#')
+        self.station_id = int(field_id+msg[0][1])
+        self.station_name = " "
+        self.station_status = int(msg[9])
+        self.station_relative_humidity = float(msg[2])/100
+        self.station_temperature = float(msg[3])/100
+        self.station_wind_speed = float(msg[4])/10
+        self.station_solar_radiation = int(msg[1])
+        self.station_ev = float(msg[6])/10
+
         """
         comma = message.index(",")
         if comma == 23:
@@ -644,7 +654,7 @@ class MessageProcessor:
         #if the area config has been changed, return it
         
         if areas_config != 'G':
-            return areas_config
+            return areas_config.ljust(73,'0')
         else:
             return 'ROK'
         

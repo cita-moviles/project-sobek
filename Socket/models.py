@@ -541,7 +541,7 @@ class MessageProcessor:
         for msg in msglist:
             try:
                 print("------" + msg + "-------")
-		print type(msg)
+
                 """if msg[1:3] == "00":
                     print("KEEP ALIVE")
 
@@ -601,7 +601,7 @@ class MessageProcessor:
                         print "AREAS"
                         area = Crop_Area(r_data, field_id[1])
                         #area configuration setup
-                        """
+                        
                         global area_cfg
                         print "--" + area_cfg + "---"
 
@@ -610,7 +610,7 @@ class MessageProcessor:
                             areas_config += area_configuration
                             #normalize the db to ROK
                             area.normalize_cfg()
-                        """
+                        
                         print area.to_json()
                         #area.upload_to_server()
                         #gets the data for the consolidated sensor
@@ -645,10 +645,10 @@ class MessageProcessor:
                 logging.exception("Something awful happened!")
                 print('Unexpected error: ' + msg)
         #if the area config has been changed, return it
-        """
+        
         if areas_config != 'G':
             return areas_config
         else:
             return 'ROK'
-        """
+        
         return 'ROK'

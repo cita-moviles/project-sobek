@@ -226,7 +226,7 @@ class Crop_Area:
             else:
                 str_data = ''
                 #str_field_id = str(result2['fk_farm_field'])
-                area_cfg += '0' + field_id + str(self.area_id)[1] + str_data.zfill(7)
+                area_cfg += str(self.area_id)[1] + str_data.zfill(7)
                 print "Sending pending configuration"
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
@@ -480,8 +480,7 @@ class Crop_Area_Agg:
 
 class Weather_Station_Agg:
     def __init__(self, station_id, station_relative_humidity, station_temp, station_wind_speed,
-                 station_solar_radiation, station_ev, station_date_received):
-        self.station_ev = station_ev
+                 station_solar_radiation, station_date_received):
         self.station_relative_humidity = station_relative_humidity
         self.station_temperature = station_temp
         self.station_wind_speed = station_wind_speed
@@ -495,7 +494,7 @@ class Weather_Station_Agg:
                           sort_keys=True, indent=4)
 
     def upload_to_server(self, id):
-        url = "http://riego.chi.itesm.mx/Weather_Station_Agg/" + str(id) + "/"
+        url = "http://riego.chi.itesm.mx/Station_Agg/" + str(id) + "/"
         headers = {"Authorization": "Basic YWRtaW46YWRtaW4=",
                    "Content-Type": "application/json"}
         print self.to_json()
@@ -540,8 +539,10 @@ class MessageProcessor:
 
         print currentDate
         area_configuration = "ROK"
-        areas_config = 'G'
+        areas_config = 'G01'
         msglist = message.split('#')
+
+        no_of_areas_changed = 0
 
         converter = HexConverter()
 
@@ -617,6 +618,7 @@ class MessageProcessor:
                             areas_config += area_configuration
                             #normalize the db to ROK
                             area.normalize_cfg()
+                            no_of_areas_changed += 1
 
                         #print area.to_json()
                         area.upload_to_server()
@@ -653,7 +655,11 @@ class MessageProcessor:
                 print('Unexpected error: ' + msg)
         #if the area config has been changed, return it
 
-        if areas_config != 'G':
+        if areas_config != 'G01':
+
+            while no_of_areas_changed < 9:
+                areas_config += str(no_of_areas_changed)
+                areas_config.ljust(7, '0')
             return areas_config.ljust(73,'0')
         else:
             return 'ROK'

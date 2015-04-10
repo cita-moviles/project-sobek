@@ -275,7 +275,7 @@ class Weather_Station:
         msg = message.split('#')
         self.station_id = int(field_id+msg[0][1])
         self.station_name = " "
-        self.station_status = int(msg[9])
+        self.station_status = int(msg[9]) 
         self.station_relative_humidity = float(msg[2])/100
         self.station_temperature = float(msg[3])/100
         self.station_wind_speed = float(msg[4])/10

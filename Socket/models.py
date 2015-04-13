@@ -69,9 +69,9 @@ class Sensor:
         print self.to_json()
         try:
             result = urllib2.urlopen(request, self.to_json())
-        except urllib2.HTTPError:
-            print('There was an error!')
-            pass
+        except urllib2.HTTPError, ex:
+            print('Server error response')
+        pass
     def get_from_server(self, id):
         request = urllib2.Request("http://riego.chi.itesm.mx/Sensor/" + str(self.sensor_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
@@ -137,7 +137,10 @@ class Valve:
         request.get_method = lambda: 'PUT'
         print "---http://riego.chi.itesm.mx/Valve/" + str(self.valve_id) + "/"
         print self.to_json()
-        result = urllib2.urlopen(request, self.to_json())
+        try:
+            result = urllib2.urlopen(request, self.to_json())
+        except urllib2.HTTPError, ex:
+            print('Server error response')
         pass
 
     def get_from_server(self, id):
@@ -188,7 +191,10 @@ class Crop_Area:
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'
         print self.to_json()
-        result = urllib2.urlopen(request, self.to_json())
+        try:
+            result = urllib2.urlopen(request, self.to_json())
+        except urllib2.HTTPError, ex:
+            print('Server error response')
         pass
 
 
@@ -400,7 +406,10 @@ class Farm_Field:
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'
         print self.to_json()
-        result = urllib2.urlopen(request, self.to_json())
+        try:
+            result = urllib2.urlopen(request, self.to_json())
+        except urllib2.HTTPError, ex:
+            print('Server error response')
         pass
 
     def get_from_server(self):

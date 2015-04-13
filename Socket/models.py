@@ -275,13 +275,13 @@ class Weather_Station:
         msg = message.split('#')
         self.station_id = int(field_id+msg[0][1])
         self.station_name = " "
-        self.station_status = int(msg[9]) 
-        self.station_relative_humidity = float(msg[2])/100
-        self.station_temperature = float(msg[3])/100
-        self.station_wind_speed = float(msg[4])/10
+        self.station_status = int(msg[9])
+        self.station_relative_humidity = float(msg[2])
+        self.station_temperature = float(msg[3])
+        self.station_wind_speed = float(msg[4])
         self.station_solar_radiation = int(msg[1])
-        self.station_ev = float(msg[6])/10
-
+        self.station_ev = float(msg[6])
+        self.station_user_define1 = msg([5])
         """
         comma = message.index(",")
         if comma == 23:
@@ -311,7 +311,10 @@ class Weather_Station:
         request.add_header("Content-Type", "application/json")
         request.get_method = lambda: 'PUT'
         print self.to_json()
-        result = urllib2.urlopen(request, self.to_json())
+        try:
+            result = urllib2.urlopen(request, self.to_json())
+        except urllib2.HTTPError, ex:
+            print('Server error response')
         pass
 
     def get_from_server(self, id):

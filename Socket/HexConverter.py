@@ -49,13 +49,14 @@ class HexConverter():
     def whex_to_str(selfs, msg):
         node = str(int(msg[0:2], 16))+'#'
         radiation = str(int(msg[2:6], 16))+'#'
-        humidity = str(int(msg[6:8], 16)) + str(int(msg[8:10], 16))+'#'
-        temperature = str(int(msg[10:12], 16)) + str(int(msg[12:14], 16))+'#'
-        wind = str(int(msg[14:16], 16)) + str(int(msg[16:18], 16))+'#'
-        rain = str(int(msg[18:22], 16))+'#'
-        eto = str(int(msg[22:24], 16)) + str(int(msg[24:26], 16))+'#'
+        humidity = str(int(msg[6:8], 16)) + '.' + str(int(msg[8:10], 16))+'#'
+        temperature = str(int(msg[10:12], 16)) + '.' + str(int(msg[12:14], 16))+'#'
+        wind = str(int(msg[14:16], 16)) + '.' + str(int(msg[16:18], 16))+'#'
+        rain = str(int(msg[18:20], 16)) + '.' + str(int(msg[20:22], 16))+'#'
+        eto = str(int(msg[22:24], 16)) + '.' + str(int(msg[24:26], 16))+'#'
         battery = str(int(msg[26:28], 16))+'#'
         rssi = str(int(msg[28:30], 16))+'#'
         error_c = str(int(msg[30:32], 16))
         new_str = node+radiation+humidity+temperature+wind+rain+eto+battery+rssi+error_c
         return new_str
+

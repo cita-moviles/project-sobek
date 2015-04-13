@@ -287,7 +287,7 @@ class Weather_Station:
         self.station_wind_speed = float(msg[4])
         self.station_solar_radiation = int(msg[1])
         self.station_ev = float(msg[6])
-        self.station_user_define1 = msg([5])
+        self.station_user_define1 = str(msg([5]))
         """
         comma = message.index(",")
         if comma == 23:

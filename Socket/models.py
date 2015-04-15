@@ -159,14 +159,14 @@ class Valve:
 
 #30
 class Crop_Area:
-    def __init__(self, message, field_id):
+    def __init__(self, message, field_id, station_ev):
         """
           Pos[0] = 'R' Start of message
           Pos[1] = Area ID
           Pos[2] = Number of sensors
         """
         self.area_id = int(field_id+message[1])
-        #self.area_ev = float(message[7:9] + "." + message[9])
+        self.area_ev = station_ev
         self.area_x_position = 0
         self.area_y_position = 0
         self.area_user_define1 = ' '
@@ -619,7 +619,7 @@ class MessageProcessor:
                         #gets the data for the areas
                         r_data = 'R'+re.split('W', msg)[1].split('R')[index+1].split('C')[0]
                         print "AREAS"
-                        area = Crop_Area(r_data, field_id[1])
+                        area = Crop_Area(r_data, field_id[1],station.station_ev)
                         #area configuration setup
 
                         global area_cfg

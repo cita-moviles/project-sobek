@@ -288,19 +288,7 @@ class Weather_Station:
         self.station_solar_radiation = int(msg[1])
         self.station_ev = float(msg[6])
         self.station_user_define1 = str(msg[5])
-        """
-        comma = message.index(",")
-        if comma == 23:
-            self.station_user_define1 = ' '
-            self.station_user_define2 = ' '
-        else:
-            self.station_user_define1 = message[23: comma]
-            terminator = message.index("#")
-            if (comma + 1) == terminator:
-                self.station_user_define2 = ' '
-            else:
-                self.station_user_define2 = message[comma + 1: terminator]
-        """
+        self.station_user_define2 = str(msg[9])
 
         global currentDate
         self.station_date_received = str(currentDate)

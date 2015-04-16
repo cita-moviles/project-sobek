@@ -1,8 +1,8 @@
 /**
  * Created by Enrique Ramírez on 8/20/14.
  */
-var use_agg;
 
+var use_agg;
 /**
  * Helper Function that hides an element from the page.
  *
@@ -371,7 +371,8 @@ function weatherCallback(data) {
     var status = data.station_status;
     var temperature = (data.station_temperature+ ' ºC');
     var wind_speed = (data.station_wind_speed + " m&frasl;s");
-    var battery_level = data.station_user_define1;
+    var rain = (data.station_user_define1 + " mm");
+    //var battery_level = data.station_user_define1;
 
     // Selecting the tags
     var id_tag = $('#station_data');
@@ -381,6 +382,7 @@ function weatherCallback(data) {
     var status_tag = $('#status_data');
     var temperature_tag = $('#temperature_data');
     var wind_tag = $('#wind_data');
+    var rain_tag = $('#rain_data');
     var battery_tag = $('#battery_data');
 
 
@@ -399,7 +401,8 @@ function weatherCallback(data) {
 
     temperature_tag.append(temperature);
     wind_tag.append(wind_speed);
-    battery_tag.append(battery_level);
+    //battery_tag.append(battery_level);
+    rain_tag.append (rain);
 
 }
 
@@ -438,9 +441,17 @@ function getSensorLogs(start, end, callback) {
  * @param {Function} callback Function that will handle the data retrieved from the web service
  * */
 function getEvotranspirationLog(area_id, start_date, end_date, callback) {
-
+    var evo_graph_data;
+    //PRUEBA:
+    console.log(sensor_id);
+    if (use_agg===0){
+        evo_graph_data= "/Crop_Area_Log/";
+    }
+    else {
+        evo_graph_data= "/Crop_Area_Agg/";
+    }
     $.ajax({
-        url: "/Crop_Area_Log/",
+        url: evo_graph_data,
         data: {
             area_id: area_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),

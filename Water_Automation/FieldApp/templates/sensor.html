@@ -172,7 +172,13 @@ function getSensorsForFieldSelected () {
     });
 }
 function getSensorForArea(area_selector){
-  var current_area=$('#'+area_selector).val();
+  var current_area;
+  if (area_selector!==undefined) {
+    current_area=$('#'+area_selector).val();
+  }
+  else {
+     current_area=$('#area').val();
+  }
   if(current_area===null){
       $("#sensor").html("");
       return false;
@@ -192,14 +198,20 @@ function getSensorForArea(area_selector){
 }
 
     function graphLogs() {
-
+        var sensor_graph_data;
+        if (use_agg===1){
+            sensor_graph_data= "/Sensor_Agg/";
+        }
+        else {
+            sensor_graph_data= "/Sensor_Log/";
+        }
 
         console.log(init_date.dateFormat('Y-m-d H:i:s'));
         console.log(end_date.dateFormat('Y-m-d H:i:s'));
         var sensor_id = $('#sensor').val();
 
         $.ajax({
-            url: "/Sensor_Agg/",
+            url: sensor_graph_data,
             data: {
                 sensor_id: sensor_id,
                 min_date: init_date.dateFormat('Y-m-d H:i:s'),
@@ -219,8 +231,8 @@ function getSensorForArea(area_selector){
                     var temp_array = [];
                     temp_array.push(date_received);
                     temp_array.push(value.sensor_hl1);
-                    temp_array.push(value.sensor_hl2);
                     temp_array.push(value.sensor_hl3);
+                    temp_array.push(value.sensor_hl2);
                     moisture_array.push(temp_array);
 
 {#                    var temp_array2 = [];#}

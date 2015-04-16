@@ -36,13 +36,14 @@ class Area_Serializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class Area_Configuration_Serializer(serializers.ModelSerializer):
-    area_id = serializers.RelatedField()
+class Area_Configuration_Serializer(serializers.HyperlinkedModelSerializer):
+    FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='config-detail')
+    area_id = serializers.PrimaryKeyRelatedField()
 
     class Meta:
         model = Area_Configuration
         fields = (
-            'area_id', 'area_configuration'
+           'area_id', 'area_configuration'
         )
 
 
@@ -160,7 +161,7 @@ class Weather_Station_Agg_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Weather_Station_Agg
-        fields = ('agg_id', 'agg_date', 'station_id', 'station_status', 'station_relative_humidty',
+        fields = ('agg_id', 'agg_date', 'station_id', 'station_relative_humidity',
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation', 'station_date_received')
 
 
@@ -169,5 +170,5 @@ class Farm_Field_Agg_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Farm_Field_Agg
-        fields = ('agg_id', 'agg_date', 'field_id', 'field_imei', 'field_signal', 'field_latitude',
+        fields = ('agg_id', 'agg_date', 'field_id', 'field_signal', 'field_latitude',
                   'field_longitude', 'field_date_received')

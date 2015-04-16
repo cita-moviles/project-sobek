@@ -306,7 +306,7 @@ try:
 
 except urllib2.HTTPError, ex:
     print('Not found ')
-
+"""
 ## Field exe
 request = urllib2.Request("http://riego.chi.itesm.mx/Farm_Field/")
 request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
@@ -323,3 +323,4 @@ try:
 
 except urllib2.HTTPError, ex:
     print('Not found ')
+"""

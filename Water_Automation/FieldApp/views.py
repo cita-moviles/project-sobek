@@ -91,7 +91,7 @@ class ValveFilter (django_filters.FilterSet):
 class AreaConfigurationFilter (django_filters.FilterSet):
      class Meta:
           model = Area_Configuration
-          fields = ['area_id', 'area_configuration']
+          fields = ['config_id', 'area_id', 'area_configuration']
 
 
 class StationFilter (django_filters.FilterSet):
@@ -235,7 +235,7 @@ class ValveSearch (generics.ListCreateAPIView):
 
 
 class AreaConfigurationSearch (generics.ListCreateAPIView):
-     queryset = Area_Configuration.objects.all ()
+     queryset = Area_Configuration.objects.all()
      serializer_class = Area_Configuration_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = AreaConfigurationFilter

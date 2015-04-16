@@ -34,6 +34,8 @@
             <p id="temperature_data">Temperature: </p>
 
             <p id="wind_data">Wind Speed: </p>
+
+            <p id="rain_data">Rain: </p>
         </div>
     </div>
 
@@ -45,11 +47,11 @@
         <div class="row">
             <div class="small-5 columns">
                 <label for="field">Field</label>
-                <select id="field" onchange="getAreasOptions('area','field'),getConsolidatedSensorForFieldSelected()"></select>
+                <select id="field" onchange="getAreasOptions('area','field'),getAreaForFieldSelected()"></select>
             </div>
             <div class="small-5 columns">
                 <label for="area">Area</label>
-                <select id="area" onchange="getConsolidatedSensorForFieldSelected()" ></select>
+                <select id="area" onchange="getConsolidatedSensorIDForArea()" ></select>
             </div>
         </div>
 
@@ -137,10 +139,10 @@
 
 {% include 'footer.html' %}
 <script>
+
 /*NOTA: Existen "Pruebas de control" que imprimen en la consola de los navegadores, descomentarlas para usarlas, recuerda
 volver a comentarlas de ya no necesitarlas. De modificar el código, sigue el mismo formato de comentarios.
-Trabajado por: Enrique Ramirez, Alejandro Rodriguez, Carla Prieto (Agregate si colaboraste). Propiedad del CITA.
- */
+*/
 
 //PAQUETE PARA GRAFICAS DE GOOGLE:
 google.load('visualization', '1.0', {'packages': ['corechart']});
@@ -159,9 +161,13 @@ initDatePickers(from_picker,to_picker);
 
 //POPULATE SELECTORS:
 PopulateFields();
+LogErrorCode();
 
-/*Nombre: PopulateFields
- Tarea: Poblar el selector de Fields con los Fields existentes. Este mismo se encargará de llamar a la población de áreas.*/
+
+/**
+ * Populate the selector with the existing fields
+
+ * */
 function PopulateFields() {
     var current_field;
     $.ajax({
@@ -174,15 +180,19 @@ function PopulateFields() {
             });
             field_selector.html(options);
             current_field = $("#field").val();
-            //PRUEBA DE CONTROL: console.log(current_field);
+            console.log("THE CURRENT FIELD SELECTED: " + current_field);
             PopulateAreaForField(current_field);
         }
     });
 }
 
-/*Nombre: PopulateAreaForField
- Tarea: Poblar el selector de Area de acuerdo a Field que este en el selector de Field
- Parametro: Recibe de la función PopulateFields el Field actual en el selector de Field*/
+/**
+ * Populates the area selector accordingly to the value on the field selector, so it just puts the areas
+ * belonging to the field selected.
+ *
+ * @param {Number} field_id Identification number for the field.
+
+ * */
 function PopulateAreaForField(field){
     $.ajax({
         url: "Area_Search",
@@ -193,11 +203,14 @@ function PopulateAreaForField(field){
                 options += '<option value=" '+ value.area_id+ '">' + value.area_name + '</option>';
             });
             area_selector.html(options);
+
         }
     });
 }
-
-function getConsolidatedSensorForFieldSelected () {
+/**
+ * Gets the current areas for a field on field change.
+ * */
+function getAreaForFieldSelected () {
     var current_field=$("#field").val();
     var current_area;
     $.ajax({
@@ -210,80 +223,46 @@ function getConsolidatedSensorForFieldSelected () {
             });
             $('#area').html(options);
             current_area= $('#area').val();
-            console.log(current_area);
-            getConsolidatedSensorIDForArea(current_area, 0);
+
+            console.log("CURRENT AREA SELECTED: " + current_area);
+            getConsolidatedSensorIDForArea();
+            LogErrorCode();
         }
     });
 }
+ /**
+ * Gets the consolidated sensor_id for an area
+ * */
 
+function getConsolidatedSensorIDForArea ( ) {
+    current_farmfield_id= $("#field").val();
+    current_area_id= $("#area").val();
 
-/*Esta función esta actualmente sin uso, sin embargo, la deje en código porque puede ser útil para recabar los sensores
-que hay en un área.
-Nombre: getSensorForArea
-Tarea: Poner en elemento con id #current_sensor los sensores de un área.
-Parametros: Recibe el nombre del selector de area. Puede ser sustituido por la variable global area_selector, pero habrá que
-modificar la definición de la variable local current_area.
-*/
-/*function getSensorForArea(area_selector){
-  var current_area=$('#'+area_selector).val();
- getConsolidatedSensorIDForArea(current_area,0);
-  if(current_area===null){
-      $("#default_sensor").html("");
-      return false;
-  }
-  //console.log(current_area);
-    $.ajax({
-        url:"/Sensor_Search",
-        data: {fk_area:current_area, },
-        success:function(data) {
-            var default_sensor = "";
-
-            $.each(data, function (index, value) {
-                if(data.isEmptyObject){default_sensor=" ";}
-                default_sensor += "<p>Sensors: " + value.sensor_id + "</p>";
-            });
-            $('#default_sensor').html(default_sensor);
-        }
-    });
-}*/
-
-
-function getConsolidatedSensorIDForArea (current_area, getSensorLog) {
-    current_area = parseInt(current_area)+1;
     var Consolidated_Sensor_id;
-    var sensor_name;
-    if (current_area < 10) {
-        sensor_name = 'NS0' + current_area;
-    } else {
-        sensor_name = "NS" + current_area;
-    }
-    console.log(sensor_name);
-    $.ajax({
-        url: "/Sensor_Search",
-        data: {sensor_name: sensor_name},
-        success: function (data) {
-            $.each(data, function (index, value) {
-                $.each(data, function (index, value) {
-                   /* if (data.isEmptyObject) {
-                        Consolidated_Sensor_id = "";
-                        return false;
-                    }*/
-                    Consolidated_Sensor_id = value.sensor_id;
-                });
-            });
-            if (getSensorLog===1){
-               getSensorLogGraph(Consolidated_Sensor_id);
-            }
-        }
-    });
+    Consolidated_Sensor_id = (parseInt(current_farmfield_id)*100) + (parseInt(current_area_id)*10);
+    //PRUEBA
+    console.log("CONSOLIDATED SENSOR FOR THIS AREA: "+ Consolidated_Sensor_id);
+    console.log("CURRENT AREA SELECTED: " + current_area_id);
+    getSensorLogGraph(Consolidated_Sensor_id);
 }
+/**
+ * Graphs the data from a consolidated sensor in the area selected
+ *
+ * @param {Number} the sensor_id of the consolidated sensor in the area
+ * */
+
 function getSensorLogGraph(Consolidate_sensor_id) {
     var sensor_id = Consolidate_sensor_id;
-
-    //PRUEBA:
-    console.log(sensor_id);
+    var sensor_graph_data;
+    //PRUEBA:console.log(sensor_id);
+    if (use_agg===0){
+        sensor_graph_data= "/Sensor_Log/";
+    }
+    else {
+        sensor_graph_data= "/Sensor_Agg/";
+    }
     $.ajax({
-        url: "/Sensor_Agg/",
+        url: sensor_graph_data,
         data: {
             sensor_id: sensor_id,
             min_date: init_date.dateFormat('Y-m-d H:i:s'),
@@ -308,9 +287,7 @@ function getSensorLogGraph(Consolidate_sensor_id) {
             });
 
 
-            //PRUEBA SENSOR:
-            console.log(moisture_array);
-            //
+            //PRUEBA SENSOR:console.log(moisture_array);
             var data_moisture = google.visualization.arrayToDataTable(moisture_array);
 
             var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
@@ -321,9 +298,10 @@ function getSensorLogGraph(Consolidate_sensor_id) {
             };
             hideLoading();
             chart_moisture.draw(data_moisture, options);
+            LogErrorCode();
         }});
 }
-
+/*
 function populateSensorAndValves(area_id) {
     getSensorsForArea(area_id, function (data) {
 
@@ -349,23 +327,27 @@ function populateSensorAndValves(area_id) {
         valve_selector.html(options);
     });
 }
+*/
 
+//CALL THE WEATHER DATA TO FILL:
 getAjaxWeatherData(31, weatherCallback);
-
+// SET THE INITIAL AND END DATE:
 var init_date = new Date();
 var end_date = new Date();
 
 init_date.setDate(end_date.getDate() - 10);
-
+//SET THE PROGRESS BAR
 var progressBar = $('#progress');
 
 function setInitDate(option) {
     init_date = getStartingDate(option);
-    console.log('from: ' + init_date + ' to ' + end_date);
+    //PRUEBA: console.log('from: ' + init_date + ' to ' + end_date);
     graphData();
 
 }
-
+/**
+ * Graphs the evotranspiration
+ * */
 function graphLogs() {
     var area_id = $('#area').val();
     getConsolidatedSensorIDForArea(area_id,1);
@@ -386,8 +368,7 @@ function graphLogs() {
                     }
             );
         }
-        //PRUEBAS:
-        console.log(ev_array);
+        //PRUEBAS: console.log(ev_array);
         var data_ev = google.visualization.arrayToDataTable(ev_array);
         var options = {
             title: 'Evotranspiration',
@@ -398,9 +379,12 @@ function graphLogs() {
         chart_ev.draw(data_ev, options);
     });
         getValveForArea();
+        LogErrorCode();
 }
-
-    function getValveForArea(){
+/**
+ * Requests the valves for the area selected
+ * */
+ function getValveForArea(){
      var current_area=area_selector.val();
      var current_valve;
         $.ajax({
@@ -414,11 +398,26 @@ function graphLogs() {
             graphValveData(current_valve);
             }
         });
+    LogErrorCode();
     }
-    function graphValveData(current_valve) {
+/**
+ * Graphs the valve data of a valve in the area selected.
+ *
+ * @param {Number} valve_id The id of the valve to graph
+ * */
+function graphValveData(current_valve) {
+    var valve_graph_data;
+    //PRUEBA:
+    console.log(sensor_id);
+    if (use_agg===0){
+        valve_graph_data= "/Valve_Log/";
+    }
+    else {
+        valve_graph_data= "/Valve_Agg/";
+    }
     var valve_id= current_valve;
             $.ajax({
-                url: "/Valve_Log/",
+                url: valve_graph_data,
                 data: {
                     valve_id: valve_id,
                     min_date: init_date.dateFormat('Y-m-d H:i:s'),
@@ -464,7 +463,33 @@ function graphLogs() {
 
     }
     });
+    LogErrorCode();
 }
+/**
+ * Graphs the valve data of a valve in the area selected.
+ *
+ * @param {Number} valve_id The id of the valve to graph
+ * */
+function LogErrorCode ()
+{
+ var error_code;
+ var current_field = $("#field").val();
+    $.ajax({
+        url: "/Weather_Station/",
+        data: {
+        fk_farm_field: current_field
+        },
+    success: function (data) {
+        $.each (data, function (index, value ){
+          error_code = value.station_user_define2;
+          console.log("ERROR CODE: " + error_code);
+        })
+    }
+    })
+
+}
+LogErrorCode();
+
 </script>
 </body>
 </html>

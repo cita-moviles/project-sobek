@@ -3,6 +3,15 @@
 <head>
     <title>GPRSs - Proyect Sobek</title>
      {% include 'includeScripts.html' %}
+    <style>
+        #map_canvas{
+            width: 1000px;
+            height: 400px;
+            background-color: greenyellow;
+            margin: 30px 10px 30px 130px;
+        }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
 </head>
 <body>
 
@@ -18,7 +27,9 @@
         <div id="current_field" class="clearfix"></div>
         <div id="signal_chart" height="400" width="5000"></div>
 </div>
+<div id="map_canvas">
 
+</div>
 {% include 'footer.html' %}
 </body>
 
@@ -27,7 +38,8 @@
 <script>
 getFarmFields();
 google.load("visualization", "1", {packages: ["corechart"]});
-    function graphLogs(clicked_id) {
+
+function graphLogs(clicked_id) {
         var field_id = clicked_id;
         console.log(clicked_id);
         $.ajax({
@@ -54,27 +66,55 @@ google.load("visualization", "1", {packages: ["corechart"]});
             }
         });
     }
+    function showFieldTecinMaps (){
+        initialize(28.675212, -106.080549)
+    }
     function showGoogleMaps(clicked_id) {
-        var field_id = clicked_id;
+        var field_id_clicked;
         var latitude;
         var longitude;
-        //console.log(clicked_id);
+        var clicked =Number(clicked_id);
+        if (clicked===1){
+            showFieldTecinMaps();
+            return false;
+        }
+        console.log(clicked_id);
         $.ajax({
             url: "Farm_Field",
-            data: {
-                field_id: field_id
-            },
+            data: { field_id: field_id_clicked},
             success: function (data) {
                 console.log('AJAX SUCCESS');
                 $.each(data, function (index, value) {
-                    latitude = value.field_latitude;
-                    longitude = value.field_longitude;
+                        field_id_clicked= value.field_id;
+                        longitude = value.field_latitude;
+                        latitude = value.field_longitude;
+
+                        if (field_id_clicked===clicked){
+                          initialize(latitude, longitude);
+                        }
                 });
-            window.open= ("'http://maps.google.com/?ll="+latitude+","+longitude+"'", '_blank');
-            //console.log("http://maps.google.com/?ll="+latitude+","+longitude);
+            console.log(latitude, longitude);
             }
         });
     }
+    function initialize(latitude,longitude) {
+        var mapCanvas = document.getElementById('map_canvas');
+        var field_position = new google.maps.LatLng(latitude, longitude);
+        var mapOptions = {
+            center: field_position,
+            zoom: 17,
+            tilt: 45,
+            mapTypeId: google.maps.MapTypeId.HYBRID
+
+        }
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+        var marker = new google.maps.Marker ({
+            position: map.getCenter(),
+            map: map
+        });
+
+    }
+    google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
 </html>

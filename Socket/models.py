@@ -657,12 +657,23 @@ class MessageProcessor:
 
 
         if areas_config != 'G01':
-
+            """
             while no_of_areas_changed < 9:
                 areas_config += str(no_of_areas_changed)
                 areas_config.ljust(7, '0')
-
-            return areas_config.ljust(73,'0')
+            return areas_config.ljust(73,'0')"""
+            g = "G".encode("hex")
+            f1 = hex(0) + hex(1) + hex(1) + hex(2) + hex(15) + hex(19) + hex(30) + hex(22) + hex(0)
+            f2 = hex(2) + hex(2) + hex(16) + hex(14) + hex(29) + hex(0) + hex(0)
+            f3 = hex(3) + hex(0)*6
+            f4 = hex(4) + hex(0)*6
+            f5 = hex(5) + hex(0)*6
+            f6 = hex(6) + hex(0)*6
+            f7 = hex(7) + hex(0)*6
+            f8 = hex(8) + hex(0)*6
+            f9 = hex(9) + hex(0)*6
+            f10 = hex(10) + hex(0)*6
+            return g + f1 + f2 + f3 + f4 + f5 + f6 + f7 +f8 +f9 +f10
         else:
             return 'ROK'
         

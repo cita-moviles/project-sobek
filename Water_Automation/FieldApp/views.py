@@ -91,7 +91,7 @@ class ValveFilter (django_filters.FilterSet):
 class AreaConfigurationFilter (django_filters.FilterSet):
      class Meta:
           model = Area_Configuration
-          fields = ['config_id', 'area_id', 'area_configuration']
+          fields = ['area_id', 'area_configuration']
 
 
 class StationFilter (django_filters.FilterSet):

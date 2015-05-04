@@ -66,9 +66,13 @@ function getFarmFields(){
                 current_data += "<div class='panel left' style='margin-left: 5px;'><h4>Field: " +
                                  value.field_name + "</h4>";
                 current_data += "<p>Imei: " + value.field_imei + "<br/>";
-                current_data += "Latitude: " + value.field_latitude + "<br/>";
-                current_data += "Longitude: " + value.field_longitude + "<br/>";
-                current_data += "Signal: " + value.field_signal + "</p><button class='button tiny' id='"+value.field_id+"'onclick='graphLogs(this.id)'>Signal Graph</button></br><button id='"+value.field_id+"'class='button tiny' onclick='showGoogleMaps(this.id)'>Show In Map</button></div>";
+                current_data += "Latitude: " + value.field_longitude + "<br/>";
+                current_data += "Longitude: " + value.field_latitude + "<br/>";
+                current_data += "Signal: " + value.field_signal + "</p><button class='button tiny' id='"+
+                                             value.field_id+
+                                            "'onclick='graphLogs(this.id)'>Signal Graph</button></br><button id='"
+                                            +value.field_id+
+                                            "'class='button tiny' onclick='showGoogleMaps(this.id)'>Show In Map</button></div>";
                 $('#current_field').html(current_data);
 
             });
@@ -238,15 +242,28 @@ function getSensors(select_id, search_id) {
                     var dr = new Date(Date.parse(value.sensor_date_received));
                     date_received = dr.toLocaleString();
                 }
-
+                //SET THE NODE PICKER:
                 options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
-                current_sensor+="<p>Sensor: </p>"+ value.sensor_id;
-                current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
-                current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
-                current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
-                current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
+
+                if (value.sensor_id%100!==0) { //IF ITS NOT A CONSOLIDATED SENSOR:
+
+                    current_sensor += "<p>Sensor: </p>" + value.sensor_id;
+                    current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
+                    current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
+                    current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
+                    current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
 //                current_data += "Temperature: " + value.sensor_temperature + "<br/>";
-                current_data += "Date: " + date_received + "</p>";
+                    current_data += "Date: " + date_received + "</p>";
+                }
+                else { //IF IT IS A CONSOLIDATED SENSOR
+
+                    current_sensor += "<p>Sensor: </p>" + value.sensor_id;
+                    current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
+                    current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
+                    current_data += "Date: " + date_received + "</p>";
+
+                }
+
             });
 
             $('#' + select_id).html(options);

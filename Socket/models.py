@@ -661,7 +661,7 @@ class MessageProcessor:
                 areas_config += str(no_of_areas_changed)
                 areas_config.ljust(7, '0')
             return areas_config.ljust(73,'0')"""
-            g = ord("G")
+            g = chr(71)
             f1 = chr(0) + chr(1) + chr(1) + chr(2) + chr(15) + chr(19) + chr(30) + chr(22) + chr(0)
             f2 = chr(2) + chr(2) + chr(16) + chr(14) + chr(29) + chr(0) + chr(0)
             f3 = chr(3) + chr(0)*6

@@ -655,13 +655,6 @@ class MessageProcessor:
                 print('Unexpected error: ' + msg)
         #if the area config has been changed, return it
 
-
-        if areas_config != 'G01':
-            """
-            while no_of_areas_changed < 9:
-                areas_config += str(no_of_areas_changed)
-                areas_config.ljust(7, '0')
-            return areas_config.ljust(73,'0')"""
             g = chr(71)
             f1 = chr(0) + chr(1) + chr(1) + chr(2) + chr(15) + chr(19) + chr(30) + chr(22) + chr(0)
             f2 = chr(2) + chr(2) + chr(16) + chr(14) + chr(29) + chr(0) + chr(0)
@@ -674,6 +667,4 @@ class MessageProcessor:
             f9 = chr(9) + chr(0)*6
             f10 = chr(10) + chr(0)*6
             return g + f1 + f2 + f3 + f4 + f5 + f6 + f7 +f8 +f9 +f10
-        else:
-            return 'ROK'
         

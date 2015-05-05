@@ -661,17 +661,17 @@ class MessageProcessor:
                 areas_config += str(no_of_areas_changed)
                 areas_config.ljust(7, '0')
             return areas_config.ljust(73,'0')"""
-            g = "G".encode("hex")
-            f1 = hex(0) + hex(1) + hex(1) + hex(2) + hex(15) + hex(19) + hex(30) + hex(22) + hex(0)
-            f2 = hex(2) + hex(2) + hex(16) + hex(14) + hex(29) + hex(0) + hex(0)
-            f3 = hex(3) + hex(0)*6
-            f4 = hex(4) + hex(0)*6
-            f5 = hex(5) + hex(0)*6
-            f6 = hex(6) + hex(0)*6
-            f7 = hex(7) + hex(0)*6
-            f8 = hex(8) + hex(0)*6
-            f9 = hex(9) + hex(0)*6
-            f10 = hex(10) + hex(0)*6
+            g = ord("G")
+            f1 = chr(0) + chr(1) + chr(1) + chr(2) + chr(15) + chr(19) + chr(30) + chr(22) + chr(0)
+            f2 = chr(2) + chr(2) + chr(16) + chr(14) + chr(29) + chr(0) + chr(0)
+            f3 = chr(3) + chr(0)*6
+            f4 = chr(4) + chr(0)*6
+            f5 = chr(5) + chr(0)*6
+            f6 = chr(6) + chr(0)*6
+            f7 = chr(7) + chr(0)*6
+            f8 = chr(8) + chr(0)*6
+            f9 = chr(9) + chr(0)*6
+            f10 = chr(10) + chr(0)*6
             return g + f1 + f2 + f3 + f4 + f5 + f6 + f7 +f8 +f9 +f10
         else:
             return 'ROK'

@@ -332,7 +332,8 @@ function quick_date(option) {
     to.datetimepicker({
         value: end_date.dateFormat('Y-m-d H:i:s')
     });
-
+    console.log(use_agg);
+    return use_agg;
     graphLogs();
 
 }

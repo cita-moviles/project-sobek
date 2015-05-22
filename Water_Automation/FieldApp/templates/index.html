@@ -47,7 +47,7 @@
         <div class="row">
             <div class="small-5 columns">
                 <label for="field">Field</label>
-                <select id="field" onchange="getAreasOptions('area','field'),getAreaForFieldSelected()"></select>
+                <select id="field" onchange="getAreasOptions('area','field'),getAreaForFieldSelected(), LoadWeatherData()"></select>
             </div>
             <div class="small-5 columns">
                 <label for="area">Area</label>
@@ -161,6 +161,9 @@ initDatePickers(from_picker,to_picker);
 
 //POPULATE SELECTORS:
 PopulateFields();
+//POPULATE WEATHER STATION DATA
+getAjaxFarmFields(11,weatherCallback());
+//LOG ANY ERROR CODE. SEE CONSOLE.
 LogErrorCode();
 
 
@@ -331,7 +334,14 @@ function populateSensorAndValves(area_id) {
 */
 
 //CALL THE WEATHER DATA TO FILL:
-getAjaxWeatherData(11, weatherCallback);
+function LoadWeatherData () {
+    var field_id = $("#field").val();
+    var station_id = field_id + '1';
+    station_id= station_id.replace(/\s/g, '');
+    console.log('Staion ID: ' + station_id);
+    getAjaxWeatherData(station_id, weatherCallback);
+}
+
 // SET THE INITIAL AND END DATE:
 var init_date = new Date();
 var end_date = new Date();
@@ -411,7 +421,6 @@ function graphValveData(current_valve) {
     //PRUEBA:
    // console.log(sensor_id);
     if (use_agg===0){
-        valve_graph_data= "/Valve_Log/";
     }
     else {
         valve_graph_data= "/Valve_Agg/";
@@ -430,7 +439,7 @@ function graphValveData(current_valve) {
                         ['Time', 'Flow']
                     ];
 
-                 /*   if (data.length == 0) {
+                    /*if (data.length === 0) {
                         valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
                             0]);
 

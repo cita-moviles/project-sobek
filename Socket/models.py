@@ -20,7 +20,7 @@ def instantiate_date():
 
 def instantiate_cfg():
     global area_cfg
-    area_cfg = ''
+    area_cfg = 'ROK'
 
 
 #10
@@ -216,7 +216,7 @@ class Crop_Area:
             pass
 
     def get_from_server(self, field_id):
-        area_cfg = ''
+        local_area_cfg = ''
         request = urllib2.Request("http://riego.chi.itesm.mx/Area_Configuration/" + str(self.area_id) + "/")
         request.add_header("Authorization", "Basic YWRtaW46YWRtaW4=")
         request.add_header("Content-Type", "application/json")
@@ -227,17 +227,34 @@ class Crop_Area:
             result2 = json.load(result)
             print "Server Config: " + result2['area_configuration']
             if result2['area_configuration'] == "ROK":
-                area_cfg += 'ROK'
-                print "No configuration pending"
+                local_area_cfg += result2['area_configuration'][2] + '0'*6
             else:
-                str_data = ''
-                #str_field_id = str(result2['fk_farm_field'])
-                area_cfg += str(self.area_id)[1] + str_data.zfill(7)
-                print "Sending pending configuration"
+                data = result2['area_configuration']
+                global config_mode
+                config_mode = True
+                str_field_id = data[0:2]
+                str_area_id = data[2]
+                str_mode = data[3]
+                local_area_cfg += str_area_id
+                if str_mode == '1':
+                    state = data[4]
+                    local_area_cfg += state
+                elif str_mode == '2':
+                    auto_data = data[4:]
+                    min_data = auto_data.split('#')[0]
+                    max_data = auto_data.split('#')[1]
+                    local_area_cfg += min_data + max_data
+                elif str_mode == '3':
+                    timer_data = data[4:]
+                    days = timer_data.split['#'][0]
+                    time = timer_data.split['#'][1]
+                    start = time.split['#'][0]
+                    duration = time.split['#'][1]
+                    local_area_cfg += days + start + duration
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
             print('Area configuration not found ' + str(self.area_id))
-        return area_cfg
+        return local_area_cfg
 
     def normalize_cfg(self):
         request = urllib2.Request("http://riego.chi.itesm.mx/Area_Configuration/" + str(self.area_id) + "/")
@@ -539,12 +556,11 @@ class MessageProcessor:
 
         print currentDate
         area_configuration = "ROK"
-        areas_config = 'G01'
+        msg_areas = 'G'
         msglist = message.split('#')
-
-        no_of_areas_changed = 0
-
         converter = HexConverter()
+        global config_mode
+        config_mode = False
 
         for msg in msglist:
             try:
@@ -602,6 +618,9 @@ class MessageProcessor:
                     #print station.to_json()
                     station.upload_to_server()
 
+                    #First, build the configuration message
+                    msg_areas += str(field_id)
+
                     #r_data -> Area
                     for index in xrange(int(no_of_areas)):
                         #gets the data for the areas
@@ -615,10 +634,9 @@ class MessageProcessor:
 
                         if area_configuration != area_cfg:
                             area_configuration = area_cfg
-                            areas_config += area_configuration
+                            msg_areas += area_configuration
                             #normalize the db to ROK
                             area.normalize_cfg()
-                            no_of_areas_changed += 1
 
                         #print area.to_json()
                         area.upload_to_server()
@@ -653,8 +671,16 @@ class MessageProcessor:
             except Exception, ex:
                 logging.exception("Something awful happened!")
                 print('Unexpected error: ' + msg)
-        #if the area config has been changed, return it
 
+            #if the area config has been changed, return it
+            if config_mode:
+                print "Sending configuration"
+                print msg_areas
+                return msg_areas
+            else:
+                print "No configuration pending"
+                return 'ROK'
+            """
             g = chr(71)
             f1 = chr(0) + chr(1) + chr(1) + chr(1) + chr(1) + chr(0) + chr(0) + chr(0) + chr(0)
             f2 = chr(2) + chr(3) + chr(10) + chr(8) + chr(48) + chr(3) + chr(48)
@@ -666,5 +692,5 @@ class MessageProcessor:
             f8 = chr(8) + chr(0)*6
             f9 = chr(9) + chr(0)*6
             f10 = chr(10) + chr(0)*6
-            return g + f1 + f2 + f3 + f4 + f5 + f6 + f7 +f8 +f9 +f10
         
+            return g + f1 + f2 + f3 + f4 + f5 + f6 + f7 +f8 +f9 +f10"""

@@ -52,14 +52,46 @@
 
         </section>
 
-
         <section id="opTimer" class="operationModes">
+            <label>Timer Mode</label>
+            <label for = "dayofweek">Select days of the week: </label>
+                <br>
+                <input type="checkbox" class ="dayofweek" value="128" id="mon">Mon
+                <input type="checkbox" class ="dayofweek" value="64" id="tue">Tue
+                <input type="checkbox" class ="dayofweek" value="32" id="wed">Wed
+                <input type="checkbox" class ="dayofweek" value="16" id="thu">Thu
+                <input type="checkbox" class ="dayofweek" value="8" id="fri">Fri
+                <input type="checkbox" class ="dayofweek" value="4" id="sat">Sat
+                <input type="checkbox" class ="dayofweek" value="2" id="sun">Sun
+            <br>
+            <label class ="timers">Starting at:</label>
+                <input type="time" class="time" id = "start_time">
+            <label class ="timers" >Duration:</label>
+                <input type="time" class="time" id = "duration_time">
+
             <button onclick="saveOpTim();">Save</button>
+
         </section>
 
         <style>
             #opModeSelect, .operationModes {
                 display: none;
+            }
+            input.dayofweek {
+                display: inline-block;
+                padding-right: 15px;
+                margin-left: 15px;
+
+            }
+            input.time {
+                max-width: 100px;
+                float: left;
+                margin-right: 25px;
+            }
+            label.timers{
+                max-width: 200px;
+                float: left;
+                margin-right: 10px;
             }
 
             .inpHumidity {
@@ -70,7 +102,7 @@
 </div>
 
 <script>
-    var strConfig;
+var strConfig;
 var field_selector = $('#field');
 var area_selector = $('#area');
 //POPULATE SELECTORS:
@@ -115,13 +147,15 @@ function PopulateAreaForField(field){
 
     function getConfigurations() {
         var area_id = $('#area').val();
-        var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
+        //var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
+        var url = "http://localhost:8000/Area_Configuration/" +area_id;
         $.ajax({
             url: url,
             success: function(json){
                 $('#opModeSelect').css('display', 'block');
                 $('#opAutomatic').css('display', 'none');
                 $('#opManual').css('display', 'none');
+                $('#opTimer').css ('display', 'none');
 
                 var area_configuration = json.area_configuration.substr(2);
                 var area_operation = json.area_configuration[0];
@@ -140,6 +174,10 @@ function PopulateAreaForField(field){
                         $('#opAutomatic').css('display', 'block');
                         $('#maxHum').val(area_configuration.substr(0,2) + "." +  area_configuration.substr(2,1) );
                         $('#minHum').val(area_configuration.substr(3,2) + "." +  area_configuration.substr(5,1) );
+                        break;
+                    case "3":
+                        $('operationMode').val(3);
+                        $('#opTimer').css('display','block');
                         break;
                 }
 
@@ -168,23 +206,38 @@ function PopulateAreaForField(field){
     }
 
     function saveOpMan() {
-        var area_id = $('#area').val().substring(1,3);
+        //var area_id = $('#area').val().substring(1,3);
+        var area_id = $('#area').val();
+        var field_id = $('#field').val();
+        if (Number(field_id)<10) {
+            strConfig = '0' + field_id + area_id;
+        }
+        else {
+            strConfig = field_id + area_id;
+        }
+        console.log ("area id from manual mode: " + area_id );
         var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
+        url = url.replace(/\s/g, '');
+        console.log(url);
 
-        strConfig = "1-";
+        //strConfig = "1-";
         console.log($('input[name=rOpMan]:radio:checked').val(0));
         switch ($('input[name=rOpMan]:radio:checked').attr('id')) {
             case 'rOpManON':
-                strConfig += '1';
+                strConfig +='1';
                 break;
             case 'rOpManOFF':
-                strConfig += '0';
+                strConfig +='0';
                 break;
             default:
                 alert("You didn't select an operation");
                 return;
                 break;
         }
+
+        strConfig += '00000';
+        strConfig= strConfig.replace(/\s/g, '');
+        console.log("Conf string: " + strConfig);
 
         $.ajax({
             url: url,
@@ -198,17 +251,29 @@ function PopulateAreaForField(field){
     }
 
     function saveOpAut() {
-        var area_id = $('#area').val().substring(1,3);
-        var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
+        var area_id = $('#area').val();
+        var field_id = $('#field').val();
+        console.log(field_id);
+        if (Number(field_id)<10) {
+            strConfig = '0' + field_id + area_id;
+        }
+        else {
+            strConfig = field_id + area_id;
+        }
 
-        strConfig = "2-";
+        var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
+        url = url.replace(/\s/g, '');
+
+        strConfig += '2';
         var maxHum = parseFloat($('#maxHum').val());
         var minHum = parseFloat($('#minHum').val());
 
         var integerMax = parseInt(Math.floor(maxHum) + (maxHum % 1).toFixed(1).substr(2,1));
         var integerMin = parseInt(Math.floor(minHum) + (minHum % 1).toFixed(1).substr(2,1));
 
-        strConfig += lPad3(integerMax) + lPad3(integerMin);
+        strConfig += lPad3(integerMax) +'#'+ lPad3(integerMin);
+        strConfig = strConfig.replace(/\s/g, '');
+        console.log('strConf de auto mode: '+ strConfig);
 
         $.ajax({
             url: url,
@@ -222,9 +287,57 @@ function PopulateAreaForField(field){
     }
 
     function saveOpTim() {
-        strConfig = "3-";
-        strConfig += "#";
-        alert(strConfig);
+        var area_id = $('#area').val();
+        var field_id = $('#field').val();
+        console.log(field_id);
+        if (Number(field_id)<10) {
+            strConfig = '0' + field_id + area_id;
+        }
+        else {
+            strConfig = field_id + area_id;
+        }
+        var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
+        url = url.replace(/\s/g, '');
+
+        strConfig += '3';
+        strConfig += '#' + getBinaryDays();
+        var duration = $('#duration_time').val();
+        var start = $ ('#start_time').val();
+        console.log(start);
+        strConfig += '#'+ start + '#' + duration;
+        strConfig= strConfig.replace(/\s/g, '');
+
+        $.ajax({
+            url: url,
+            type: 'PUT',
+            data: {area_id:area_id, area_configuration: strConfig },
+            success: function(data) {
+                $('.result').html(data);
+                alert('Configuration was sent');
+            }
+        });
+
+
+    }
+    function getBinaryDays () {
+        var bin_sum= 0;
+     var mon = parseInt($('#mon:checked').val());
+        mon = mon || 0;
+     var tue = parseInt($('#tue:checked').val());
+        tue = tue || 0;
+     var wed = parseInt($('#wed:checked').val());
+        wed = wed || 0;
+     var thu = parseInt($('#thu:checked').val());
+        thu = thu || 0;
+     var fri = parseInt($('#fri:checked').val());
+        fri = fri || 0;
+     var sat = parseInt($('#sat:checked').val());
+        sat = sat || 0;
+     var sun = parseInt($('#sun:checked').val());
+        sun = sun || 0;
+     bin_sum = mon+tue+wed+thu+fri+sat+sun;
+        console.log("BIN SUM: " + bin_sum);
+        return bin_sum;
     }
 
     function lPad3(number) {

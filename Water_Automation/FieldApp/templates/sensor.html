@@ -102,7 +102,6 @@
     google.load("visualization", "1", {packages: ["corechart"]});
     getAjaxFarmFields('field', 'area', 'sensor');
 
-
     var from_picker = '#to_datetimepicker';
     var to_picker = '#from_datetimepicker';
     initDatePickers(from_picker,to_picker);
@@ -110,9 +109,11 @@
     var field_selector = $('#field');
     var area_selector = $('#area');
     var sensor_selector = $('#sensor');
+    var FinishedGettingAjaxAreas = false;
 
     PopulateFields();
 function PopulateFields() {
+
     var current_field;
     $.ajax({
         url: "/Farm_Field",
@@ -160,7 +161,8 @@ function getSensorsForFieldSelected () {
     var current_field=$("#field").val();
     $.ajax({
         url: "/Area_Search/",
-        data: {fk_farm_field: current_field },
+        data: {fk_farm_field: current_field
+        },
         success: function (data) {
             options = "";
             $.each(data, function (index, value) {
@@ -168,7 +170,9 @@ function getSensorsForFieldSelected () {
             });
             $('#area').html(options);
             getSensorForArea('area');
+            LoadCurrentSensorData();
         }
+
     });
 }
 function getSensorForArea(area_selector){
@@ -193,10 +197,52 @@ function getSensorForArea(area_selector){
                options += '<option value="' + value.sensor_id + '">' + value.sensor_id + '</option>';
             });
             $('#sensor').html(options);
+             LoadCurrentSensorData();
         }
     });
 }
+function LoadCurrentSensorData () {
 
+        var current_area = $('#area').val();
+    console.log("Current catched area in Loadcurrentsensordata: " + current_area);
+        $.ajax({
+        url: "/Sensor_Search/",
+        data: { fk_area: current_area},
+        success: function (data) {
+            var options = "";
+            var current_data = "";
+            var current_sensor="";
+
+            $.each(data, function (index, value) {
+                  var date_received = "";
+                    if (value.sensor_date_received !== "") {
+                    var dr = new Date(Date.parse(value.sensor_date_received));
+                    date_received = dr.toLocaleString();
+                }
+                if (value.sensor_id%100!==0) { //IF ITS NOT A CONSOLIDATED SENSOR:
+
+                    current_sensor += "<p>Sensor: </p>" + value.sensor_id;
+                    current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
+                    current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
+                    current_data += "Level 2: " + value.sensor_hl2 + "<br/>";
+                    current_data += "Level 3: " + value.sensor_hl3 + "<br/>";
+//                current_data += "Temperature: " + value.sensor_temperature + "<br/>";
+                    current_data += "Date: " + date_received + "</p>";
+                }
+                else { //IF IT IS A CONSOLIDATED SENSOR
+
+                    current_sensor += "<p>Sensor: </p>" + value.sensor_id;
+                    current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";
+                    current_data += "<p>Level 1: " + value.sensor_hl1 + "<br/>";
+                    current_data += "Date: " + date_received + "</p>";
+
+                }
+            });
+             $('#current_sensor').html(current_data);
+             $('#default_sensor').html(current_sensor);
+            }});
+
+    }
     function graphLogs() {
         var sensor_graph_data;
         if (use_agg===1){

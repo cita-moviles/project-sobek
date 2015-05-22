@@ -23,7 +23,7 @@
                 onchange="getAreasOptions('area', 'field'),getConsolidatedValveForFieldSelected();"></select>
         <label>Area</label>
         <select id="area"
-                onchange="getConsolidatedValveForFieldSelected();"></select>
+                onchange="getValveForArea('area');"></select>
         <label>Valve</label>
         <select id="valve"></select>
 
@@ -138,7 +138,7 @@
         }
     });
 }
-    function getValveForArea(area_selector){
+  function getValveForArea(area_selector){
   var current_area=$('#'+area_selector).val();
   if(current_area===null){
       $("#default_valve").html("");
@@ -172,6 +172,11 @@ function PopulateAreaForField(field){
             area_selector.html(options);
         }
     });
+}
+function LoadCurrentValveData () {
+
+
+
 }
 
     function graphLogs() {

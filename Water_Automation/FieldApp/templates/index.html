@@ -47,7 +47,7 @@
         <div class="row">
             <div class="small-5 columns">
                 <label for="field">Field</label>
-                <select id="field" onchange="getAreasOptions('area','field'),getAreaForFieldSelected()"></select>
+                <select id="field" onchange="getAreasOptions('area','field'),getAreaForFieldSelected(), LoadWeatherData()"></select>
             </div>
             <div class="small-5 columns">
                 <label for="area">Area</label>
@@ -161,6 +161,9 @@ initDatePickers(from_picker,to_picker);
 
 //POPULATE SELECTORS:
 PopulateFields();
+//POPULATE WEATHER STATION DATA
+getAjaxFarmFields(11,weatherCallback());
+//LOG ANY ERROR CODE. SEE CONSOLE.
 LogErrorCode();
 
 
@@ -239,7 +242,7 @@ function getConsolidatedSensorIDForArea ( ) {
     current_area_id= $("#area").val();
 
     var Consolidated_Sensor_id;
-    Consolidated_Sensor_id = (parseInt(current_farmfield_id)*100) + (parseInt(current_area_id)*10);
+    Consolidated_Sensor_id = (parseInt(current_area_id)*10);
     //PRUEBA
     console.log("CONSOLIDATED SENSOR FOR THIS AREA: "+ Consolidated_Sensor_id);
     console.log("CURRENT AREA SELECTED: " + current_area_id);
@@ -330,7 +333,14 @@ function populateSensorAndValves(area_id) {
 */
 
 //CALL THE WEATHER DATA TO FILL:
-getAjaxWeatherData(31, weatherCallback);
+function LoadWeatherData () {
+    var field_id = $("#field").val();
+    var station_id = field_id + '1';
+    station_id= station_id.replace(/\s/g, '');
+    console.log('Staion ID: ' + station_id);
+    getAjaxWeatherData(station_id, weatherCallback);
+}
+
 // SET THE INITIAL AND END DATE:
 var init_date = new Date();
 var end_date = new Date();
@@ -408,8 +418,9 @@ function graphLogs() {
 function graphValveData(current_valve) {
     var valve_graph_data;
     //PRUEBA:
-    console.log(sensor_id);
-    if (use_agg===0){
+    //console.log(sensor_id);
+    console.log (use_agg);
+    if (use_agg === 0){
         valve_graph_data= "/Valve_Log/";
     }
     else {
@@ -429,11 +440,11 @@ function graphValveData(current_valve) {
                         ['Time', 'Flow']
                     ];
 
-                    if (data.length == 0) {
+                    /*if (data.length === 0) {
                         valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
                             0]);
 
-                    } else {
+                    } else {*/
                         $.each(data, function (index, value) {
                             var date_received = new Date(Date.parse(value.valve_date_received));
 
@@ -442,7 +453,7 @@ function graphValveData(current_valve) {
                             temp_array.push(value.valve_flow);
                             valve_flow_array.push(temp_array);
                         });
-                    }
+
 
 
                     /* var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);*/

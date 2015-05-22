@@ -93,7 +93,6 @@ class AreaConfigurationFilter (django_filters.FilterSet):
           model = Area_Configuration
           fields = ['area_id', 'area_configuration']
 
-
 class StationFilter (django_filters.FilterSet):
      class Meta:
           model = Weather_Station

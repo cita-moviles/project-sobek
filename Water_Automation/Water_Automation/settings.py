@@ -7,6 +7,7 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
     ('Enrique Ramirez', 'enrique.ramirez35@gmail.com'),
     ('Luis Gonzalez', 'luishgc@gmail.com'),
+    ('Alejandro Rodriguez', 'ardzoht@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -99,7 +100,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:

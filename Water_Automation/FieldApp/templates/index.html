@@ -239,7 +239,7 @@ function getConsolidatedSensorIDForArea ( ) {
     current_area_id= $("#area").val();
 
     var Consolidated_Sensor_id;
-    Consolidated_Sensor_id = (parseInt(current_farmfield_id)*100) + (parseInt(current_area_id)*10);
+    Consolidated_Sensor_id = (parseInt(current_area_id)*10);
     //PRUEBA
     console.log("CONSOLIDATED SENSOR FOR THIS AREA: "+ Consolidated_Sensor_id);
     console.log("CURRENT AREA SELECTED: " + current_area_id);
@@ -255,6 +255,7 @@ function getSensorLogGraph(Consolidate_sensor_id) {
     var sensor_id = Consolidate_sensor_id;
     var sensor_graph_data;
     //PRUEBA:console.log(sensor_id);
+    console.log(use_agg);
     if (use_agg===0){
         sensor_graph_data= "/Sensor_Log/";
     }
@@ -330,7 +331,7 @@ function populateSensorAndValves(area_id) {
 */
 
 //CALL THE WEATHER DATA TO FILL:
-getAjaxWeatherData(31, weatherCallback);
+getAjaxWeatherData(11, weatherCallback);
 // SET THE INITIAL AND END DATE:
 var init_date = new Date();
 var end_date = new Date();
@@ -408,7 +409,7 @@ function graphLogs() {
 function graphValveData(current_valve) {
     var valve_graph_data;
     //PRUEBA:
-    console.log(sensor_id);
+   // console.log(sensor_id);
     if (use_agg===0){
         valve_graph_data= "/Valve_Log/";
     }
@@ -429,11 +430,11 @@ function graphValveData(current_valve) {
                         ['Time', 'Flow']
                     ];
 
-                    if (data.length == 0) {
+                 /*   if (data.length == 0) {
                         valve_flow_array.push([end_date.dateFormat('Y-m-d H:i:s'),
                             0]);
 
-                    } else {
+                    } else {*/
                         $.each(data, function (index, value) {
                             var date_received = new Date(Date.parse(value.valve_date_received));
 
@@ -442,7 +443,7 @@ function graphValveData(current_valve) {
                             temp_array.push(value.valve_flow);
                             valve_flow_array.push(temp_array);
                         });
-                    }
+                    
 
 
                     /* var data_actuator = google.visualization.arrayToDataTable(valve_actuator_array);*/

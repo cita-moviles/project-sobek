@@ -2,7 +2,7 @@
  * Created by Enrique Ramírez on 8/20/14.
  */
 
-var use_agg;
+var use_agg=0;
 /**
  * Helper Function that hides an element from the page.
  *
@@ -443,7 +443,7 @@ function getSensorLogs(start, end, callback) {
 function getEvotranspirationLog(area_id, start_date, end_date, callback) {
     var evo_graph_data;
     //PRUEBA:
-    console.log(sensor_id);
+    //console.log(sensor_id);
     if (use_agg===0){
         evo_graph_data= "/Crop_Area_Log/";
     }

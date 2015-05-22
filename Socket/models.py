@@ -656,8 +656,8 @@ class MessageProcessor:
         #if the area config has been changed, return it
 
             g = chr(71)
-            f1 = chr(0) + chr(1) + chr(1) + chr(2) + chr(15) + chr(19) + chr(30) + chr(22) + chr(0)
-            f2 = chr(2) + chr(2) + chr(16) + chr(14) + chr(29) + chr(0) + chr(0)
+            f1 = chr(0) + chr(1) + chr(1) + chr(1) + chr(1) + chr(0) + chr(0) + chr(0) + chr(0)
+            f2 = chr(2) + chr(3) + chr(10) + chr(8) + chr(48) + chr(3) + chr(48)
             f3 = chr(3) + chr(0)*6
             f4 = chr(4) + chr(0)*6
             f5 = chr(5) + chr(0)*6

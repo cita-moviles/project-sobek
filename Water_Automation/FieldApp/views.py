@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
-
+from rest_framework.views import APIView
 from rest_framework import viewsets
 from django.views.generic import TemplateView
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
@@ -315,12 +315,12 @@ class Weather_Station_Agg_ViewSet(generics.ListCreateAPIView):
     filter_class = StationAggFilter
 
 
-class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
+class Farm_Field_Agg_ViewSet(APIView):
     queryset = Farm_Field_Agg.objects.all()
     serializer_class = Farm_Field_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = FieldAggFilter
-    renderer_classes = (r.CSVRenderer, ) + api_settings.DEFAULT_RENDERER_CLASSES
+    renderer_classes = (r.CSVRenderer, )
 
 
 @api_view(('GET',))

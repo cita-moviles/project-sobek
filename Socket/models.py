@@ -565,7 +565,6 @@ class MessageProcessor:
         for msg in msglist:
             try:
                 print("------" + msg + "-------")
-
                 """if msg[1:3] == "00":
                     print("KEEP ALIVE")
 
@@ -682,16 +681,19 @@ class MessageProcessor:
                 print('Unexpected error: ' + msg)
 
             #if the area config has been changed, return it
-            if config_mode:
-                print "Sending configuration"
-                print msg_areas
-                msg_converted = ""
-                for word in msg_areas:
+        if config_mode:
+            print "Sending configuration"
+            print msg_areas
+            msg_converted = ""
+            for word in msg_areas:
+                if word == 'G':
+                    msg_converted += chr(word)
+                else:
                     msg_converted += chr(int(word))
-                return msg_converted
-            else:
-                print "No configuration pending"
-                return 'ROK'
+            return msg_converted
+        else:
+            print "No configuration pending"
+            return 'ROK'
             """
             g = chr(71)
             f1 = chr(0) + chr(1) + chr(1) + chr(2) + chr(15) + chr(19) + chr(30) + chr(22) + chr(0)

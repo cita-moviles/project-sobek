@@ -320,7 +320,7 @@ class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     serializer_class = Farm_Field_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = FieldAggFilter
-    renderer_classes = (r.CSVRenderer, ) + api_settings.DEFAULT_RENDERER_CLASSES
+    renderer_classes = (r.CSVRenderer, )
 
 
 @api_view(('GET',))

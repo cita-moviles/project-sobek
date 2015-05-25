@@ -635,6 +635,15 @@ class MessageProcessor:
                         if area_configuration != area_cfg:
                             area_configuration = area_cfg
                             msg_areas += area_configuration
+                            msg_areas += '02' + '0'*6
+                            msg_areas += '03' + '0'*6
+                            msg_areas += '04' + '0'*6
+                            msg_areas += '05' + '0'*6
+                            msg_areas += '06' + '0'*6
+                            msg_areas += '07' + '0'*6
+                            msg_areas += '08' + '0'*6
+                            msg_areas += '09' + '0'*6
+                            msg_areas += '10' + '0'*6
                             #normalize the db to ROK
                             area.normalize_cfg()
 
@@ -676,7 +685,10 @@ class MessageProcessor:
             if config_mode:
                 print "Sending configuration"
                 print msg_areas
-                return msg_areas
+                msg_converted = ""
+                for word in msg_areas:
+                    msg_converted += chr(int(word))
+                return msg_converted
             else:
                 print "No configuration pending"
                 return 'ROK'

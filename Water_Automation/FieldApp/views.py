@@ -16,7 +16,9 @@ from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Se
      Sensor_Agg_Serializer, Valve_Agg_Serializer, Crop_Area_Agg_Serializer, Weather_Station_Agg_Serializer, \
      Farm_Field_Agg_Serializer
 
-from rest_pandas import PandasViewSet
+from rest_framework.settings import api_settings
+from rest_framework_csv import renderers as r
+
 
 class Crop_ViewSet (viewsets.ModelViewSet):
      queryset = Crop.objects.all ()
@@ -59,10 +61,7 @@ class Field_ViewSet (viewsets.ModelViewSet):
      serializer_class = Farm_Field_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-class FieldPandas_ViewSet(PandasViewSet):
-    queryset = Farm_Field.objects.all()
-    serializer_class = Farm_Field_Serializer
-    permission_classes =  (permissions.IsAuthenticatedOrReadOnly,)
+
 # Filters
 class FieldFilter (django_filters.FilterSet):
      class Meta:
@@ -321,6 +320,7 @@ class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     serializer_class = Farm_Field_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = FieldAggFilter
+    renderer_classes = (r.CSVRenderer, ) + api_settings.DEFAULT_RENDERER_CLASSES
 
 
 @api_view(('GET',))

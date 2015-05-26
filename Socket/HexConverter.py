@@ -32,7 +32,7 @@ class HexConverter():
                     return_str += s_data+'A'
 
                     a_data_hex = message[74+(index2*48):88+(index*48)]
-                    a_data = self.hex_to_str(a_data_hex)
+                    a_data = self.a_hex_to_str(a_data_hex)
                     return_str += a_data+'R'
             print return_str[:-1]
             return return_str[:-1]
@@ -45,6 +45,15 @@ class HexConverter():
             data = int(pair, 16)
             new_str += str(data)
         return new_str
+
+    def a_hex_to_str(self, msg):
+        node = str(int(msg[0:2], 16)) + '#'
+        sta = str(int(msg[2:4], 16)) + '#'
+        flow = str(int(msg[4:6], 16) + int(msg[6:8], 16)/100.0) + '#'
+        btty = str(int(msg[8:10], 16)) + '#'
+        rssi = str(int(msg[10:12], 16)) + '#'
+        err_code = str(int(msg[12:14], 16))
+        return node + sta + flow + btty + rssi + err_code
 
     def sc_hex_to_str(self, msg):
         node = str(int(msg[0:2], 16)) + '#'

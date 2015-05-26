@@ -100,9 +100,11 @@ class Valve:
         Pos[6] = RSSI
         Pos[7] = Error code
         """
-        self.valve_id = int(field_id+area_id+message[1])
-        self.valve_status = int(message[3])
-        self.valve_flow = int(message[4:6])
+        msg = message.split('#')
+        print msg
+        self.valve_id = int(field_id+area_id+msg[0][1])
+        self.valve_status = int(msg[1])
+        self.valve_flow = float(msg[2])
         self.valve_pressure = 0
         self.valve_limit = 0
         self.valve_ideal = 0

@@ -36,14 +36,15 @@ class Sensor:
         Pos[9] = RSSI
         Pos[10] = Error code
         """
-        if message[0] == 'S':
-            self.sensor_id = int(field_id+area_id+message[1])
-            self.sensor_hl1 = float(message[2:4]) # + "." + message[11])
-            self.sensor_hl2 = float(message[4:6]) #+ "." + message[14])
-            self.sensor_hl3 = float(message[6:8]) #+ "." + message[17])
-        elif message[0] == 'C':
+        msg = message.split('#')
+        if msg[0][0] == 'S':
+            self.sensor_id = int(field_id+area_id+msg[0][1])
+            self.sensor_hl1 = float(msg[1]) # + "." + message[11])
+            self.sensor_hl2 = float(msg[2]) #+ "." + message[14])
+            self.sensor_hl3 = float(msg[3]) #+ "." + message[17])
+        elif msg[0][0] == 'C':
             self.sensor_id = int(field_id+area_id+'0')
-            self.sensor_hl1 = float(message[2:4])
+            self.sensor_hl1 = float(msg[1])
             self.sensor_hl2 = 0
             self.sensor_hl3 = 0
         #print self.sensor_id
@@ -100,8 +101,8 @@ class Valve:
         Pos[7] = Error code
         """
         self.valve_id = int(field_id+area_id+message[1])
-        self.valve_status = int(message[2])
-        self.valve_flow = int(message[3:5])
+        self.valve_status = int(message[3])
+        self.valve_flow = int(message[4:6])
         self.valve_pressure = 0
         self.valve_limit = 0
         self.valve_ideal = 0
@@ -598,8 +599,8 @@ class MessageProcessor:
                 """
                 if msg[1:3] == "50":
                     field = Farm_Field(msg + "#")
-                    #print field.to_json()
-                    field.upload_to_server()
+                    print field.to_json()
+                    #field.upload_to_server()
 
                 elif msg[0] == "F":
 
@@ -614,8 +615,8 @@ class MessageProcessor:
                     #w_data -> Weather
                     print "STATIONS"
                     station = Weather_Station(w_data, field_id[1])
-                    #print station.to_json()
-                    station.upload_to_server()
+                    print station.to_json()
+                    #station.upload_to_server()
 
                     #First, build the configuration message
                     msg_areas += str(field_id)
@@ -646,15 +647,15 @@ class MessageProcessor:
                             #normalize the db to ROK
                             area.normalize_cfg()
 
-                        #print area.to_json()
-                        area.upload_to_server()
+                        print area.to_json()
+                        #area.upload_to_server()
                         #gets the data for the consolidated sensor
                         sc_data = 'C'+re.split('W', msg)[1].split('R')[index+1].split('C')[1].split('S')[0]
                         area_id = r_data[1]
                         print "CONSOLIDATED SENSORS"
                         sensor = Sensor(sc_data, field_id[1], area_id)
-                        #print sensor.to_json()
-                        sensor.upload_to_server()
+                        print sensor.to_json()
+                        #sensor.upload_to_server()
                         no_of_sensors = int(r_data[2])
                         #gets the data for all the sensors
                         for index2 in xrange(index,int(no_of_sensors)+index):
@@ -662,14 +663,14 @@ class MessageProcessor:
                             area_id = r_data[1]
                             print "SENSORS"
                             sensor = Sensor(s_data, field_id[1], area_id)
-                            #print sensor.to_json()
-                            sensor.upload_to_server()
+                            print sensor.to_json()
+                            #sensor.upload_to_server()
                             #gets the data for the actuators
                             a_data = 'A'+re.split('W', msg)[1].split('R')[index2+1].split('C')[1].split('S')[1].split('A')[1]
                             print "ACTUATORS"
                             actuator = Valve(a_data, field_id[1], area_id)
-                            #print actuator.to_json()
-                            actuator.upload_to_server()
+                            print actuator.to_json()
+                            #actuator.upload_to_server()
                 else:
                     print "Nothing cool > " + msg
 

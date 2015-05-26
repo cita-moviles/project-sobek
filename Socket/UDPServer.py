@@ -3,6 +3,9 @@ from socket import socket, AF_INET, SOCK_DGRAM
 from models import MessageProcessor
 from Utils import FileWriter
 import sys
+import time
+
+
 
 PORT = 4580
 
@@ -24,13 +27,13 @@ def sobek_server(address):
         if not msg:
             print('No data received')
             break
-
+        start_time = time.time()
         print('Got message from', addr)
         FileWriter.writeToFile(msg)
         return_value = MessageProcessor.process_message(msg)
 
-        print "Return Value " + return_value
-
+        print return_value
+        print("--- %s seconds ---" % (time.time() - start_time))
         sock.sendto(return_value, addr)
 
 if __name__ == '__main__':

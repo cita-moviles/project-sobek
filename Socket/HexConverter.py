@@ -24,11 +24,11 @@ class HexConverter():
                 return_str += r_data+'C'
                 no_of_sensors = int(r_data[1])
                 sc_data_hex = message[46+(index*48):52+(index*48)]
-                sc_data = self.hex_to_str(sc_data_hex)
+                sc_data = self.sc_hex_to_str(sc_data_hex)
                 return_str += sc_data+'S'
                 for index2 in xrange(index,int(no_of_sensors)+index):
                     s_data_hex = message[53+(index2*48):72+(index2*48)]
-                    s_data = self.hex_to_str(s_data_hex)
+                    s_data = self.shex_to_str(s_data_hex)
                     return_str += s_data+'A'
 
                     a_data_hex = message[74+(index2*48):88+(index*48)]
@@ -46,14 +46,29 @@ class HexConverter():
             new_str += str(data)
         return new_str
 
+    def sc_hex_to_str(self, msg):
+        node = str(int(msg[0:2], 16)) + '#'
+        l1 = str(int(msg[2:4], 16) + int(msg[4:6], 16)/100.0)
+        return node + l1
+
+    def shex_to_str(self, msg):
+        node = str(int(msg[0:2], 16)) + '#'
+        l1 = str(int(msg[2:4], 16) + int(msg[4:6], 16)/100.0) + '#'
+        l2 = str(int(msg[6:8], 16) + int(msg[8:10], 16)/100.0) + '#'
+        l3 = str(int(msg[10:12], 16) + int(msg[12:14], 16)/100.0) + '#'
+        btty = str(int(msg[14:16], 16)) + '#'
+        rssi = str(int(msg[16:18], 16)) + '#'
+        err_code = str(int(msg[18:20], 16))
+        return node + l1 + l2 + l3 + btty + rssi + err_code
+
     def whex_to_str(selfs, msg):
         node = str(int(msg[0:2], 16))+'#'
         radiation = str(int(msg[2:6], 16))+'#'
-        humidity = str(int(msg[6:8], 16)) + '.' + str(int(msg[8:10], 16))+'#'
-        temperature = str(int(msg[10:12], 16)) + '.' + str(int(msg[12:14], 16))+'#'
-        wind = str(int(msg[14:16], 16)) + '.' + str(int(msg[16:18], 16))+'#'
-        rain = str(int(msg[18:20], 16)) + '.' + str(int(msg[20:22], 16))+'#'
-        eto = str(int(msg[22:24], 16)) + '.' + str(int(msg[24:26], 16))+'#'
+        humidity = str(int(msg[6:8], 16) + (int(msg[8:10], 16)/100.0)) + '#'
+        temperature = str(int(msg[10:12], 16) + (int(msg[12:14], 16)/100.0)) + '#'
+        wind = str(int(msg[14:16], 16) + (int(msg[16:18], 16)/100.0)) + '#'
+        rain = str(int(msg[18:20], 16) + (int(msg[20:22], 16)/100.0)) + '#'
+        eto = str(int(msg[22:24], 16) + (int(msg[24:26], 16)/100.0)) + '#'
         battery = str(int(msg[26:28], 16))+'#'
         rssi = str(int(msg[28:30], 16))+'#'
         error_c = str(int(msg[30:32], 16))

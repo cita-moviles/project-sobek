@@ -608,8 +608,8 @@ class MessageProcessor:
                 """
                 if msg[1:3] == "50":
                     field = Farm_Field(msg + "#")
-                    print field.to_json()
-                    #field.upload_to_server()
+                    #print field.to_json()
+                    field.upload_to_server()
 
                 elif msg[0] == "F":
 
@@ -624,8 +624,8 @@ class MessageProcessor:
                     #w_data -> Weather
                     print "STATIONS"
                     station = Weather_Station(w_data, field_id[1])
-                    print station.to_json()
-                    #station.upload_to_server()
+                    #print station.to_json()
+                    station.upload_to_server()
 
                     #First, build the configuration message
                     msg_areas += str(field_id)
@@ -648,15 +648,15 @@ class MessageProcessor:
                             #normalize the db to ROK
                             area.normalize_cfg()
 
-                        print area.to_json()
-                        #area.upload_to_server()
+                        #print area.to_json()
+                        area.upload_to_server()
                         #gets the data for the consolidated sensor
                         sc_data = 'C'+re.split('W', msg)[1].split('R')[index+1].split('C')[1].split('S')[0]
                         area_id = r_data[1]
                         print "CONSOLIDATED SENSORS"
                         sensor = Sensor(sc_data, field_id[1], area_id)
-                        print sensor.to_json()
-                        #sensor.upload_to_server()
+                        #print sensor.to_json()
+                        sensor.upload_to_server()
                         no_of_sensors = int(r_data[2])
                         #gets the data for all the sensors
                         for index2 in xrange(index,int(no_of_sensors)+index):
@@ -664,14 +664,14 @@ class MessageProcessor:
                             area_id = r_data[1]
                             print "SENSORS"
                             sensor = Sensor(s_data, field_id[1], area_id)
-                            print sensor.to_json()
-                            #sensor.upload_to_server()
+                            #print sensor.to_json()
+                            sensor.upload_to_server()
                             #gets the data for the actuators
                             a_data = 'A'+re.split('W', msg)[1].split('R')[index2+1].split('C')[1].split('S')[1].split('A')[1]
                             print "ACTUATORS"
                             actuator = Valve(a_data, field_id[1], area_id)
-                            print actuator.to_json()
-                            #actuator.upload_to_server()
+                            #print actuator.to_json()
+                            actuator.upload_to_server()
                 else:
                     print "Nothing cool > " + msg
 

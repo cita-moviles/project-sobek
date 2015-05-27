@@ -230,7 +230,7 @@ class Crop_Area:
             result2 = json.load(result)
             print "Server Config: " + result2['area_configuration']
             if result2['area_configuration'] == "ROK":
-                local_area_cfg += result2['area_configuration'][2] + '0'*6
+                local_area_cfg += str(self.area_id)[1] + '0'*6
             else:
                 data = result2['area_configuration']
                 global config_mode
@@ -241,7 +241,7 @@ class Crop_Area:
                 local_area_cfg += str_area_id
                 if str_mode == '1':
                     state = data[4]
-                    local_area_cfg += state
+                    local_area_cfg += state + data[4:]
                 elif str_mode == '2':
                     auto_data = data[4:]
                     min_data = auto_data.split('#')[0]
@@ -558,12 +558,19 @@ class MessageProcessor:
         instantiate_cfg()
 
         print currentDate
+
+        #Checkers
         area_configuration = "ROK"
         msg_areas = 'G'
+
         msglist = message.split('#')
         converter = HexConverter()
+
+        #Flags for configuration
         global config_mode
         config_mode = False
+        global areas_changed
+        areas_changed =[]
 
         for msg in msglist:
             try:
@@ -601,8 +608,8 @@ class MessageProcessor:
                 """
                 if msg[1:3] == "50":
                     field = Farm_Field(msg + "#")
-                    print field.to_json()
-                    #field.upload_to_server()
+                    #print field.to_json()
+                    field.upload_to_server()
 
                 elif msg[0] == "F":
 
@@ -617,8 +624,8 @@ class MessageProcessor:
                     #w_data -> Weather
                     print "STATIONS"
                     station = Weather_Station(w_data, field_id[1])
-                    print station.to_json()
-                    #station.upload_to_server()
+                    #print station.to_json()
+                    station.upload_to_server()
 
                     #First, build the configuration message
                     msg_areas += str(field_id)
@@ -635,29 +642,21 @@ class MessageProcessor:
                         print "--" + area_cfg + "---"
 
                         if area_configuration != area_cfg:
+
                             area_configuration = area_cfg
                             msg_areas += area_configuration
-                            msg_areas += '02' + '0'*6
-                            msg_areas += '03' + '0'*6
-                            msg_areas += '04' + '0'*6
-                            msg_areas += '05' + '0'*6
-                            msg_areas += '06' + '0'*6
-                            msg_areas += '07' + '0'*6
-                            msg_areas += '08' + '0'*6
-                            msg_areas += '09' + '0'*6
-                            msg_areas += '10' + '0'*6
                             #normalize the db to ROK
                             area.normalize_cfg()
 
-                        print area.to_json()
-                        #area.upload_to_server()
+                        #print area.to_json()
+                        area.upload_to_server()
                         #gets the data for the consolidated sensor
                         sc_data = 'C'+re.split('W', msg)[1].split('R')[index+1].split('C')[1].split('S')[0]
                         area_id = r_data[1]
                         print "CONSOLIDATED SENSORS" + sc_data
                         sensor = Sensor(sc_data, field_id[1], area_id)
-                        print sensor.to_json()
-                        #sensor.upload_to_server()
+                        #print sensor.to_json()
+                        sensor.upload_to_server()
                         no_of_sensors = int(r_data[2])
                         #gets the data for all the sensors
                         for index2 in xrange(index,int(no_of_sensors)+index):
@@ -665,14 +664,14 @@ class MessageProcessor:
                             area_id = r_data[1]
                             print "SENSORS" + s_data
                             sensor = Sensor(s_data, field_id[1], area_id)
-                            print sensor.to_json()
-                            #sensor.upload_to_server()
+                            #print sensor.to_json()
+                            sensor.upload_to_server()
                             #gets the data for the actuators
                             a_data = 'A'+re.split('W', msg)[1].split('R')[index2+1].split('C')[1].split('S')[1].split('A')[1]
                             print "ACTUATORS"
                             actuator = Valve(a_data, field_id[1], area_id)
-                            print actuator.to_json()
-                            #actuator.upload_to_server()
+                            #print actuator.to_json()
+                            actuator.upload_to_server()
                 else:
                     print "Nothing cool > " + msg
 
@@ -686,6 +685,14 @@ class MessageProcessor:
             #if the area config has been changed, return it
         if config_mode:
             print "Sending configuration"
+            msg_areas += '3' + '0'*6
+            msg_areas += '4' + '0'*6
+            msg_areas += '5' + '0'*6
+            msg_areas += '6' + '0'*6
+            msg_areas += '7' + '0'*6
+            msg_areas += '8' + '0'*6
+            msg_areas += '9' + '0'*6
+            msg_areas += '10' + '0'*6
             print msg_areas
             msg_converted = ""
             for word in msg_areas:

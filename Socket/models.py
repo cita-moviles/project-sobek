@@ -690,7 +690,7 @@ class MessageProcessor:
             msg_converted = ""
             for word in msg_areas:
                 if word == 'G':
-                    msg_converted += chr(word)
+                    msg_converted += chr(71)
                 else:
                     msg_converted += chr(int(word))
             return msg_converted

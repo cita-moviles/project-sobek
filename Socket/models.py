@@ -230,7 +230,7 @@ class Crop_Area:
             result2 = json.load(result)
             print "Server Config: " + result2['area_configuration']
             if result2['area_configuration'] == "ROK":
-                local_area_cfg += result2['area_configuration'][2] + '0'*6
+                local_area_cfg += str(self.area_id)[1] + '0'*6
             else:
                 data = result2['area_configuration']
                 global config_mode
@@ -241,7 +241,7 @@ class Crop_Area:
                 local_area_cfg += str_area_id
                 if str_mode == '1':
                     state = data[4]
-                    local_area_cfg += state
+                    local_area_cfg += state + data[4:]
                 elif str_mode == '2':
                     auto_data = data[4:]
                     min_data = auto_data.split('#')[0]
@@ -558,12 +558,19 @@ class MessageProcessor:
         instantiate_cfg()
 
         print currentDate
+
+        #Checkers
         area_configuration = "ROK"
         msg_areas = 'G'
+
         msglist = message.split('#')
         converter = HexConverter()
+
+        #Flags for configuration
         global config_mode
         config_mode = False
+        global areas_changed
+        areas_changed =[]
 
         for msg in msglist:
             try:
@@ -635,17 +642,9 @@ class MessageProcessor:
                         print "--" + area_cfg + "---"
 
                         if area_configuration != area_cfg:
+
                             area_configuration = area_cfg
                             msg_areas += area_configuration
-                            msg_areas += '02' + '0'*6
-                            msg_areas += '03' + '0'*6
-                            msg_areas += '04' + '0'*6
-                            msg_areas += '05' + '0'*6
-                            msg_areas += '06' + '0'*6
-                            msg_areas += '07' + '0'*6
-                            msg_areas += '08' + '0'*6
-                            msg_areas += '09' + '0'*6
-                            msg_areas += '10' + '0'*6
                             #normalize the db to ROK
                             area.normalize_cfg()
 
@@ -686,11 +685,19 @@ class MessageProcessor:
             #if the area config has been changed, return it
         if config_mode:
             print "Sending configuration"
+            msg_areas += '3' + '0'*6
+            msg_areas += '4' + '0'*6
+            msg_areas += '5' + '0'*6
+            msg_areas += '6' + '0'*6
+            msg_areas += '7' + '0'*6
+            msg_areas += '8' + '0'*6
+            msg_areas += '9' + '0'*6
+            msg_areas += '10' + '0'*6
             print msg_areas
             msg_converted = ""
             for word in msg_areas:
                 if word == 'G':
-                    msg_converted += chr(word)
+                    msg_converted += chr(71)
                 else:
                     msg_converted += chr(int(word))
             return msg_converted

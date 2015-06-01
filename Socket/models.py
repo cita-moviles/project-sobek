@@ -248,11 +248,10 @@ class Crop_Area:
                     max_data = auto_data.split('#')[1]
                     local_area_cfg += min_data + max_data
                 elif str_mode == '3':
-                    timer_data = data[4:]
-                    days = timer_data.split['#'][0]
-                    time = timer_data.split['#'][1]
-                    start = time.split['#'][0]
-                    duration = time.split['#'][1]
+                    timer_data = data[5:]
+                    days = timer_data.split('#')[0]
+                    start = timer_data.split('#')[1].translate(None,':')
+                    duration = timer_data.split('#')[2].translate(None,':')
                     local_area_cfg += days + start + duration
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")

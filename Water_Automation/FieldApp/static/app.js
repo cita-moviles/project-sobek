@@ -344,11 +344,14 @@ function quick_date(option) {
  * @param {Number} station_id The Id of the station to be retreived
  * @oaran {Function} Callback callback Function in charge of processing the JSON from web service
  * */
-function getAjaxWeatherData(station_id, callback) {
+function getAjaxWeatherData(station_id) {
     $.ajax({
-        url: '/Weather_Station/' + station_id,
+        url: '/Weather_Station/'+station_id,
+    success: function (data){
+        weatherCallback(data);
+    }
 
-        success: callback});
+    });
 }
 
 /**
@@ -357,53 +360,51 @@ function getAjaxWeatherData(station_id, callback) {
  * @param data JSON Retreived from the web service
  * */
 function weatherCallback(data) {
-    var date_received = '';
-    if (data.station_date_received !== '') {
+
+        var date_received = '';
         var dr = new Date(Date.parse(data.station_date_received));
         date_received = dr.toLocaleString();
 
-    }
+        // Getting Data from received JSON
+        var station_id = data.station_id;
+        var station_name = data.station_name;
+        var relative_humidity = (data.station_relative_humidity + '%');
+        var radiation = (data.station_solar_radiation + " W&frasl;m<sup>2</sup>");
+        var status = data.station_status;
+        var temperature = (data.station_temperature + ' ºC');
+        var wind_speed = (data.station_wind_speed + " m&frasl;s");
+        var rain = (data.station_user_define1 + " mm");
+        //var battery_level = data.station_user_define1;
 
-    // Getting Data from received JSON
-    var station_id = data.station_id;
-    var station_name = data.station_name;
-    var relative_humidity = (data.station_relative_humidity + '%');
-    var radiation = (data.station_solar_radiation + " W&frasl;m<sup>2</sup>");
-    var status = data.station_status;
-    var temperature = (data.station_temperature+ ' ºC');
-    var wind_speed = (data.station_wind_speed + " m&frasl;s");
-    var rain = (data.station_user_define1 + " mm");
-    //var battery_level = data.station_user_define1;
-
-    // Selecting the tags
-    var id_tag = $('#station_data');
-    var date_tag = $('#date_data');
-    var humidity_tag = $('#humidity_data');
-    var radiation_tag = $('#radiation_data');
-    var status_tag = $('#status_data');
-    var temperature_tag = $('#temperature_data');
-    var wind_tag = $('#wind_data');
-    var rain_tag = $('#rain_data');
-    var battery_tag = $('#battery_data');
+        // Selecting the tags
+        var id_tag = $('#station_data');
+        var date_tag = $('#date_data');
+        var humidity_tag = $('#humidity_data');
+        var radiation_tag = $('#radiation_data');
+        var status_tag = $('#status_data');
+        var temperature_tag = $('#temperature_data');
+        var wind_tag = $('#wind_data');
+        var rain_tag = $('#rain_data');
+        var battery_tag = $('#battery_data');
 
 
-    // Asign data received to tags
-    id_tag.append(station_id);
-    date_tag.append(date_received);
-    humidity_tag.append(relative_humidity);
-    radiation_tag.append(radiation);
+        // Asign data received to tags
+        id_tag.append(station_id);
+        date_tag.append(date_received);
+        humidity_tag.append(relative_humidity);
+        radiation_tag.append(radiation);
 
-    if (status === 0) {
-        status_tag.append('OK');
-    } else {
-        status_tag.append('Communication Error');
-    }
+        if (status === 0) {
+            status_tag.append('OK');
+        } else {
+            status_tag.append('Communication Error');
+        }
 
 
-    temperature_tag.append(temperature);
-    wind_tag.append(wind_speed);
-    //battery_tag.append(battery_level);
-    rain_tag.append (rain);
+        temperature_tag.append(temperature);
+        wind_tag.append(wind_speed);
+        //battery_tag.append(battery_level);
+        rain_tag.append(rain);
 
 }
 
@@ -444,7 +445,7 @@ function getSensorLogs(start, end, callback) {
 function getEvotranspirationLog(area_id, start_date, end_date, callback) {
     var evo_graph_data;
     //PRUEBA:
-    console.log(sensor_id);
+    //console.log(sensor_id);
     if (use_agg===0){
         evo_graph_data= "/Crop_Area_Log/";
     }

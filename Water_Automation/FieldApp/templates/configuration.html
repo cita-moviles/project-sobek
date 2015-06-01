@@ -390,10 +390,10 @@ function readDays (days){
         var field_id = $('#field').val();
         console.log(field_id);
         if (Number(field_id)<10) {
-            strConfig = '0' + field_id + area_id;
+            strConfig = '0' + area_id;
         }
         else {
-            strConfig = field_id + area_id;
+            strConfig = area_id;
         }
 
         var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;

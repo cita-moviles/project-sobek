@@ -93,11 +93,13 @@ function getAreasOptions(select_id,search_id) {
             });
             $('#' + select_id).html(options);
             getCurrentArea('area');
+
         }
     });
 }
 function getCurrentArea(area_selector){
   var current_area=$('#'+area_selector).val();
+  LoadCurrentConf();
  return current_area;
 }
 
@@ -195,6 +197,7 @@ function getStationCurrentData(select_id, search_id) {
             });
 
             $('#' + select_id).html(options);
+            $('#current_station').html(' ');
             $('#current_station').html(current_data);
         }
     });
@@ -416,12 +419,12 @@ function quick_date(option) {
  * @param {Number} station_id The Id of the station to be retreived
  * @oaran {Function} Callback callback Function in charge of processing the JSON from web service
  * */
-function getAjaxWeatherData(station_id, callback) {
+/*function getAjaxWeatherData(station_id, callback) {
     $.ajax({
         url: '/Weather_Station/' + station_id,
 
         success: callback});
-}
+}*/
 
 
 

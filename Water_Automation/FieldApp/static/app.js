@@ -344,11 +344,14 @@ function quick_date(option) {
  * @param {Number} station_id The Id of the station to be retreived
  * @oaran {Function} Callback callback Function in charge of processing the JSON from web service
  * */
-function getAjaxWeatherData(station_id, callback) {
+function getAjaxWeatherData(station_id) {
     $.ajax({
-        url: '/Weather_Station/' + station_id,
+        url: '/Weather_Station/'+station_id,
+    success: function (data){
+        weatherCallback(data);
+    }
 
-        success: callback});
+    });
 }
 
 /**
@@ -397,11 +400,10 @@ function weatherCallback(data) {
         status_tag.append('Communication Error');
     }
 
-
-    temperature_tag.append(temperature);
-    wind_tag.append(wind_speed);
-    //battery_tag.append(battery_level);
-    rain_tag.append (rain);
+        temperature_tag.append(temperature);
+        wind_tag.append(wind_speed);
+        //battery_tag.append(battery_level);
+        rain_tag.append(rain);
 
 }
 

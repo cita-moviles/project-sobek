@@ -146,6 +146,7 @@ volver a comentarlas de ya no necesitarlas. De modificar el código, sigue el mi
 
 //PAQUETE PARA GRAFICAS DE GOOGLE:
 google.load('visualization', '1.0', {'packages': ['corechart']});
+//GraphPrueba();
 {#getAjaxFarmFields('field', 'area', 'sensor');#}
 
 //SELECTORS:
@@ -162,9 +163,9 @@ initDatePickers(from_picker,to_picker);
 //POPULATE SELECTORS:
 PopulateFields();
 //POPULATE WEATHER STATION DATA
-getAjaxFarmFields(11,weatherCallback());
+getAjaxWeatherData(11);
 //LOG ANY ERROR CODE. SEE CONSOLE.
-LogErrorCode();
+//LogErrorCode();
 
 
 /**
@@ -229,7 +230,7 @@ function getAreaForFieldSelected () {
 
             console.log("CURRENT AREA SELECTED: " + current_area);
             getConsolidatedSensorIDForArea();
-            LogErrorCode();
+            //LogErrorCode();
         }
     });
 }
@@ -302,7 +303,7 @@ function getSensorLogGraph(Consolidate_sensor_id) {
             };
             hideLoading();
             chart_moisture.draw(data_moisture, options);
-            LogErrorCode();
+            //LogErrorCode();
         }});
 }
 /*
@@ -339,7 +340,7 @@ function LoadWeatherData () {
     var station_id = field_id + '1';
     station_id= station_id.replace(/\s/g, '');
     console.log('Staion ID: ' + station_id);
-    getAjaxWeatherData(station_id, weatherCallback);
+    getAjaxWeatherData(station_id);
 }
 
 // SET THE INITIAL AND END DATE:
@@ -409,7 +410,7 @@ function graphLogs() {
             graphValveData(current_valve);
             }
         });
-    LogErrorCode();
+    //LogErrorCode();
     }
 /**
  * Graphs the valve data of a valve in the area selected.
@@ -419,8 +420,10 @@ function graphLogs() {
 function graphValveData(current_valve) {
     var valve_graph_data;
     //PRUEBA:
-   // console.log(sensor_id);
-   /* if (use_agg===0){
+    //console.log(sensor_id);
+    console.log (use_agg);
+   /* if (use_agg === 0){
+        valve_graph_data= "/Valve_Log/";
     }
     else {
         valve_graph_data= "/Valve_Agg/";
@@ -473,7 +476,7 @@ function graphValveData(current_valve) {
 
     }
     });
-    LogErrorCode();
+   // LogErrorCode();
 }
 /**
  * Graphs the valve data of a valve in the area selected.
@@ -498,7 +501,6 @@ function LogErrorCode ()
     })
 
 }
-LogErrorCode();
 
 </script>
 </body>

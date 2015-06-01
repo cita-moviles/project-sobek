@@ -420,14 +420,14 @@ function graphValveData(current_valve) {
     var valve_graph_data;
     //PRUEBA:
    // console.log(sensor_id);
-    if (use_agg===0){
+   /* if (use_agg===0){
     }
     else {
         valve_graph_data= "/Valve_Agg/";
-    }
+    }*/
     var valve_id= current_valve;
             $.ajax({
-                url: valve_graph_data,
+                url: "/Valve_Log/",
                 data: {
                     valve_id: valve_id,
                     min_date: init_date.dateFormat('Y-m-d H:i:s'),

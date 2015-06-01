@@ -358,11 +358,9 @@ function getAjaxWeatherData(station_id, callback) {
  * */
 function weatherCallback(data) {
     var date_received = '';
-    if (data.station_date_received !== '') {
-        var dr = new Date(Date.parse(data.station_date_received));
-        date_received = dr.toLocaleString();
+    var dr = new Date(Date.parse(data.station_date_received));
+    date_received = dr.toLocaleString();
 
-    }
 
     // Getting Data from received JSON
     var station_id = data.station_id;

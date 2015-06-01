@@ -20,7 +20,7 @@
         </h3>
         <label>Field</label>
         <select id="field"
-                onchange="getStationsOptions('station', 'field');"></select>
+                onchange="getStationForField()"></select>
         <label>Weather Station</label>
         <select id="station"></select>
 
@@ -103,14 +103,51 @@
 <script>
 
     google.load("visualization", "1", {packages: ["corechart"]});
-    getAjaxFarmFields('field', 'station', '');
+    //getAjaxFarmFields('field', 'station', '');
     var from_picker = '#to_datetimepicker';
     var to_picker = '#from_datetimepicker';
 
     initDatePickers(from_picker, to_picker);
 
     console.log($('#station').val());
+    PopulateFields();
 
+    function PopulateFields() {
+
+    var current_field;
+    $.ajax({
+        url: "/Farm_Field",
+        data: {},
+        success: function (data) {
+            var options = "";
+            $.each(data, function (index, value) {
+                options += '<option value="' + value.field_id + '">' + value.field_name + '</option>';
+            });
+            field_selector.html(options);
+            current_field = $("#field").val();
+            //console.log(current_field);
+            PopulateStationForField(current_field);
+        }
+    });
+}
+
+    function PopulateStationForField (current_field) {
+       $.ajax({
+        url: "/Weather_Station/",
+        data: {fk_farm_field: current_field},
+        success: function (data){
+            var options ="";
+            $.each(data, function(index,value){
+                options += '<option value=" '+ value.station_id+ '">' + value.station_name + '</option>';
+            });
+            $('#station').html(options);
+        }
+    });
+}
+  function getStationForField () {
+      var current_field= $("#field").val();
+      PopulateStationForField(current_field);
+  }
     function graphLogs() {
         console.log(init_date.dateFormat('Y-m-d H:i:s'));
         console.log(end_date.dateFormat('Y-m-d H:i:s'));

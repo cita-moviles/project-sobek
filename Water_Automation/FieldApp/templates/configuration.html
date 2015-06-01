@@ -21,9 +21,9 @@
         <label>Field</label>
         <select id="field" onchange="getAreasOptions('area', 'field')"></select>
         <label>Area</label>
-        <select id="area" onchange="hideOperations();"></select>
+        <select id="area" onchange="LoadCurrentConf()"></select>
 
-        <button onclick="getConfigurations()">Get Configuration</button>
+        <button onclick="showConfigurations()">Change Configuration</button>
 
         <section id="opModeSelect">
             <label>Operation Mode</label>
@@ -72,7 +72,12 @@
             <button onclick="saveOpTim();">Save</button>
 
         </section>
-
+        </div>
+    <div class="medium-4 columns">
+        <h3>Current Configuration:</h3>
+        <p id="current_conf"></p>
+        <p id="read_conf"></p>
+    </div>
         <style>
             #opModeSelect, .operationModes {
                 display: none;
@@ -102,11 +107,13 @@
 </div>
 
 <script>
+var configuration;
 var strConfig;
 var field_selector = $('#field');
 var area_selector = $('#area');
 //POPULATE SELECTORS:
 PopulateFields();
+
 
 /*Nombre: PopulateFields
  Tarea: Poblar el selector de Fields con los Fields existentes. Este mismo se encargará de llamar a la población de áreas.*/
@@ -141,22 +148,150 @@ function PopulateAreaForField(field){
                 options += '<option value=" '+ value.area_id+ '">' + value.area_name + '</option>';
             });
             area_selector.html(options);
+            LoadCurrentConf();
         }
     });
 }
+function LoadCurrentConf () {
+    var current_area = $('#area').val();
+    $.ajax ({
+        url: '/Area_Configuration/'+current_area,
+        data: {area_id: current_area},
+        success: function (data) {
+            var current_conf = data.area_configuration;
+            console.log("Current configuration string: "+current_conf);
+            $("#current_conf").html("Current configuration string: " +current_conf);
+            readConf(current_conf);
+        }
 
-    function getConfigurations() {
+    })
+
+}
+function readConf (conf) {
+    var mode = conf.substring(3,4);
+
+    switch (mode) {
+        case "1" : {
+            configuration = "<h3>Manual mode<h3>";
+            readManualConf(conf);
+            break;
+        }
+        case "2" : {
+            configuration = "<h3>Automatic mode on<h3>";
+            readAutoConf(conf);
+            break;
+        }
+        case "3" : {
+            configuration = "<h3>Timer mode<h3>";
+            readTimerConf(conf);
+            break;
+        }
+        default :
+            console.log ("ERROR");
+    }
+}
+function readManualConf (conf) {
+    var on_off = conf.substring(4,5);
+    switch (on_off) {
+        case "1":{
+            configuration = configuration + "<p>ON</p>";
+            break;
+        }
+        case "0":{
+            configuration = configuration + "<p>OFF</p>";
+            break;
+        }
+        default :
+            console.log ("ERROR");
+    }
+    $('#read_conf').html(configuration);
+
+
+}
+function readAutoConf (conf) {
+    var auto = conf.substring(4);
+    var auto_array = auto.split("#");
+    var min = auto_array[0];
+    var max = auto_array [1];
+    configuration = configuration + "<p>Min moisture: " + min + "</p>";
+    configuration = configuration + "<p>Max moisture: " + max + "</p>";
+    $('#read_conf').html(configuration);
+
+}
+function readTimerConf (conf) {
+    var timer = conf.substring(4);
+    var timer_array = timer.split('#');
+    var days = timer_array [0];
+    var start = timer_array [1];
+    var duration = timer_array [2];
+    days = Number(days).toString(2);
+    days = zeroFill(Number(days),9);
+    readDays(days);
+    configuration = configuration + "<p>Starting at: " +start + "</p>";
+    configuration = configuration + "<p>with duration of: " +duration + "</p>";
+    $('#read_conf').html(configuration);
+
+
+}
+function readDays (days){
+    var array_days = days.split('');
+    configuration = configuration + "<h5>Days: <h5>"
+    for (i=1; i<=7; i++) {
+        console.log(i);
+        if (array_days[i]==='0');
+        else {
+            switch (i){
+                case 1:{
+                    configuration = configuration + "<p>Monday</p>";
+                    console.log("Monday");
+                    break;
+                }
+                case 2:{
+                    configuration = configuration + "<p>Tuesday</p>";
+                    console.log("Tuesday");
+                    break;
+                }
+                case 3:{
+                    configuration = configuration + "<p>Wednesday</p>";
+                    console.log("Wednesday");
+                    break;
+                }
+                case 4:{
+                    configuration = configuration + "<p>Thursday</p>";
+                    console.log("Thursday");
+                    break;
+                }
+                case 5:{
+                    configuration = configuration + "<p>Friday</p>";
+                    console.log("Friday");
+                    break;
+                }
+                case 6:{
+                    configuration = configuration + "<p>Saturday</p>";
+                    console.log("Saturday");
+                    break;
+                }
+                case 7:{
+                    configuration = configuration + "<p>Sunday</p>";
+                    console.log("Sunday");
+                    break;
+                }
+            }
+
+        }
+
+    }
+    return configuration;
+
+}
+
+    /*function getConfigurations() {
         var area_id = $('#area').val();
         //var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
         var url = "http://localhost:8000/Area_Configuration/" +area_id;
         $.ajax({
             url: url,
             success: function(json){
-                $('#opModeSelect').css('display', 'block');
-                $('#opAutomatic').css('display', 'none');
-                $('#opManual').css('display', 'none');
-                $('#opTimer').css ('display', 'none');
-
                 var area_configuration = json.area_configuration.substr(2);
                 var area_operation = json.area_configuration[0];
                 switch (area_operation){
@@ -183,7 +318,7 @@ function PopulateAreaForField(field){
 
             }
         } );
-    }
+    }*/
 
     function hideOperations() {
         $('#opModeSelect').css('display', 'none');
@@ -255,10 +390,10 @@ function PopulateAreaForField(field){
         var field_id = $('#field').val();
         console.log(field_id);
         if (Number(field_id)<10) {
-            strConfig = '0' + field_id + area_id;
+            strConfig = '0' + area_id;
         }
         else {
-            strConfig = field_id + area_id;
+            strConfig = area_id;
         }
 
         var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
@@ -291,10 +426,10 @@ function PopulateAreaForField(field){
         var field_id = $('#field').val();
         console.log(field_id);
         if (Number(field_id)<10) {
-            strConfig = '0' + field_id + area_id;
+            strConfig = '0' + area_id;
         }
         else {
-            strConfig = field_id + area_id;
+            strConfig = area_id;
         }
         var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
         url = url.replace(/\s/g, '');
@@ -306,6 +441,7 @@ function PopulateAreaForField(field){
         console.log(start);
         strConfig += '#'+ start + '#' + duration;
         strConfig= strConfig.replace(/\s/g, '');
+        console.log ("Timer str conf: "+ strConfig);
 
         $.ajax({
             url: url,
@@ -339,10 +475,28 @@ function PopulateAreaForField(field){
         console.log("BIN SUM: " + bin_sum);
         return bin_sum;
     }
+function zeroFill( number, width )
+    {
+      width -= number.toString().length;
+      if ( width > 0 )
+      {
+        return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+      }
+      return number + ""; // always return a string
+    }
 
     function lPad3(number) {
         if (number<=999) { number = ("00"+number).slice(-3); }
         return number;
+    }
+
+    function showConfigurations() {
+      $('#opModeSelect').css('display', 'block');
+      $('#opAutomatic').css('display', 'none');
+      $('#opManual').css('display', 'block');
+      $('#opTimer').css ('display', 'none');
+
+
     }
 </script>
 </body>

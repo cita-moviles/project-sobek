@@ -20,10 +20,10 @@
         </h3>
         <label>Field</label>
         <select id="field"
-                onchange="getAreasOptions('area', 'field'),getConsolidatedValveForFieldSelected();"></select>
+                onchange="getAreasOptions('area', 'field')"></select>
         <label>Area</label>
         <select id="area"
-                onchange="getValveForArea('area');"></select>
+                onchange="getValveForFieldSelected()"></select>
         <label>Valve</label>
         <select id="valve"></select>
 
@@ -106,7 +106,7 @@
     initDatePickers(from_picker, to_picker);
 
     PopulateFields();
-    function PopulateFields() {
+ function PopulateFields() {
     var current_field;
     $.ajax({
         url: "/Farm_Field",
@@ -123,43 +123,6 @@
         }
     });
 }
-    function getConsolidatedValveForFieldSelected () {
-    var current_field=$("#field").val();
-    $.ajax({
-        url: "/Area_Search/",
-        data: {fk_farm_field: current_field },
-        success: function (data) {
-            options = "";
-            $.each(data, function (index, value) {
-                options += '<option value="' + value.area_id + '">' + value.area_name + '</option>';
-            });
-            $('#area').html(options);
-            getValveForArea('area');
-        }
-    });
-}
-  function getValveForArea(area_selector){
-  var current_area=$('#'+area_selector).val();
-  if(current_area===null){
-      $("#default_valve").html("");
-      return false;
-  }
-  //console.log(current_area);
-    $.ajax({
-        url:"/Valve_Search",
-        data: {fk_area:current_area,
-               valve_id: 0 },
-        success:function(data) {
-            var default_valve = "";
-
-            $.each(data, function (index, value) {
-                if(data.isEmptyObject){default_valve=" ";}
-                default_valve += "<p>Valve: " + value.valve_id + "</p>";
-            });
-            $('#default_valve').html(default_valve);
-        }
-    });
-}
 function PopulateAreaForField(field){
     $.ajax({
         url: "Area_Search",
@@ -170,12 +133,47 @@ function PopulateAreaForField(field){
                 options += '<option value=" '+ value.area_id+ '">' + value.area_name + '</option>';
             });
             area_selector.html(options);
+            getValveForFieldSelected();
         }
     });
 }
+function getValveForFieldSelected () {
+    var current_area=$("#area").val();
+    $.ajax({
+        url: "/Valve_Search/",
+        data: {fk_area: current_area },
+        success: function (data) {
+            options = "";
+            $.each(data, function (index, value) {
+                options += '<option value="' + value.valve_id + '">' + value.valve_name + '</option>';
+            });
+            $('#valve').html(options);
+           LoadCurrentValveData();
+        }
+    });
+}
+
 function LoadCurrentValveData () {
+  var current_valve=$('#valve').val();
+  var valve_data= ' ';
+  //console.log(current_area);
+    $.ajax({
+        url:"/Valve/" + current_valve,
+        success:function(data) {
+            var date_received;
+                console.log(data);
+                   var dr = new Date(Date.parse(data.valve_date_received));
+                date_received = dr.toLocaleString();
+                valve_data = "<h3>Valve:<h3><p>Valve id: " + data.valve_id + "</p>";
+                valve_data += "<p>Date received: " + date_received + "</p>";
+                valve_data += "<p>Valve Name: "+ data.valve_name + "</p>";
+                valve_data += "<p>Valve Flow: " + data.valve_flow + "</p>";
+                valve_data += "<p>Valve Pressure: " + data.valve_pressure + "</p>";
 
-
+            $('#current_valve').html(' ');
+            $('#current_valve').html(valve_data);
+        }
+    });
 
 }
 

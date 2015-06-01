@@ -366,14 +366,15 @@ function weatherCallback(data) {
         date_received = dr.toLocaleString();
 
         // Getting Data from received JSON
-        var station_id = data.station_id;
-        var station_name = data.station_name;
-        var relative_humidity = (data.station_relative_humidity + '%');
-        var radiation = (data.station_solar_radiation + " W&frasl;m<sup>2</sup>");
-        var status = data.station_status;
-        var temperature = (data.station_temperature + ' ºC');
-        var wind_speed = (data.station_wind_speed + " m&frasl;s");
-        var rain = (data.station_user_define1 + " mm");
+        var station_id = "<p>Station ID: "+ data.station_id + "</p>";
+        var date = "<p>Date received: "+ date_received + "</p>"
+        var station_name = "<p>Station Name: "+data.station_name + "</p>";
+        var relative_humidity = "<p>Humidity: "+(data.station_relative_humidity + '%')+ "</p>";
+        var radiation = "<p>Radiation: "+ (data.station_solar_radiation + " W&frasl;m<sup>2</sup>")+ "</p>";
+        var status = "<p>Status: " + data.station_status + "</p>";
+        var temperature = "<p>Temperature: " + (data.station_temperature + ' ºC')+ "</p>";
+        var wind_speed = "<p>Wind Speed: "+ (data.station_wind_speed + " m&frasl;s")+ "</p>";
+        var rain = "<p>Rain: " + (data.station_user_define1 + " mm")+ "</p>";
         //var battery_level = data.station_user_define1;
 
         // Selecting the tags
@@ -389,22 +390,22 @@ function weatherCallback(data) {
 
 
         // Asign data received to tags
-        id_tag.append(station_id);
-        date_tag.append(date_received);
-        humidity_tag.append(relative_humidity);
-        radiation_tag.append(radiation);
+        id_tag.html(station_id);
+        date_tag.html(date);
+        humidity_tag.html(relative_humidity);
+        radiation_tag.html(radiation);
 
         if (status === 0) {
-            status_tag.append('OK');
+            status_tag.html('<p>OK</p>');
         } else {
-            status_tag.append('Communication Error');
+            status_tag.html('<p>Communication Error</p>');
         }
 
 
-        temperature_tag.append(temperature);
-        wind_tag.append(wind_speed);
+        temperature_tag.html(temperature);
+        wind_tag.html(wind_speed);
         //battery_tag.append(battery_level);
-        rain_tag.append(rain);
+        rain_tag.html(rain);
 
 }
 

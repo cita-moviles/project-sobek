@@ -17,7 +17,7 @@ from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Se
      Farm_Field_Agg_Serializer
 
 from rest_framework.settings import api_settings
-from rest_framework_csv import renderers as r
+#from rest_framework_csv import renderers as r
 
 
 class Crop_ViewSet (viewsets.ModelViewSet):
@@ -213,7 +213,7 @@ class FieldSearch (generics.ListCreateAPIView):
      serializer_class = Farm_Field_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = FieldFilter
-     renderer_classes = r.CSVRenderer
+     #renderer_classes = r.CSVRenderer
 
 class SensorSearch (generics.ListCreateAPIView):
      queryset = Sensor.objects.all ()
@@ -319,7 +319,7 @@ class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     serializer_class = Farm_Field_Agg_Serializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = FieldAggFilter
-    renderer_classes = (r.CSVRenderer, )
+    #renderer_classes = (r.CSVRenderer, )
 
 
 @api_view(('GET',))

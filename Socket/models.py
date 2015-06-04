@@ -260,7 +260,7 @@ class Crop_Area:
                     auto_data = data[4:]
                     min_data = auto_data.split('#')[0]
                     max_data = auto_data.split('#')[1]
-                    local_area_cfg += min_data + max_data
+                    local_area_cfg += str_mode +min_data + max_data
                 elif str_mode == '3':
                     timer_data = data[5:]
                     days = timer_data.split('#')[0]

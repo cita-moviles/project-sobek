@@ -240,7 +240,7 @@ class Crop_Area:
                 str_mode = data[3]
                 local_area_cfg += str_area_id
                 if str_mode == '1':
-                    state = data[4]
+                    state = data[3]
                     local_area_cfg += state + data[4:]
                 elif str_mode == '2':
                     auto_data = data[4:]

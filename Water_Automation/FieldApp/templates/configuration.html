@@ -114,7 +114,7 @@ var area_selector = $('#area');
 //POPULATE SELECTORS:
 PopulateFields();
 
-
+/***/
 /*Nombre: PopulateFields
  Tarea: Poblar el selector de Fields con los Fields existentes. Este mismo se encargará de llamar a la población de áreas.*/
 function PopulateFields() {
@@ -345,11 +345,10 @@ function readDays (days){
         var area_id = $('#area').val();
         var field_id = $('#field').val();
         if (Number(field_id)<10) {
-            strConfig = '0' + field_id + area_id;
-        }
+            strConfig = '0' + area_id;}
         else {
-            strConfig = field_id + area_id;
-        }
+            strConfig = area_id;
+            }
         console.log ("area id from manual mode: " + area_id );
         var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
         url = url.replace(/\s/g, '');
@@ -366,7 +365,6 @@ function readDays (days){
                 break;
             default:
                 alert("You didn't select an operation");
-                return;
                 break;
         }
 
@@ -400,13 +398,16 @@ function readDays (days){
         url = url.replace(/\s/g, '');
 
         strConfig += '2';
-        var maxHum = parseFloat($('#maxHum').val());
+        /*var maxHum = parseFloat($('#maxHum').val());
         var minHum = parseFloat($('#minHum').val());
 
         var integerMax = parseInt(Math.floor(maxHum) + (maxHum % 1).toFixed(1).substr(2,1));
-        var integerMin = parseInt(Math.floor(minHum) + (minHum % 1).toFixed(1).substr(2,1));
+        var integerMin = parseInt(Math.floor(minHum) + (minHum % 1).toFixed(1).substr(2,1));*/
+        var maxHum = $('#maxHum').val();
+        var minHum = $('#minHum').val();
 
-        strConfig += lPad3(integerMax) +'#'+ lPad3(integerMin);
+        //strConfig += (lPad3(integerMax)/10) +'#'+ (lPad3(integerMin)/10);
+        strConfig += maxHum + '#' + minHum;
         strConfig = strConfig.replace(/\s/g, '');
         console.log('strConf de auto mode: '+ strConfig);
 

@@ -350,7 +350,6 @@ function readDays (days){
             strConfig = area_id;
             }
 
-        }
         console.log ("area id from manual mode: " + area_id );
         var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
         url = url.replace(/\s/g, '');
@@ -367,7 +366,6 @@ function readDays (days){
                 break;
             default:
                 alert("You didn't select an operation");
-                return;
                 break;
         }
 
@@ -490,7 +488,6 @@ function zeroFill( number, width )
         if (number<=999) { number = ("00"+number).slice(-3); }
         return number;
     }
-
     function showConfigurations() {
       $('#opModeSelect').css('display', 'block');
       $('#opAutomatic').css('display', 'none');

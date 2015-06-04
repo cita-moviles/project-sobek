@@ -244,7 +244,7 @@ class Crop_Area:
             result2 = json.load(result)
             print "Server Config: " + result2['area_configuration']
             if result2['area_configuration'] == "ROK":
-                local_area_cfg += str(self.area_id)[1] + '0'*6
+                local_area_cfg += chr(int(str(self.area_id)[1])) + chr(0)*6
             else:
                 data = result2['area_configuration']
                 global config_mode
@@ -255,18 +255,29 @@ class Crop_Area:
                 local_area_cfg += str_area_id
                 if str_mode == '1':
                     state = data[3]
-                    local_area_cfg += state + data[4:]
+                    local_area_cfg += chr(int(state))
+                    for char in data[4:]:
+                        local_area_cfg += chr(int(char))
                 elif str_mode == '2':
                     auto_data = data[4:]
                     min_data = auto_data.split('#')[0]
                     max_data = auto_data.split('#')[1]
-                    local_area_cfg += str_mode +min_data + max_data
+                    min_data_1, min_data_2 = int(min_data.split('.')[0]), int(min_data.split('.')[1])
+                    max_data_1, max_data_2 = int(max_data.split('.')[0]), int(max_data.split('.')[1])
+                    if min_data_2 < 10 and len(min_data.split('.')[1]) < 2:
+                        min_data_2 = min_data_2*10
+                    if max_data_2 < 10 and len(max_data.split('.')[1]) < 2:
+                        max_data_2 = max_data_2*10
+                    print local_area_cfg + str_mode + str(min_data_1)+ str(min_data_2) + str(max_data_1) + str(max_data_2)
+                    local_area_cfg += chr(int(str_mode))
+                    local_area_cfg += chr(min_data_1) + chr(min_data_2) + chr(max_data_1) + chr(max_data_2)
                 elif str_mode == '3':
                     timer_data = data[5:]
                     days = timer_data.split('#')[0]
-                    start = timer_data.split('#')[1].translate(None, ':')
-                    duration = timer_data.split('#')[2].translate(None, ':')
-                    local_area_cfg += days + start + duration
+                    start_1, start_2 = timer_data.split('#')[1].split(':')[0],timer_data.split('#')[1].split(':')[1]
+                    duration_1, duration_2 = timer_data.split('#')[2].split(':')[0], timer_data.split('#')[2].split(':')[1]
+                    print start_1, start_2, duration_1, duration_2
+                    local_area_cfg += chr(int(days)) + chr(int(start_1)) + chr(int(start_2)) + chr(int(duration_1)) + chr(int(duration_2))
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
             print('Area configuration not found ' + str(self.area_id))
@@ -594,7 +605,7 @@ class MessageProcessor:
 
         # Checkers
         area_configuration = "ROK"
-        msg_areas = 'G'
+        msg_areas = chr(71)
 
         msglist = message.split('#')
         converter = HexConverter()
@@ -675,8 +686,6 @@ class MessageProcessor:
                         # area configuration setup
 
                         global area_cfg
-                        print "--" + area_cfg + "---"
-
                         if area_configuration != area_cfg:
 
                             area_configuration = area_cfg
@@ -727,22 +736,22 @@ class MessageProcessor:
             # if the area config has been changed, return it
         if config_mode:
             print "Sending configuration"
-            msg_areas += '3' + '0'*6
-            msg_areas += '4' + '0'*6
-            msg_areas += '5' + '0'*6
-            msg_areas += '6' + '0'*6
-            msg_areas += '7' + '0'*6
-            msg_areas += '8' + '0'*6
-            msg_areas += '9' + '0'*6
-            msg_areas += '10' + '0'*6
-            print msg_areas
-            msg_converted = ""
+            msg_areas += chr(3) + chr(0)*6
+            msg_areas += chr(4) + chr(0)*6
+            msg_areas += chr(5) + chr(0)*6
+            msg_areas += chr(6) + chr(0)*6
+            msg_areas += chr(7) + chr(0)*6
+            msg_areas += chr(8) + chr(0)*6
+            msg_areas += chr(9) + chr(0)*6
+            msg_areas += chr(10) + chr(0)*6
+            return msg_areas
+            """msg_converted = ""
             for word in msg_areas:
                 if word == 'G':
                     msg_converted += chr(71)
                 else:
                     msg_converted += chr(int(word))
-            return msg_converted
+            return msg_converted"""
         else:
             print "No configuration pending"
             return 'ROK'

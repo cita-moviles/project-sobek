@@ -4,7 +4,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
-
+from rest_pandas import PandasViewSet
 from rest_framework import viewsets
 from django.views.generic import TemplateView
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
@@ -52,7 +52,7 @@ class Sensor_ViewSet (viewsets.ModelViewSet):
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
 
-class Field_ViewSet (viewsets.ModelViewSet):
+class Field_ViewSet (PandasViewSet):
      queryset = Farm_Field.objects.all ()
      serializer_class = Farm_Field_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)

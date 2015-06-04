@@ -399,11 +399,10 @@ function weatherCallback(data) {
     } else {
         status_tag.append('Communication Error');
     }
-
-        temperature_tag.append(temperature);
-        wind_tag.append(wind_speed);
+        temperature_tag.html(temperature);
+        wind_tag.html(wind_speed);
         //battery_tag.append(battery_level);
-        rain_tag.append(rain);
+        rain_tag.html(rain);
 
 }
 

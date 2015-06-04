@@ -50,8 +50,8 @@ class Sensor_ViewSet (viewsets.ModelViewSet):
      serializer_class = Sensor_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
-class Field_ViewSet(viewsets.ModelViewSet):
-     queryset = Farm_Field.objects.all()
+class Field_ViewSet (viewsets.ModelViewSet):
+     queryset = Farm_Field.objects.all ()
      serializer_class = Farm_Field_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 # Filters

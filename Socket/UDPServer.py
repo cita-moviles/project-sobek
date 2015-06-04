@@ -30,11 +30,14 @@ def sobek_server(address):
         start_time = time.time()
         print('Got message from', addr)
         FileWriter.writeToFile(msg)
-        return_value = MessageProcessor.process_message(msg)
-
-        print return_value
-        print("--- %s seconds ---" % (time.time() - start_time))
-        sock.sendto(return_value, addr)
+        if msg == 'GOK':
+            pass
+            print "Received GOK"
+        else:
+            return_value = MessageProcessor.process_message(msg)
+            print return_value
+            print("--- %s seconds ---" % (time.time() - start_time))
+            sock.sendto(return_value, addr)
 
 if __name__ == '__main__':
     sobek_server (('', PORT))

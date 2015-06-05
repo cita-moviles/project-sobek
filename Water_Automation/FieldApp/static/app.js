@@ -386,7 +386,7 @@ function weatherCallback(data) {
         var temperature_tag = $('#temperature_data');
         var wind_tag = $('#wind_data');
         var rain_tag = $('#rain_data');
-        var battery_tag = $('#battery_data');
+        var battery_tag = $('#battery_data'); 
 
 
         // Asign data received to tags

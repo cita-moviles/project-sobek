@@ -360,45 +360,47 @@ function getAjaxWeatherData(station_id) {
  * @param data JSON Retreived from the web service
  * */
 function weatherCallback(data) {
-    var date_received = '';
-    var dr = new Date(Date.parse(data.station_date_received));
-    date_received = dr.toLocaleString();
+
+        var date_received = '';
+        var dr = new Date(Date.parse(data.station_date_received));
+        date_received = dr.toLocaleString();
+
+        // Getting Data from received JSON
+        var station_id = "<p>Station ID: "+ data.station_id + "</p>";
+        var date = "<p>Date received: "+ date_received + "</p>"
+        var station_name = "<p>Station Name: "+data.station_name + "</p>";
+        var relative_humidity = "<p>Humidity: "+(data.station_relative_humidity + '%')+ "</p>";
+        var radiation = "<p>Radiation: "+ (data.station_solar_radiation + " W&frasl;m<sup>2</sup>")+ "</p>";
+        var status = "<p>Status: " + data.station_status + "</p>";
+        var temperature = "<p>Temperature: " + (data.station_temperature + ' ºC')+ "</p>";
+        var wind_speed = "<p>Wind Speed: "+ (data.station_wind_speed + " m&frasl;s")+ "</p>";
+        var rain = "<p>Rain: " + (data.station_user_define1 + " mm")+ "</p>";
+        //var battery_level = data.station_user_define1;
+
+        // Selecting the tags
+        var id_tag = $('#station_data');
+        var date_tag = $('#date_data');
+        var humidity_tag = $('#humidity_data');
+        var radiation_tag = $('#radiation_data');
+        var status_tag = $('#status_data');
+        var temperature_tag = $('#temperature_data');
+        var wind_tag = $('#wind_data');
+        var rain_tag = $('#rain_data');
+        var battery_tag = $('#battery_data'); 
 
 
-    // Getting Data from received JSON
-    var station_id = data.station_id;
-    var station_name = data.station_name;
-    var relative_humidity = (data.station_relative_humidity + '%');
-    var radiation = (data.station_solar_radiation + " W&frasl;m<sup>2</sup>");
-    var status = data.station_status;
-    var temperature = (data.station_temperature+ ' ºC');
-    var wind_speed = (data.station_wind_speed + " m&frasl;s");
-    var rain = (data.station_user_define1 + " mm");
-    //var battery_level = data.station_user_define1;
+        // Asign data received to tags
+        id_tag.html(station_id);
+        date_tag.html(date);
+        humidity_tag.html(relative_humidity);
+        radiation_tag.html(radiation);
 
-    // Selecting the tags
-    var id_tag = $('#station_data');
-    var date_tag = $('#date_data');
-    var humidity_tag = $('#humidity_data');
-    var radiation_tag = $('#radiation_data');
-    var status_tag = $('#status_data');
-    var temperature_tag = $('#temperature_data');
-    var wind_tag = $('#wind_data');
-    var rain_tag = $('#rain_data');
-    var battery_tag = $('#battery_data');
+        if (status === 0) {
+            status_tag.html('<p>OK</p>');
+        } else {
+            status_tag.html('<p>Communication Error</p>');
+        }
 
-
-    // Asign data received to tags
-    id_tag.append(station_id);
-    date_tag.append(date_received);
-    humidity_tag.append(relative_humidity);
-    radiation_tag.append(radiation);
-
-    if (status === 0) {
-        status_tag.append('OK');
-    } else {
-        status_tag.append('Communication Error');
-    }
         temperature_tag.html(temperature);
         wind_tag.html(wind_speed);
         //battery_tag.append(battery_level);

@@ -344,29 +344,26 @@ function readDays (days){
         //var area_id = $('#area').val().substring(1,3);
         var area_id = $('#area').val();
         var field_id = $('#field').val();
-        if (Number(field_id)<10) {
-            strConfig = '0' + area_id;}
+        if (Number(field_id) < 10) {
+            strConfig = '0' + area_id;
+        }
         else {
             strConfig = area_id;
-            }
-        console.log ("area id from manual mode: " + area_id );
+        }
+        strConfig += '1';
+        console.log("area id from manual mode: " + area_id);
         var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
         url = url.replace(/\s/g, '');
         console.log(url);
-
-        //strConfig = "1-";
-        console.log($('input[name=rOpMan]:radio:checked').val(0));
-        switch ($('input[name=rOpMan]:radio:checked').attr('id')) {
-            case 'rOpManON':
-                strConfig +='1';
-                break;
-            case 'rOpManOFF':
-                strConfig +='0';
-                break;
-            default:
-                alert("You didn't select an operation");
-                break;
+        console.log($('#rOpManON'). val());
+        var sum = Number($('#rOpManON'). val()) + Number($('#rOpManOFF'). val());
+        if (sum === 1) {
+            strConfig += '1';
         }
+        else {
+            strConfig += '0';
+        }
+
 
         strConfig += '00000';
         strConfig= strConfig.replace(/\s/g, '');

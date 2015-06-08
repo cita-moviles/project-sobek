@@ -252,11 +252,14 @@ class Crop_Area:
                 str_field_id = data[0:2]
                 str_area_id = data[2]
                 str_mode = data[3]
-                local_area_cfg += str_area_id
+                local_area_cfg += chr(int(str_area_id))
+                local_area_cfg += chr(int(str_mode))
                 if str_mode == '1':
-                    state = data[3]
+                    state = data[4]
+                    print "MANUAL MODE: " + state
                     local_area_cfg += chr(int(state))
-                    for char in data[4:]:
+                    for char in data[5:]:
+                        print "DATA: " + char
                         local_area_cfg += chr(int(char))
                 elif str_mode == '2':
                     auto_data = data[4:]
@@ -268,8 +271,7 @@ class Crop_Area:
                         min_data_2 = min_data_2*10
                     if max_data_2 < 10 and len(max_data.split('.')[1]) < 2:
                         max_data_2 = max_data_2*10
-                    print local_area_cfg + str_mode + str(min_data_1)+ str(min_data_2) + str(max_data_1) + str(max_data_2)
-                    local_area_cfg += chr(int(str_mode))
+                    print str_area_id + str_mode + str(min_data_1)+ str(min_data_2) + str(max_data_1) + str(max_data_2)
                     local_area_cfg += chr(min_data_1) + chr(min_data_2) + chr(max_data_1) + chr(max_data_2)
                 elif str_mode == '3':
                     timer_data = data[5:]
@@ -672,7 +674,7 @@ class MessageProcessor:
                     station.upload_to_server()
 
                     # First, build the configuration message
-                    msg_areas += str(field_id)
+                    msg_areas += chr(int(field_id))
 
                     # r_data -> Area
                     for index in xrange(int(no_of_areas)):
@@ -686,12 +688,11 @@ class MessageProcessor:
                         # area configuration setup
 
                         global area_cfg
-                        if area_configuration != area_cfg:
 
-                            area_configuration = area_cfg
-                            msg_areas += area_configuration
-                            # normalize the db to ROK
-                            area.normalize_cfg()
+                        area_configuration = area_cfg
+                        msg_areas += area_configuration
+                        # normalize the db to ROK
+                        area.normalize_cfg()
 
                         # print area.to_json()
                         area.upload_to_server()

@@ -123,7 +123,7 @@
             $.each(data, function (index, value) {
                 options += '<option value="' + value.field_id + '">' + value.field_name + '</option>';
             });
-            field_selector.html(options);
+            $('#field').html(options);
             current_field = $("#field").val();
             //console.log(current_field);
             PopulateStationForField(current_field);
@@ -132,22 +132,62 @@
 }
 
     function PopulateStationForField (current_field) {
+       var field;
        $.ajax({
         url: "/Weather_Station/",
-        data: {fk_farm_field: current_field},
+
         success: function (data){
             var options ="";
             $.each(data, function(index,value){
-                options += '<option value=" '+ value.station_id+ '">' + value.station_name + '</option>';
+
+                if (current_field === value.station_id.toString().substr(0,1)) {
+                    options += '<option value=" ' + value.station_id + '">' + value.station_name + '</option>';
+                }
+                else {;}
             });
             $('#station').html(options);
+             LoadCurrentStationData();
         }
     });
+
 }
   function getStationForField () {
       var current_field= $("#field").val();
       PopulateStationForField(current_field);
   }
+
+function LoadCurrentStationData () {
+  var current_station=$('#station').val();
+  var station_data= ' ';
+  var status;
+  //console.log(current_area);
+    $.ajax({
+        url:"/Weather_Station/" + current_station,
+        success:function(data) {
+            var date_received;
+                console.log(data);
+                   var dr = new Date(Date.parse(data.station_date_received));
+                date_received = dr.toLocaleString();
+                station_data = "<h3>"+data.station_name + "<h3><p>Station id: " + data.station_id + "</p>";
+                station_data += "<p>Date received: " + date_received + "</p>";
+                station_data += "<p>Humidity: "+ data.station_relative_humidity + "%</p>";
+                station_data += "<p>Temperature: " + data.station_temperature + "ºC</p>";
+                station_data += "<p>Wind Speed: " + data.station_wind_speed + "m&frasl;s</p>";
+                station_data += "<p>Radiation: " + data.station_solar_radiation + "W&frasl;m<sup>2</sup></p>";
+                status= data.station_status;
+            if (status === 1) {
+                station_data += "<p>Status: OK</p>"
+            } else {
+                station_data += "<p>Status: Communication Error</p>"
+            }
+
+            $('#current_station').html(' ');
+            $('#current_station').html(station_data);
+        }
+    });
+
+}
+
     function graphLogs() {
         console.log(init_date.dateFormat('Y-m-d H:i:s'));
         console.log(end_date.dateFormat('Y-m-d H:i:s'));

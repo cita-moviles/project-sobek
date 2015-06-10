@@ -8,6 +8,8 @@ import time
 PORT = 4580
 
 def sobek_server(address):
+    received_cfg = False
+    holder = ''
     try:
         sock = socket(AF_INET, SOCK_DGRAM)
         print 'Socket created'
@@ -20,8 +22,6 @@ def sobek_server(address):
     while True:
         print('Waiting for data')
         msg, addr = sock.recvfrom (1024)
-        holder = ""
-        received_cfg = False
         if not msg:
             print('No data received')
             break

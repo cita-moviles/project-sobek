@@ -4,6 +4,7 @@ import json
 import urllib2
 import datetime
 import pytz
+import time
 import logging
 from datetime import timedelta
 from dateutil.parser import parse
@@ -190,7 +191,7 @@ class Crop_Area:
         self.area_name = " "
         self.area_description = " "
         self.get_name_from_server(field_id)
-
+        self.changed = False
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
@@ -246,20 +247,19 @@ class Crop_Area:
             if result2['area_configuration'] == "ROK":
                 local_area_cfg += chr(int(str(self.area_id)[1])) + chr(0)*6
             else:
+                self.changed = True
                 data = result2['area_configuration']
                 global config_mode
                 config_mode = True
-                str_field_id = data[0:2]
+                #str_field_id = data[0:2]
                 str_area_id = data[2]
                 str_mode = data[3]
                 local_area_cfg += chr(int(str_area_id))
                 local_area_cfg += chr(int(str_mode))
                 if str_mode == '1':
                     state = data[4]
-                    print "MANUAL MODE: " + state
                     local_area_cfg += chr(int(state))
                     for char in data[5:]:
-                        print "DATA: " + char
                         local_area_cfg += chr(int(char))
                 elif str_mode == '2':
                     auto_data = data[4:]
@@ -271,14 +271,12 @@ class Crop_Area:
                         min_data_2 = min_data_2*10
                     if max_data_2 < 10 and len(max_data.split('.')[1]) < 2:
                         max_data_2 = max_data_2*10
-                    print str_area_id + str_mode + str(min_data_1)+ str(min_data_2) + str(max_data_1) + str(max_data_2)
                     local_area_cfg += chr(min_data_1) + chr(min_data_2) + chr(max_data_1) + chr(max_data_2)
                 elif str_mode == '3':
                     timer_data = data[5:]
                     days = timer_data.split('#')[0]
                     start_1, start_2 = timer_data.split('#')[1].split(':')[0],timer_data.split('#')[1].split(':')[1]
                     duration_1, duration_2 = timer_data.split('#')[2].split(':')[0], timer_data.split('#')[2].split(':')[1]
-                    print start_1, start_2, duration_1, duration_2
                     local_area_cfg += chr(int(days)) + chr(int(start_1)) + chr(int(start_2)) + chr(int(duration_1)) + chr(int(duration_2))
         except urllib2.HTTPError, ex:
             #logging.exception("Something awful happened!")
@@ -606,7 +604,6 @@ class MessageProcessor:
         print currentDate
 
         # Checkers
-        area_configuration = "ROK"
         msg_areas = chr(71)
 
         msglist = message.split('#')
@@ -615,8 +612,6 @@ class MessageProcessor:
         # Flags for configuration
         global config_mode
         config_mode = False
-        global areas_changed
-        areas_changed = []
 
         for msg in msglist:
             try:
@@ -688,11 +683,11 @@ class MessageProcessor:
                         # area configuration setup
 
                         global area_cfg
-
-                        area_configuration = area_cfg
-                        msg_areas += area_configuration
-                        # normalize the db to ROK
-                        area.normalize_cfg()
+                        if area.changed == True:
+                            area_configuration = area_cfg
+                            msg_areas += area_configuration
+                            # normalize the db to ROK
+                            area.normalize_cfg()
 
                         # print area.to_json()
                         area.upload_to_server()

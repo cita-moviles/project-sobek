@@ -218,8 +218,9 @@ function LoadCurrentSensorData () {
                     if (value.sensor_date_received !== "") {
                     var dr = new Date(Date.parse(value.sensor_date_received));
                     date_received = dr.toLocaleString();
+                    var id = Number(value.sensor_id);
                 }
-                if (value.sensor_id%100!==0) { //IF ITS NOT A CONSOLIDATED SENSOR:
+                if (id%10!==0) { //IF ITS NOT A CONSOLIDATED SENSOR:
 
                     current_sensor += "<p>Sensor: </p>" + value.sensor_id;
                     current_data += "<h4>Sensor: " + value.sensor_id + "</h4>";

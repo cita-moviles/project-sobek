@@ -265,13 +265,10 @@ class Crop_Area:
                     auto_data = data[4:]
                     min_data = auto_data.split('#')[0]
                     max_data = auto_data.split('#')[1]
-                    min_data_1, min_data_2 = int(min_data.split('.')[0]), int(min_data.split('.')[1])
-                    max_data_1, max_data_2 = int(max_data.split('.')[0]), int(max_data.split('.')[1])
-                    if min_data_2 < 10 and len(min_data.split('.')[1]) < 2:
-                        min_data_2 = min_data_2*10
-                    if max_data_2 < 10 and len(max_data.split('.')[1]) < 2:
-                        max_data_2 = max_data_2*10
-                    local_area_cfg += chr(min_data_1) + chr(min_data_2) + chr(max_data_1) + chr(max_data_2)
+                    min_data_1, min_data_2 = int(min_data.split('.')[0], 16), int(min_data.split('.')[1], 16)
+                    max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
+                    print min_data_1, min_data_2, max_data_1, max_data_2
+                    local_area_cfg += hex(min_data_1) + hex(min_data_2) + hex(max_data_1) + hex(max_data_2)
                 elif str_mode == '3':
                     timer_data = data[5:]
                     days = timer_data.split('#')[0]
@@ -669,7 +666,8 @@ class MessageProcessor:
                     station.upload_to_server()
 
                     # First, build the configuration message
-                    msg_areas += chr(int(field_id))
+                    for char in field_id:
+                        msg_areas += chr(int(char))
 
                     # r_data -> Area
                     for index in xrange(int(no_of_areas)):
@@ -741,26 +739,6 @@ class MessageProcessor:
             msg_areas += chr(9) + chr(0)*6
             msg_areas += chr(10) + chr(0)*6
             return msg_areas
-            """msg_converted = ""
-            for word in msg_areas:
-                if word == 'G':
-                    msg_converted += chr(71)
-                else:
-                    msg_converted += chr(int(word))
-            return msg_converted"""
         else:
             print "No configuration pending"
             return 'ROK'
-            """
-            g = chr(71)
-            f1 = chr(0) + chr(1) + chr(1) + chr(2) + chr(15) + chr(19) + chr(30) + chr(22) + chr(0)
-            f2 = chr(2) + chr(2) + chr(16) + chr(14) + chr(29) + chr(0) + chr(0)
-            f3 = chr(3) + chr(0)*6
-            f4 = chr(4) + chr(0)*6
-            f5 = chr(5) + chr(0)*6
-            f6 = chr(6) + chr(0)*6
-            f7 = chr(7) + chr(0)*6
-            f8 = chr(8) + chr(0)*6
-            f9 = chr(9) + chr(0)*6
-            f10 = chr(10) + chr(0)*6
-            return g + f1 + f2 + f3 + f4 + f5 + f6 + f7 +f8 +f9 +f10"""

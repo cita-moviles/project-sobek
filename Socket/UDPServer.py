@@ -36,8 +36,8 @@ def sobek_server(address):
         else:
             return_value = MessageProcessor.process_message(msg)
             print return_value
-            print("--- %s seconds ---" % (time.time() - start_time))
             sock.sendto(return_value, addr)
+            print("--- %s seconds ---" % (time.time() - start_time))
 
 if __name__ == '__main__':
     sobek_server (('', PORT))

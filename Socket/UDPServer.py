@@ -1,14 +1,11 @@
-__author__ = 'luishoracio'
+__author__ = 'alexrdz'
 from socket import socket, AF_INET, SOCK_DGRAM
 from models import MessageProcessor
 from Utils import FileWriter
 import sys
 import time
 
-
-
 PORT = 4580
-
 
 def sobek_server(address):
     try:
@@ -23,7 +20,8 @@ def sobek_server(address):
     while True:
         print('Waiting for data')
         msg, addr = sock.recvfrom (1024)
-
+        holder = ""
+        received_cfg = False
         if not msg:
             print('No data received')
             break
@@ -32,13 +30,19 @@ def sobek_server(address):
 
         FileWriter.writeToFile(msg)
         if msg == 'GOK':
-            pass
+            received_cfg = True
             print "Received GOK"
         else:
             return_value = MessageProcessor.process_message(msg)
             print return_value
             print("--- %s seconds ---" % (time.time() - start_time))
-            sock.sendto(return_value, addr)
+            if received_cfg == False:
+                sock.sendto(return_value, addr)
+            else:
+                sock.sendto(holder, addr)
+                received_cfg = False
+            if return_value != 'ROK':
+                holder = return_value
 
 
 if __name__ == '__main__':

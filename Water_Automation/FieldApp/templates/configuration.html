@@ -35,8 +35,10 @@
         </section>
 
         <section id="opManual" class="operationModes">
-            <input type="radio" name="rOpMan" id="rOpManON" value="1" selected/><label for="rOpManON">ON</label>
-            <input type="radio" name="rOpMan" id="rOpManOFF" value="0"/><label for="rOpManOFF">OFF</label>
+            <form id="manual_radio">
+                <input type="radio" name="rOpMan" id="rOpManON" value="1" selected/><label for="rOpManON">ON</label>
+                <input type="radio" name="rOpMan" id="rOpManOFF" value="0"/><label for="rOpManOFF">OFF</label>
+            </form>
             <br/>
             <button onclick="saveOpMan();">Save</button>
 
@@ -355,9 +357,9 @@ function readDays (days){
         var url = "http://riego.chi.itesm.mx/Area_Configuration/" + area_id;
         url = url.replace(/\s/g, '');
         console.log(url);
-        console.log($('#rOpManON'). val());
-        var sum = Number($('#rOpManON'). val()) + Number($('#rOpManOFF'). val());
-        if (sum === 1) {
+        var sum = $('input[name=rOpMan]:checked', '#manual_radio').val();
+        console.log(sum);
+        if (sum === '1') {
             strConfig += '1';
         }
         else {

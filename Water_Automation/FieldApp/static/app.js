@@ -2,7 +2,7 @@
  * Created by Enrique Ramírez on 8/20/14.
  */
 
-var use_agg=0;
+var use_agg;
 /**
  * Helper Function that hides an element from the page.
  *
@@ -395,11 +395,12 @@ function weatherCallback(data) {
         humidity_tag.html(relative_humidity);
         radiation_tag.html(radiation);
 
-        if (data.station_status === 0) {
+        if (status === 0) {
             status_tag.html('<p>OK</p>');
         } else {
             status_tag.html('<p>Communication Error</p>');
         }
+
 
         temperature_tag.html(temperature);
         wind_tag.html(wind_speed);

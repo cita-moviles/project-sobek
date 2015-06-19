@@ -395,7 +395,7 @@ function weatherCallback(data) {
         humidity_tag.html(relative_humidity);
         radiation_tag.html(radiation);
 
-        if (status === 0) {
+        if (data.station_status === 0) {
             status_tag.html('<p>OK</p>');
         } else {
             status_tag.html('<p>Communication Error</p>');

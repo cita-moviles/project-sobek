@@ -396,9 +396,9 @@ function weatherCallback(data) {
         radiation_tag.html(radiation);
 
         if (status === 0) {
-            status_tag.html('<p>Status: OK</p>');
+            status_tag.html('<p>OK</p>');
         } else {
-            status_tag.html('<p>Status: Communication Error</p>');
+            status_tag.html('<p>Communication Error</p>');
         }
 
 

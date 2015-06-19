@@ -82,7 +82,7 @@
     </div>
         <style>
             #opModeSelect, .operationModes {
-                display: none;
+                display: block;
             }
             input.dayofweek {
                 display: inline-block;
@@ -489,7 +489,6 @@ function zeroFill( number, width )
         if (number<=999) { number = ("00"+number).slice(-3); }
         return number;
     }
-
     function showConfigurations() {
       $('#opModeSelect').css('display', 'block');
       $('#opAutomatic').css('display', 'none');

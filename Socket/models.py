@@ -191,7 +191,6 @@ class Crop_Area:
         self.area_name = " "
         self.area_description = " "
         self.get_name_from_server(field_id)
-        self.changed = False
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
@@ -246,8 +245,8 @@ class Crop_Area:
             print "Server Config: " + result2['area_configuration']
             if result2['area_configuration'] == "ROK":
                 local_area_cfg += chr(int(str(self.area_id)[1])) + chr(0)*6
+                #local_area_cfg += str(self.area_id)[1] + str(0)*6
             else:
-                self.changed = True
                 data = result2['area_configuration']
                 global config_mode
                 config_mode = True
@@ -681,11 +680,10 @@ class MessageProcessor:
                         # area configuration setup
 
                         global area_cfg
-                        if area.changed == True:
-                            area_configuration = area_cfg
-                            msg_areas += area_configuration
-                            # normalize the db to ROK
-                            area.normalize_cfg()
+                        area_configuration = area_cfg
+                        msg_areas += area_configuration
+                        # normalize the db to ROK
+                        area.normalize_cfg()
 
                         # print area.to_json()
                         area.upload_to_server()
@@ -741,4 +739,4 @@ class MessageProcessor:
             return msg_areas
         else:
             print "No configuration pending"
-	    return 'ROK'
+        return 'ROK'

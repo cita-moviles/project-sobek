@@ -260,12 +260,15 @@ function getSensorLogGraph(Consolidate_sensor_id) {
     var sensor_graph_data;
     //PRUEBA:console.log(sensor_id);
     console.log(use_agg);
+    /*
     if (use_agg===0){
         sensor_graph_data= "/Sensor_Log/";
     }
     else {
         sensor_graph_data= "/Sensor_Agg/";
     }
+    */
+    sensor_graph_data = "/Sensor_Log/";
     $.ajax({
         url: sensor_graph_data,
         data: {

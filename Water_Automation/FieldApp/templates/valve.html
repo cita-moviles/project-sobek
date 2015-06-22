@@ -184,7 +184,7 @@ function LoadCurrentValveData () {
         var sensor_id = $('#sensor').val();
 
         $.ajax({
-            url: "/Valve_Agg/",
+            url: "/Valve_Log/",
             data: {
                 sensor_id: sensor_id,
                 min_date: init_date.dateFormat('Y-m-d H:i:s'),

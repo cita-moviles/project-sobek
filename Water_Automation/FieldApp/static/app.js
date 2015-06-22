@@ -190,7 +190,7 @@ function getValvesForArea(area_id, callback) {
 function getSensorLog(sensor_id, start_date, end_date,before_callback, success_callback) {
 
     $.ajax({
-        url: "/Sensor_Agg/",
+        url: "/Sensor_Log/",
         data: {
             sensor_id: sensor_id,
             min_date: start_date.dateFormat('Y-m-d H:i:s'),
@@ -422,7 +422,7 @@ function getSensorLogs(start, end, callback) {
     var sensor_id = $('#sensor').val();
 
     $.ajax({
-        url: "/Sensor_Agg/",
+        url: "/Sensor_Log/",
         data: {
             sensor_id: sensor_id,
             min_date: start.dateFormat('Y-m-d H:i:s'),
@@ -447,12 +447,13 @@ function getEvotranspirationLog(area_id, start_date, end_date, callback) {
     var evo_graph_data;
     //PRUEBA:
     //console.log(sensor_id);
-    if (use_agg===0){
+    /*if (use_agg===0){
         evo_graph_data= "/Crop_Area_Log/";
     }
     else {
         evo_graph_data= "/Crop_Area_Agg/";
-    }
+    } */
+    evo_graph_data = "/Crop_Area_Log/";
     $.ajax({
         url: evo_graph_data,
         data: {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>Proyecto Sobek</title>
+    <title>Water Automation</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -299,7 +299,10 @@ function getSensorLogGraph(Consolidate_sensor_id) {
 
             var options = {
                 title: 'Soil Moisture',
-                smoothLine: true
+                smoothLine: true,
+                vAxis: {
+                    viewWindow: { max:70, min:20}
+                }
             };
             hideLoading();
             chart_moisture.draw(data_moisture, options);
@@ -384,7 +387,10 @@ function graphLogs() {
         var data_ev = google.visualization.arrayToDataTable(ev_array);
         var options = {
             title: 'Evotranspiration',
-            smoothLine: true
+            smoothLine: true,
+              vAxis: {
+                    viewWindow: { max:25, min:0}
+                }
         };
 
         var chart_ev = new google.visualization.LineChart(document.getElementById('ev_chart'));
@@ -464,7 +470,10 @@ function graphValveData(current_valve) {
 
                     var options = {
                         smoothLine: true,
-                        title: 'Flow'
+                        title: 'Flow',
+                          vAxis: {
+                             viewWindow: { max:50, min:0}
+                           }
                     };
                     /*var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
         chart_actuator.draw(data_actuator, options);*/

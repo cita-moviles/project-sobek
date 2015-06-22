@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sensors - Proyect Sobek</title>
+    <title>Water Automation-Moisture</title>
     {% include 'includeScripts.html' %}
 </head>
 <body>
@@ -246,12 +246,11 @@ function LoadCurrentSensorData () {
     }
     function graphLogs() {
         var sensor_graph_data;
-        if (use_agg===1){
+        /*if (use_agg===1){
             sensor_graph_data= "/Sensor_Agg/";
-        }
-        else {
+        }*/
             sensor_graph_data= "/Sensor_Log/";
-        }
+
 
         console.log(init_date.dateFormat('Y-m-d H:i:s'));
         console.log(end_date.dateFormat('Y-m-d H:i:s'));

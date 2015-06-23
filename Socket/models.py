@@ -587,9 +587,9 @@ class MessageProcessor:
 
     def __init__(self):
         pass
+        self.changed = False
 
-    @staticmethod
-    def process_message(message):
+    def process_message(self,message):
         global currentDate
 
         if currentDate is None:
@@ -736,7 +736,7 @@ class MessageProcessor:
             msg_areas += chr(8) + chr(0)*6
             msg_areas += chr(9) + chr(0)*6
             msg_areas += chr(10) + chr(0)*6
+            self.changed = True
             return msg_areas
         else:
             print "No configuration pending"
-        return 'ROK'

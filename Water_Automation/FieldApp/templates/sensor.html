@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Sensors - Proyect Sobek</title>
+    <title>Water Automation-Moisture</title>
     {% include 'includeScripts.html' %}
 </head>
 <body>
@@ -16,10 +16,10 @@
 
 <div class="row card">
 
-    <div class="medium-4 columns">
-        <h3>
+    <div class="medium-3 columns">
+        <h5>
             Select the Sensor you wish to graph:
-        </h3>
+        </h5>
         <label>Field</label>
          <select id="field" onchange="getAreasOptions('area','field'),getSensorsForFieldSelected()"></select>
         <label>Area</label>
@@ -27,33 +27,45 @@
         <label>Node</label>
         <select id="sensor"></select>
 
-        <p>Select the range of dates you wish to graph:</p>
 
-        <label for="from_datetimepicker">From</label>
-        <input id="from_datetimepicker" type="text"/>
+    </div>
+    <div class="medium-3 columns">
+          <h3>Current data</h3>
 
-        <label for="to_datetimepicker">to</label>
-        <input id="to_datetimepicker" type="text"/>
+        <div id="current_sensor"></div>
+     </div>
+    <div class="medium-6 columns">
+           <h5>Select the range of dates you wish to graph:</h5>
+            <div class="row">
+                <div class="small-6 columns">
+                    <label for="from_datetimepicker" >From</label>
+                    <input id="to_datetimepicker" type="text"/>
+                 </div>
+                <div class="small-6 columns">
+                     <label for="to_datetimepicker" >to</label>
 
+                     <input id="from_datetimepicker" type="text"/>
+                </div>
+        </div>
         <ul class="button-group [radius round]">
             <li>
-                <button onclick="quick_date(1)" class="button">6 hours
+                <button onclick="quick_date(1)" class="button tiny">6 hours
                 </button>
             </li>
             <li>
-                <button onclick="quick_date(2)" class="button">24 hours
+                <button onclick="quick_date(2)" class="button tiny">24 hours
                 </button>
             </li>
             <li>
-                <button onclick="quick_date(3)" class="button">7 days
+                <button onclick="quick_date(3)" class="button tiny">7 days
                 </button>
             </li>
             <li>
-                <button onclick="quick_date(4)" class="button">15 days
+                <button onclick="quick_date(4)" class="button tiny">15 days
                 </button>
             </li>
             <li>
-                <button onclick="quick_date(5)" class="button">30 days
+                <button onclick="quick_date(5)" class="button tiny">30 days
                 </button>
             </li>
         </ul>
@@ -61,38 +73,24 @@
         <br/>
         <ul class="button-group [radius round]">
             <li>
-                <button class="button" onclick="graphLogs()">Graph
+                <button class="button small" onclick="graphLogs()">Graph
                 </button>
             </li>
             <li>
-                <button class="button [secondary alert success]"
+                <button class="button [secondary alert success] small"
                         onclick="hideTag('graphs')">Clean
                 </button>
             </li>
         </ul>
-    </div>
+        </div>
+     <div id="moisture_chart" class="medium-10 columns"></div>
 
-    <div class="medium-4  columns">
-        <h3>Current data</h3>
 
-        <div id="current_sensor"></div>
 
-    </div>
 
-    <div class="medium-4 columns">
-        <h3>Graphs</h3>
-        <section id="graphs">
-            <h4>Soil Moisture</h4>
 
-            <div id="moisture_chart" height="400" width="1000"></div>
-
-{#            <h4>Temperature</h4>#}
-            {##}
-            {#            <div id="temperature_chart" height="400" width="1000"></div>#}
-        </section>
-
-    </div>
 </div>
+
 <br/>
 <br/>
 <br/>
@@ -246,12 +244,11 @@ function LoadCurrentSensorData () {
     }
     function graphLogs() {
         var sensor_graph_data;
-        if (use_agg===1){
+        /*if (use_agg===1){
             sensor_graph_data= "/Sensor_Agg/";
-        }
-        else {
+        }*/
             sensor_graph_data= "/Sensor_Log/";
-        }
+
 
         console.log(init_date.dateFormat('Y-m-d H:i:s'));
         console.log(end_date.dateFormat('Y-m-d H:i:s'));
@@ -297,9 +294,13 @@ function LoadCurrentSensorData () {
                 var chart_moisture = new google.visualization.LineChart(document.getElementById('moisture_chart'));
 {#                var chart_temperature = new google.visualization.LineChart(document.getElementById('temperature_chart'));#}
 
-                var options = {
-                    smoothLine: true
-                };
+                 var options = {
+                title: 'Soil Moisture Graph',
+                smoothLine: true,
+                vAxis: {
+                    viewWindow: { max:70, min:20}
+                }
+            };
 
                 chart_moisture.draw(data_moisture, options);
 {#                chart_temperature.draw(data_temperature, options);#}

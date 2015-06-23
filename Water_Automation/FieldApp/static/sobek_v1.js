@@ -68,9 +68,7 @@ function getFarmFields(){
                 current_data += "<p>Imei: " + value.field_imei + "<br/>";
                 current_data += "Latitude: " + value.field_longitude + "<br/>";
                 current_data += "Longitude: " + value.field_latitude + "<br/>";
-                current_data += "Signal: " + value.field_signal + "</p><button class='button tiny' id='"+
-                                             value.field_id+
-                                            "'onclick='graphLogs(this.id)'>Signal Graph</button></br><button id='"
+                current_data += "Signal: " + value.field_signal + "</p><button id='"
                                             +value.field_id+
                                             "'class='button tiny' onclick='showGoogleMaps(this.id)'>Show In Map</button></div>";
                 $('#current_field').html(current_data);

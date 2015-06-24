@@ -9,6 +9,7 @@ from models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weath
 
 class Crop_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='crop-detail')
+    crop_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Crop
@@ -18,6 +19,8 @@ class Crop_Serializer(serializers.HyperlinkedModelSerializer):
 
 class Farm_Field_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='field-detail')
+    field_name = serializers.CharField(read_only=True)
+    field_description = serializers.CharField(read_only=True)
 
     class Meta:
         model = Farm_Field
@@ -27,6 +30,9 @@ class Farm_Field_Serializer(serializers.HyperlinkedModelSerializer):
 
 class Area_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='area-detail')
+    area_name = serializers.CharField(read_only=True)
+    fk_crop = serializers.HyperlinkedRelatedField(read_only=True)
+    area_description = serializers.CharField(read_only=True)
 
     class Meta:
         model = Crop_Area
@@ -49,7 +55,7 @@ class Area_Configuration_Serializer(serializers.HyperlinkedModelSerializer):
 
 class Valve_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='valve-detail')
-
+    valve_name = serializers.CharField(read_only=True)
     class Meta:
         model = Valve
         fields = (
@@ -60,6 +66,7 @@ class Valve_Serializer(serializers.HyperlinkedModelSerializer):
 
 class Station_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='station-detail')
+    station_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Weather_Station
@@ -72,6 +79,7 @@ class Station_Serializer(serializers.HyperlinkedModelSerializer):
 
 class Sensor_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='sensor-detail')
+    sensor_name = serializers.CharField(read_only=True)
 
     class Meta:
         model = Sensor

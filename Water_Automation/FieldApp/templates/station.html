@@ -175,7 +175,7 @@ function LoadCurrentStationData () {
                 station_data += "<p>Wind Speed: " + data.station_wind_speed + "m&frasl;s</p>";
                 station_data += "<p>Radiation: " + data.station_solar_radiation + "W&frasl;m<sup>2</sup></p>";
                 status= data.station_status;
-            if (status === 1) {
+            if (status === 0) {
                 station_data += "<p>Status: OK</p>"
             } else {
                 station_data += "<p>Status: Communication Error</p>"

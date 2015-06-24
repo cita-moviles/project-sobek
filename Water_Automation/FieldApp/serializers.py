@@ -31,7 +31,7 @@ class Farm_Field_Serializer(serializers.HyperlinkedModelSerializer):
 class Area_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='area-detail')
     area_name = serializers.CharField(read_only=True)
-    fk_crop = serializers.HyperlinkedRelatedField(read_only=True)
+    fk_crop = serializers.HyperlinkedRelatedField(read_only=True, view_name='crop-detail')
     area_description = serializers.CharField(read_only=True)
 
     class Meta:

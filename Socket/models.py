@@ -58,9 +58,9 @@ class Sensor:
         self.sensor_user_define2 = ' '
         global currentDate
         self.sensor_date_received = str(currentDate)
-        self.fk_area = " "
-        self.sensor_name = " "
-        self.get_from_server(field_id+area_id)
+        #self.sensor_name = " "
+        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + field_id+area_id + "/"
+        #self.get_from_server(field_id+area_id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -133,9 +133,10 @@ class Valve:
         self.valve_date_received = str(currentDate)
         #self.limit = int(message[21:26])
 
-        self.fk_area = " "
-        self.valve_name = " "
-        self.get_from_server(field_id+area_id)
+        #self.fk_area = " "
+        #self.valve_name = " "
+        self.fk_area= "http://riego.chi.itesm.mx/Crop_Area/" + field_id+area_id + "/"
+        #self.get_from_server(field_id+area_id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -186,11 +187,9 @@ class Crop_Area:
         self.area_y_position = 0
         self.area_user_define1 = ' '
         self.area_user_define2 = ' '
-        self.fk_farm_field = " "
-        self.fk_crop = " "
-        self.area_name = " "
-        self.area_description = " "
-        self.get_name_from_server(field_id)
+        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/" + \
+                             field_id + "/"
+        #self.get_name_from_server(field_id)
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
@@ -337,9 +336,9 @@ class Weather_Station:
 
         global currentDate
         self.station_date_received = str(currentDate)
-        self.fk_farm_field = " "
-        self.station_name = " "
-        self.get_from_server(field_id)
+        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/" + \
+                             field_id + "/"
+        #self.get_from_server(field_id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -409,9 +408,7 @@ class Farm_Field:
             else:
                 self.field_user_define2 = message[comma + 1: terminator]
 
-        self.field_name = " "
-        self.field_description = " "
-        self.get_from_server()
+        #self.get_from_server()
 
         global currentDate
         # TimeZone

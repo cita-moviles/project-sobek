@@ -43,13 +43,13 @@ class Area_Configuration_Serializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Area_Configuration
         fields = (
-           'area_id', 'area_configuration','field_id'
+           'area_id', 'area_configuration',
         )
 
 
 class Valve_Serializer(serializers.HyperlinkedModelSerializer):
     FieldApp = serializers.HyperlinkedRelatedField(many=True, view_name='valve-detail')
-
+    valve_name = serializers.CharField(read_only=True)
     class Meta:
         model = Valve
         fields = (

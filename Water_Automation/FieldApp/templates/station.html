@@ -14,91 +14,79 @@
     </div>
 </div>
 <div class="row card">
-    <div class="medium-4 columns">
-        <h3>
+    <div class="medium-3 columns">
+        <h5>
             Select the Weather Station you wish to graph:
-        </h3>
+        </h5>
         <label>Field</label>
         <select id="field"
                 onchange="getStationForField()"></select>
         <label>Weather Station</label>
         <select id="station"></select>
-
+    </div>
+    <div class="medium-3 columns">
+         <h3>Current data</h3>
+        <div id="current_station"></div>
+    </div>
+    <div class="medium-6 columns">
         <p>Select the range of dates you wish to graph:</p>
 
         {# Inputs #}
-        <label for="from">From</label>
-        <input id="from_datetimepicker" type="text"/>
-        <label for="to">to</label>
-        <input id="to_datetimepicker" type="text"/>
+           <div class="row">
+                <div class="small-6 columns">
+                    <label for="from_datetimepicker" >From</label>
+                    <input id="to_datetimepicker" type="text"/>
+                 </div>
+                <div class="small-6 columns">
+                     <label for="to_datetimepicker" >to</label>
+
+                     <input id="from_datetimepicker" type="text"/>
+                </div>
+        </div>
 
         {#Buttons#}
         <ul class="button-group [radius round]">
             <li>
-                <button onclick="quick_date(1)" class="button">6 hours</button>
+                <button onclick="quick_date(1)" class="tiny button">6 hours</button>
             </li>
             <li>
-                <button onclick="quick_date(2)" class="button">24 hours</button>
+                <button onclick="quick_date(2)" class="tiny button">24 hours</button>
             </li>
             <li>
-                <button onclick="quick_date(3)" class="button">7 days</button>
+                <button onclick="quick_date(3)" class="tiny button">7 days</button>
             </li>
             <li>
-                <button onclick="quick_date(4)" class="button">15 days</button>
+                <button onclick="quick_date(4)" class="tiny button">15 days</button>
             </li>
             <li>
-                <button onclick="quick_date(5)" class="button">30 days</button>
+                <button onclick="quick_date(5)" class="tiny button">30 days</button>
             </li>
         </ul>
 
         <br/>
         <ul class="button-group [radius round]">
             <li>
-                <button class="button" onclick="graphLogs()">Graph</button>
+                <button class="small button" onclick="graphLogs()">Graph</button>
             </li>
             <li>
-                <button class="button [secondary alert success]"
+                <button class="small button [secondary alert success]"
                         onclick="hideTag('graphs')">Clean
                 </button>
             </li>
         </ul>
+         <div class="progress round">
+            <p id="progress_message" style="float: left; margin-right:5px"></p>
+            <span id="progress" class="meter" style="width: 0; float: left">
+           </span>
+       </div>
     </div>
 
-    <div class="medium-4 columns">
-
-        <h3>Current data</h3>
-
-        <div id="current_station"></div>
-
-    </div>
-
-    <div class="medium-4 columns">
-        <section id="graphs">
-
-            <h3>Status</h3>
-
-            <div id="status_chart" height="400" width="1000"></div>
-
-            <h4>Relative Humidity</h4>
-
-            <div id="moisture_chart" height="400" width="1000"></div>
-
-            <h4>Temperature</h4>
-
-            <div id="temperature_chart" height="400" width="1000"></div>
-
-            <h4>Wind Speed</h4>
-
-            <div id="wind_chart" height="400" width="1000"></div>
-
-            <h4>Solar Radiation</h4>
-
-            <div id="radiation_chart" height="400" width="1000"></div>
-
-        </section>
-    </div>
-
-</div>
+    <div id="status_chart" class="medium-10 columns graph"></div>
+    <div id="moisture_chart" class="medium-10 columns graph"></div>
+    <div id="temperature_chart" class="medium-10 columns graph"></div>
+    <div id="wind_chart" class="medium-10 columns graph"></div>
+    <div id="radiation_chart" class="medium-10 columns graph"></div>
+  </div>
 {% include 'footer.html' %}
 <script>
 
@@ -168,17 +156,17 @@ function LoadCurrentStationData () {
                 console.log(data);
                    var dr = new Date(Date.parse(data.station_date_received));
                 date_received = dr.toLocaleString();
-                station_data = "<h3>"+data.station_name + "<h3><p>Station id: " + data.station_id + "</p>";
-                station_data += "<p>Date received: " + date_received + "</p>";
-                station_data += "<p>Humidity: "+ data.station_relative_humidity + "%</p>";
-                station_data += "<p>Temperature: " + data.station_temperature + "ºC</p>";
-                station_data += "<p>Wind Speed: " + data.station_wind_speed + "m&frasl;s</p>";
-                station_data += "<p>Radiation: " + data.station_solar_radiation + "W&frasl;m<sup>2</sup></p>";
+                station_data = "<h3>"+data.station_name + "<h3><p>Station id: " + data.station_id + "<br>";
+                station_data += "Date received: " + date_received + "<br>";
+                station_data += "Humidity: "+ data.station_relative_humidity + "%<br>";
+                station_data += "Temperature: " + data.station_temperature + "ºC<br>";
+                station_data += "Wind Speed: " + data.station_wind_speed + "m&frasl;s<br>";
+                station_data += "Radiation: " + data.station_solar_radiation + "W&frasl;m<sup>2</sup><br>";
                 status= data.station_status;
             if (status === 1) {
-                station_data += "<p>Status: OK</p>"
+                station_data += "Status: OK</p>"
             } else {
-                station_data += "<p>Status: Communication Error</p>"
+                station_data += "Status: Communication Error</p>"
             }
 
             $('#current_station').html(' ');
@@ -201,6 +189,7 @@ function LoadCurrentStationData () {
                 max_date: end_date.dateFormat('Y-m-d H:i:s'),
                 ordering: "-station_date_received"
             },
+            beforeSend: displayLoading,
             success: function (data) {
 
 {#                var status_array = [];#}
@@ -261,15 +250,40 @@ function LoadCurrentStationData () {
                 var chart_wind = new google.visualization.LineChart(document.getElementById('wind_chart'));
                 var chart_radiation = new google.visualization.LineChart(document.getElementById('radiation_chart'));
 
-                var options = {
-                    smoothLine: true
-                };
-
+                var options1 = {
+                        smoothLine: true,
+                        title: 'Humidity',
+                          vAxis: {
+                             viewWindow: { max:70, min:0}
+                           }
+                    };
+                 var options2 = {
+                        smoothLine: true,
+                        title: 'Temperature',
+                          vAxis: {
+                             viewWindow: { max:70, min:-50}
+                           }
+                    };
+                var options3 = {
+                        smoothLine: true,
+                        title: 'Wind Speed',
+                          vAxis: {
+                             viewWindow: { max:20, min:0}
+                           }
+                    };
+                var options4 = {
+                        smoothLine: true,
+                        title: 'Radiation',
+                          vAxis: {
+                             viewWindow: { max:2000, min:0}
+                           }
+                    };
+                hideLoading();
 {#                chart_status.draw(data_status, options);#}
-                chart_humidity.draw(data_humidity, options);
-                chart_temperature.draw(data_temperature, options);
-                chart_wind.draw(data_wind, options);
-                chart_radiation.draw(data_radiation, options);
+                chart_humidity.draw(data_humidity, options1);
+                chart_temperature.draw(data_temperature, options2);
+                chart_wind.draw(data_wind, options3);
+                chart_radiation.draw(data_radiation, options4);
 
             }
         });

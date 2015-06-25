@@ -14,10 +14,10 @@
     </div>
 </div>
 <div class="row card">
-    <div class="medium-4 columns">
-        <h3>
+    <div class="medium-3 columns">
+        <h5>
             Select the valve you wish to graph:
-        </h3>
+        </h5>
         <label>Field</label>
         <select id="field"
                 onchange="getAreasOptions('area', 'field')"></select>
@@ -26,69 +26,65 @@
                 onchange="getValveForFieldSelected()"></select>
         <label>Valve</label>
         <select id="valve"></select>
+    </div>
 
-        <p>Select the range of dates you wish to graph:</p>
+    <div class="medium-3 columns">
+         <h3>Current data</h3>
+        <div id="current_valve"></div>
+    </div>
+     <div class="medium-6 columns">
+        <h5>Select the range of dates you wish to graph:</h5>
+            <div class="row">
+                <div class="small-6 columns">
+                    <label for="from_datetimepicker" >From</label>
+                    <input id="to_datetimepicker" type="text"/>
+                 </div>
+                <div class="small-6 columns">
+                     <label for="to_datetimepicker" >to</label>
 
-        <label for="from">From</label>
-        <input id="from_datetimepicker" type="text"/>
-        <label for="to">to</label>
-        <input id="to_datetimepicker" type="text"/>
+                     <input id="from_datetimepicker" type="text"/>
+                </div>
+        </div>
 
 
         <ul class="button-group [radius round]">
             <li>
-                <button onclick="quick_date(1)" class="button">6 hours</button>
+                <button onclick="quick_date(1)" class="tiny button">6 hours</button>
             </li>
             <li>
-                <button onclick="quick_date(2)" class="button">24 hours</button>
+                <button onclick="quick_date(2)" class="tiny button">24 hours</button>
             </li>
             <li>
-                <button onclick="quick_date(3)" class="button">7 days</button>
+                <button onclick="quick_date(3)" class="tiny button">7 days</button>
             </li>
             <li>
-                <button onclick="quick_date(4)" class="button">15 days</button>
+                <button onclick="quick_date(4)" class="tiny button">15 days</button>
             </li>
             <li>
-                <button onclick="quick_date(5)" class="button">30 days</button>
+                <button onclick="quick_date(5)" class="tiny button">30 days</button>
             </li>
         </ul>
         <br/>
         <ul class="button-group [radius round]">
             <li>
-                <button class="button" onclick="graphLogs()">Graph</button>
+                <button class="small button" onclick="graphLogs()">Graph</button>
             </li>
             <li>
-                <button class="button [secondary alert success]"
+                <button class="small button [secondary alert success]"
                         onclick="hideTag('graphs')">Clean
                 </button>
             </li>
         </ul>
+          <div class="progress round">
+            <p id="progress_message" style="float: left; margin-right:5px"></p>
+            <span id="progress" class="meter" style="width: 0; float: left">
+           </span>
+       </div>
     </div>
-
-    <div class="medium-4 columns">
-        <h3>Current data</h3>
-
-        <div id="current_valve"></div>
-    </div>
-
-    <div class="medium-4 columns">
-        <h3>Graphs</h3>
-        <section id="graphs">
-
-            <h4>Actuator & Status</h4>
-
-            <div id="valve_actuator_graph" height="400" width="1000"></div>
-
-            <h4>Flow</h4>
-
-            <div id="valve_flow_graph" height="400" width="1000"></div>
-
-            <!--<h4>Pressure</h4>
-
-            <div id="valve_pressure_graph" height="400" width="1000"></div>-->
-        </section>
-    </div>
+    <div id="valve_actuator_graph"  class="medium-10 columns graph"></div>
+    <div id="valve_flow_graph" class="medium-10 columns graph"></div>
 </div>
+
 {% include 'footer.html' %}
 
 <script>
@@ -164,11 +160,11 @@ function LoadCurrentValveData () {
                 console.log(data);
                    var dr = new Date(Date.parse(data.valve_date_received));
                 date_received = dr.toLocaleString();
-                valve_data = "<h3>Valve:<h3><p>Valve id: " + data.valve_id + "</p>";
-                valve_data += "<p>Date received: " + date_received + "</p>";
-                valve_data += "<p>Valve Name: "+ data.valve_name + "</p>";
-                valve_data += "<p>Valve Flow: " + data.valve_flow + "</p>";
-                valve_data += "<p>Valve Pressure: " + data.valve_pressure + "</p>";
+                valve_data = "<h3>Valve:<h3><p>Valve id: " + data.valve_id + "<br>";
+                valve_data += "Date received: " + date_received + "<br>";
+                valve_data += "Valve Name: "+ data.valve_name + "<br>";
+                valve_data += "Valve Flow: " + data.valve_flow + "<br>";
+                valve_data += "Valve Pressure: " + data.valve_pressure + "</p>";
 
             $('#current_valve').html(' ');
             $('#current_valve').html(valve_data);
@@ -181,16 +177,18 @@ function LoadCurrentValveData () {
 
         console.log(init_date.dateFormat('Y-m-d H:i:s'));
         console.log(end_date.dateFormat('Y-m-d H:i:s'));
-        var sensor_id = $('#sensor').val();
+        var valve_id = Number($('#valve').val());
+        var url = "/Valve_Log/"+valve_id;
 
         $.ajax({
-            url: "/Valve_Log/",
+            url: url,
             data: {
-                sensor_id: sensor_id,
+                valve_id: valve_id,
                 min_date: init_date.dateFormat('Y-m-d H:i:s'),
                 max_date: end_date.dateFormat('Y-m-d H:i:s'),
                 ordering: "-valve_date_received"
             },
+            beforeSend: displayLoading,
             success: function (data) {
 
                 var valve_actuator_array = [
@@ -227,18 +225,28 @@ function LoadCurrentValveData () {
                 var data_flow = google.visualization.arrayToDataTable(valve_flow_array);
                 var data_pressure = google.visualization.arrayToDataTable(valve_pressure_array);
 
-                var options = {
-                    smoothLine: true
-                };
+                 var options1 = {
+                        smoothLine: true,
+                        title: 'Status',
+                          vAxis: {
+                             viewWindow: { max:50, min:0}
+                           }
+                    };
+                 var options2 = {
+                        smoothLine: true,
+                        title: 'Flow',
+                          vAxis: {
+                             viewWindow: { max:50, min:0}
+                           }
+                    };
+                hideLoading();
 
                 var chart_actuator = new google.visualization.LineChart(document.getElementById('valve_actuator_graph'));
-                chart_actuator.draw(data_actuator, options);
+                chart_actuator.draw(data_actuator, options1);
 
                 var chart_flow = new google.visualization.LineChart(document.getElementById('valve_flow_graph'));
-                chart_flow.draw(data_flow, options);
+                chart_flow.draw(data_flow, options2);
 
-                var chart_pressure = new google.visualization.LineChart(document.getElementById('valve_pressure_graph'));
-                chart_pressure.draw(data_pressure, options);
 
             }
         });

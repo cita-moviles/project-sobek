@@ -82,8 +82,14 @@
                 </button>
             </li>
         </ul>
+           <div class="progress round">
+            <p id="progress_message" style="float: left; margin-right:5px"></p>
+            <span id="progress" class="meter" style="width: 0; float: left">
+           </span>
+
+       </div>
         </div>
-     <div id="moisture_chart" class="medium-10 columns"></div>
+     <div id="moisture_chart" class="medium-10 columns graph"></div>
 
 
 
@@ -262,6 +268,7 @@ function LoadCurrentSensorData () {
                 max_date: end_date.dateFormat('Y-m-d H:i:s'),
                 ordering: "-sensor_date_received"
             },
+            beforeSend: displayLoading,
             success: function (data) {
 
                 var moisture_array = [];
@@ -301,7 +308,7 @@ function LoadCurrentSensorData () {
                     viewWindow: { max:70, min:20}
                 }
             };
-
+                hideLoading();
                 chart_moisture.draw(data_moisture, options);
 {#                chart_temperature.draw(data_temperature, options);#}
 

@@ -17,6 +17,7 @@ from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Se
      Sensor_Agg_Serializer, Valve_Agg_Serializer, Crop_Area_Agg_Serializer, Weather_Station_Agg_Serializer, \
      Farm_Field_Agg_Serializer
 import time
+from Utils import FileWriter
 
 
 class Crop_ViewSet (viewsets.ModelViewSet):
@@ -358,12 +359,11 @@ class Area_Log_View(views.APIView):
         api_view_time = dispatch_time - (render_time + serializer_time + db_time)
         request_response_time = total - dispatch_time
 
-        print ("Database lookup               | %.4fs" % db_time)
-        print ("Serialization                 | %.4fs" % serializer_time)
-        print ("Django request/response       | %.4fs" % request_response_time)
-        print ("API view                      | %.4fs" % api_view_time)
-        print ("Response rendering            | %.4fs" % render_time)
-
+        FileWriter.writeToFile("Database lookup               | %.4fs" % db_time)
+        FileWriter.writeToFile("Serialization                 | %.4fs" % serializer_time)
+        FileWriter.writeToFile("Django request/response       | %.4fs" % request_response_time)
+        FileWriter.writeToFile("API view                      | %.4fs" % api_view_time)
+        FileWriter.writeToFile("Response rendering            | %.4fs" % render_time)
     request_started.connect(started)
     request_finished.connect(finished)
 

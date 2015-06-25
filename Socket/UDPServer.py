@@ -1,4 +1,4 @@
-__author__ = 'alexrdz'
+__author__ = 'luishoracio'
 from socket import socket, AF_INET, SOCK_DGRAM
 from models import MessageProcessor
 from Utils import FileWriter
@@ -8,8 +8,7 @@ import time
 PORT = 4580
 
 def sobek_server(address):
-    received_cfg = False
-    holder = ''
+    msg_processor = MessageProcessor()
     try:
         sock = socket(AF_INET, SOCK_DGRAM)
         print 'Socket created'
@@ -17,31 +16,42 @@ def sobek_server(address):
         print 'Failed to create socket. Error Code : ' + str (msg[0]) + ' Message ' + msg[1]
         sys.exit()
 
+    received_gok = False
+
     sock.bind (address)
     print('Connected to port ' + str (PORT))
     while True:
         print('Waiting for data')
         msg, addr = sock.recvfrom (1024)
+
+        #In case there's no message from GPRS
         if not msg:
             print('No data received')
             break
         start_time = time.time()
         print('Got message from', addr)
-        FileWriter.writeToFile(msg)
+
         if msg == 'GOK':
-            received_cfg = True
-            print "Received GOK"
+            received_gok = True
+
+        #Processes the message received and writes to a Log file
+        FileWriter.writeToFile(msg)
+        return_value = msg_processor.process_message(msg)
+        #Holds the value for future use
+        print return_value
+
+        #Will send the message processed if there's a config, until there's a GOK reply
+        if received_gok == False and msg_processor.changed == True:
+            sock.sendto(return_value,addr)
+        #Resets all the variables if there is a GOK reply
+        elif received_gok == True:
+            received_gok = False
+            msg_processor.changed = False
+            pass
+        #If tehre is not a config, send ROK
         else:
-            return_value = MessageProcessor.process_message(msg)
-            print return_value
-            print("--- %s seconds ---" % (time.time() - start_time))
-            if received_cfg == False:
-                sock.sendto(return_value, addr)
-            else:
-                sock.sendto(holder, addr)
-                received_cfg = False
-            if return_value != 'ROK':
-                holder = return_value
+            sock.sendto('ROK', addr)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
 
 if __name__ == '__main__':

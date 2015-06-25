@@ -58,9 +58,9 @@ class Sensor:
         self.sensor_user_define2 = ' '
         global currentDate
         self.sensor_date_received = str(currentDate)
-        self.fk_area = " "
-        self.sensor_name = " "
-        self.get_from_server(field_id+area_id)
+        #self.sensor_name = " "
+        self.fk_area = "http://riego.chi.itesm.mx/Crop_Area/" + field_id+area_id + "/"
+        #self.get_from_server(field_id+area_id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -133,9 +133,10 @@ class Valve:
         self.valve_date_received = str(currentDate)
         #self.limit = int(message[21:26])
 
-        self.fk_area = " "
-        self.valve_name = " "
-        self.get_from_server(field_id+area_id)
+        #self.fk_area = " "
+        #self.valve_name = " "
+        self.fk_area= "http://riego.chi.itesm.mx/Crop_Area/" + field_id+area_id + "/"
+        #self.get_from_server(field_id+area_id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -186,11 +187,9 @@ class Crop_Area:
         self.area_y_position = 0
         self.area_user_define1 = ' '
         self.area_user_define2 = ' '
-        self.fk_farm_field = " "
-        self.fk_crop = " "
-        self.area_name = " "
-        self.area_description = " "
-        self.get_name_from_server(field_id)
+        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/" + \
+                             field_id + "/"
+        #self.get_name_from_server(field_id)
         global currentDate
         self.area_date_received = str(currentDate)
         global area_cfg
@@ -325,8 +324,7 @@ class Weather_Station:
         self.station_ev = float(message[12:14])"""
         msg = message.split('#')
         self.station_id = int(field_id+msg[0][1])
-        self.station_name = " "
-        self.station_status = int(msg[9])
+        self.station_status = int(0)
         self.station_relative_humidity = float(msg[2])
         self.station_temperature = float(msg[3])
         self.station_wind_speed = float(msg[4])
@@ -337,9 +335,9 @@ class Weather_Station:
 
         global currentDate
         self.station_date_received = str(currentDate)
-        self.fk_farm_field = " "
-        self.station_name = " "
-        self.get_from_server(field_id)
+        self.fk_farm_field = "http://riego.chi.itesm.mx/Farm_Field/" + \
+                             field_id + "/"
+        #self.get_from_server(field_id)
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
@@ -409,9 +407,7 @@ class Farm_Field:
             else:
                 self.field_user_define2 = message[comma + 1: terminator]
 
-        self.field_name = " "
-        self.field_description = " "
-        self.get_from_server()
+        #self.get_from_server()
 
         global currentDate
         # TimeZone
@@ -587,9 +583,9 @@ class MessageProcessor:
 
     def __init__(self):
         pass
+        self.changed = False
 
-    @staticmethod
-    def process_message(message):
+    def process_message(self,message):
         global currentDate
 
         if currentDate is None:
@@ -736,7 +732,7 @@ class MessageProcessor:
             msg_areas += chr(8) + chr(0)*6
             msg_areas += chr(9) + chr(0)*6
             msg_areas += chr(10) + chr(0)*6
+            self.changed = True
             return msg_areas
         else:
             print "No configuration pending"
-        return 'ROK'

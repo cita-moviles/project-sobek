@@ -6,6 +6,8 @@ from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from django.views.generic import TemplateView
+from rest_framework import views
+from django.core.signals import request_finished, request_started
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
      Crop_Area_Log, Sensor_Log, Weather_Station_Log, Valve_Log, Farm_Field_Log, Sensor_Agg, Valve_Agg, Crop_Area_Agg, \
      Weather_Station_Agg, Farm_Field_Agg
@@ -14,6 +16,9 @@ from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Se
      Weather_Station_Log_Serializer, Valve_Log_Serializer, Sensor_Log_Serializer, Farm_Field_Log_Serializer, \
      Sensor_Agg_Serializer, Valve_Agg_Serializer, Crop_Area_Agg_Serializer, Weather_Station_Agg_Serializer, \
      Farm_Field_Agg_Serializer
+import time
+from Utils import FileWriter
+
 
 class Crop_ViewSet (viewsets.ModelViewSet):
      queryset = Crop.objects.all ()
@@ -312,6 +317,55 @@ class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = FieldAggFilter
 
+class Area_Log_View(views.APIView):
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    filter_class = AreaLogFilter
+
+    def get(self, request):
+        global serializer_time
+        global db_time
+
+        db_start = time.time()
+        area_log = list(Crop_Area_Log.objects.all())
+        db_time = time.time() - db_start
+
+        serializer_start = time.time()
+        serializer = Area_Log_Serializer(area_log)
+        data = serializer.data
+        serializer_time = time.time() - serializer_start
+
+        return Response(data)
+
+    def dispatch(self, request, *args, **kwargs):
+        global dispatch_time
+        global render_time
+
+        dispatch_start = time.time()
+        ret = super(views.APIView, self).dispatch(request, *args, **kwargs)
+
+        render_start = time.time()
+        ret.render()
+        render_time = time.time() - render_start
+
+        dispatch_time = time.time() - dispatch_start
+
+        return ret
+    def started(sender, **kwargs):
+        global started
+        started = time.time()
+
+    def finished(sender, **kwargs):
+        total = time.time() - started
+        api_view_time = dispatch_time - (render_time + serializer_time + db_time)
+        request_response_time = total - dispatch_time
+
+        FileWriter.writeToFile("Database lookup               | %.4fs" % db_time)
+        FileWriter.writeToFile("Serialization                 | %.4fs" % serializer_time)
+        FileWriter.writeToFile("Django request/response       | %.4fs" % request_response_time)
+        FileWriter.writeToFile("API view                      | %.4fs" % api_view_time)
+        FileWriter.writeToFile("Response rendering            | %.4fs" % render_time)
+    request_started.connect(started)
+    request_finished.connect(finished)
 
 @api_view(('GET',))
 def api_root(request, format=None):

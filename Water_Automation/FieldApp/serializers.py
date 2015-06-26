@@ -132,7 +132,7 @@ class Valve_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Valve_Log
-        fields = ('log_number', 'valve_id', 'valve_status', 'valve_flow','valve_date_received')
+        fields = ('log_number', 'valve_status', 'valve_flow','valve_date_received')
 
 #AGGREGATE
 class Sensor_Agg_Serializer(serializers.HyperlinkedModelSerializer):

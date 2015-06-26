@@ -29,7 +29,7 @@ urlpatterns = patterns(
     url(r'^Station_Search/', views.StationSearch.as_view(model='Weather_Station')),
     url(r'^Valve_Search/', views.ValveSearch.as_view(model='Valve')),
 
-    url(r'^Crop_Area_Log/', views.Area_Log_View.as_view()),
+    url(r'^Crop_Area_Log/', views.Area_Log_ViewSet.as_view(model='Crop_Area_Log')),
     url(r'^Sensor_Log/', views.Sensor_Log_ViewSet.as_view(model='Sensor_Log')),
     url(r'^Valve_Log/', views.Valve_Log_ViewSet.as_view(model='Valve_Log')),
     url(r'^Station_Log/', views.Station_Log_ViewSet.as_view(model='Weather_Station_Log')),

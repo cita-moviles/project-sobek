@@ -164,7 +164,7 @@ class Crop_Area_Log(models.Model):
         unique_together = ["area_id", "area_date_received"]
 
     def __unicode__(self):
-        return self.log_number
+        return unicode(self.log_number)
 
 
 class Weather_Station_Log(models.Model):

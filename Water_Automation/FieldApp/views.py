@@ -333,7 +333,9 @@ class Area_Log_View(views.APIView):
         serializer = Area_Log_Serializer(area_log)
         data = serializer.data
         serializer_time = time.time() - serializer_start
-	print db_time, serializer_time
+
+        print ("Database lookup               | %.4fs" % db_time)
+        print ("Serialization                 | %.4fs" % serializer_time)
         return Response(data)
 
     def dispatch(self, request, *args, **kwargs):
@@ -349,19 +351,8 @@ class Area_Log_View(views.APIView):
 
         dispatch_time = time.time() - dispatch_start
 
-        return ret
-    def started(sender, **kwargs):
-        global started_time
-        started_time = time.time()
-
-    def finished(sender, **kwargs):
-
-        print ("Database lookup               | %.4fs" % db_time)
-        print ("Serialization                 | %.4fs" % serializer_time)
         print ("Response rendering            | %.4fs" % render_time)
-
-    request_started.connect(started)
-    request_finished.connect(finished)
+        return ret
 
 @api_view(('GET',))
 def api_root(request, format=None):

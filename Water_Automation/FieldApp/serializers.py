@@ -113,9 +113,9 @@ class Weather_Station_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Weather_Station_Log
-        fields = ('log_number', 'log_timestamp', 'station_id', 'station_status', 'station_relative_humidity',
+        fields = ('log_number', 'station_id','station_relative_humidity',
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation',
-                  'station_date_received', 'station_user_define1', 'station_user_define2')
+                  'station_date_received')
 
 
 class Sensor_Log_Serializer(serializers.HyperlinkedModelSerializer):
@@ -123,9 +123,8 @@ class Sensor_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Sensor_Log
-        fields = ('log_number', 'log_timestamp', 'sensor_id', 'sensor_status', 'sensor_hl1', 'sensor_hl2',
-                  'sensor_hl3', 'sensor_temperature', 'sensor_date_received',
-                  'sensor_user_define1', 'sensor_user_define2')
+        fields = ('log_number', 'sensor_id', 'sensor_hl1', 'sensor_hl2',
+                  'sensor_hl3', 'sensor_temperature', 'sensor_date_received')
 
 
 class Valve_Log_Serializer(serializers.HyperlinkedModelSerializer):
@@ -133,8 +132,7 @@ class Valve_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Valve_Log
-        fields = ('log_number', 'log_timestamp', 'valve_id', 'valve_status', 'valve_flow', 'valve_pressure',
-                  'valve_limit', 'valve_date_received', 'valve_user_define1', 'valve_user_define2')
+        fields = ('log_number', 'valve_id', 'valve_status', 'valve_flow','valve_date_received')
 
 #AGGREGATE
 class Sensor_Agg_Serializer(serializers.HyperlinkedModelSerializer):

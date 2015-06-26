@@ -5424,3 +5424,8 @@ h1, h2, h3 {
     color: #0288d1; }
   .card li {
     color: #212121; }
+
+.graph {
+    min-height: 40vh;
+
+}

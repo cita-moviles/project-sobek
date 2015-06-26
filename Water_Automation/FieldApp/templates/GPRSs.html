@@ -66,36 +66,25 @@ function graphLogs(clicked_id) {
             }
         });
     }
-    function showFieldTecinMaps (){
-        initialize(28.675212, -106.080549)
-    }
     function showGoogleMaps(clicked_id) {
-        var field_id_clicked;
-        var latitude;
-        var longitude;
-        var clicked =Number(clicked_id);
-        if (clicked===1){
-            showFieldTecinMaps();
-            return false;
-        }
-        console.log(clicked_id);
-        $.ajax({
-            url: "Farm_Field",
-            data: { field_id: field_id_clicked},
-            success: function (data) {
-                console.log('AJAX SUCCESS');
-                $.each(data, function (index, value) {
-                        field_id_clicked= value.field_id;
-                        longitude = value.field_latitude;
-                        latitude = value.field_longitude;
-
-                        if (field_id_clicked===clicked){
-                          initialize(latitude, longitude);
-                        }
-                });
-            console.log(latitude, longitude);
+        console.log("Field id: "+ clicked_id);
+        switch (clicked_id) {
+            case "1":
+            {
+                initialize(28.675767, -106.081010);
+                break;
             }
-        });
+            case "2":
+            {
+                initialize(28.180920, -105.494873);
+                break;
+            }
+            case "3":
+            {
+                initialize(28.685563, -106.076992);
+                break;
+            }
+        }
     }
     function initialize(latitude,longitude) {
         var mapCanvas = document.getElementById('map_canvas');

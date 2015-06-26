@@ -254,28 +254,28 @@ class Area_Log_ViewSet (generics.ListCreateAPIView):
      filter_class = AreaLogFilter
 
 class Station_Log_ViewSet (generics.ListCreateAPIView):
-     queryset = Weather_Station_Log.objects.all ()
+     queryset = Weather_Station_Log.objects.filter(station_date_received__gte=(datetime.today() - timedelta(days=30)))
      serializer_class = Weather_Station_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = StationLogFilter
 
 
 class Sensor_Log_ViewSet (generics.ListCreateAPIView):
-     queryset = Sensor_Log.objects.all ()
+     queryset = Sensor_Log.objects.filter(sensor_date_received__gte=(datetime.today() - timedelta(days=30)))
      serializer_class = Sensor_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = SensorLogFilter
 
 
 class Valve_Log_ViewSet (generics.ListCreateAPIView):
-     queryset = Valve_Log.objects.all ()
+     queryset = Valve_Log.objects.filter(valve_date_received__gte=(datetime.today() - timedelta(days=30)))
      serializer_class = Valve_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = ValveLogFilter
 
 
 class Farm_Field_Log_ViewSet (generics.ListCreateAPIView):
-     queryset = Farm_Field_Log.objects.all ()
+     queryset = Farm_Field_Log.objects.filter(field_date_received__gte=(datetime.today() - timedelta(days=30)))
      serializer_class = Farm_Field_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = FarmFieldLogFilter

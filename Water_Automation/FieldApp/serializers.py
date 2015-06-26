@@ -113,7 +113,7 @@ class Weather_Station_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Weather_Station_Log
-        fields = ('log_number', 'station_id','station_relative_humidity',
+        fields = ('log_number','station_relative_humidity',
                   'station_temperature', 'station_wind_speed', 'station_solar_radiation',
                   'station_date_received')
 
@@ -123,7 +123,7 @@ class Sensor_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Sensor_Log
-        fields = ('log_number', 'sensor_id', 'sensor_hl1', 'sensor_hl2',
+        fields = ('log_number', 'sensor_hl1', 'sensor_hl2',
                   'sensor_hl3', 'sensor_temperature', 'sensor_date_received')
 
 

@@ -327,6 +327,7 @@ class Area_Log_View(views.APIView):
 
         db_start = time.time()
         area_log = list(Crop_Area_Log.objects.all())
+	print area_log
         db_time = time.time() - db_start
 
         serializer_start = time.time()

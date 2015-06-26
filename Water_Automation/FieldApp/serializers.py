@@ -105,7 +105,7 @@ class Area_Log_Serializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Crop_Area_Log
-        fields = ('log_number', 'area_id', 'area_ev', 'area_date_received')
+        fields = ('log_number', 'area_ev', 'area_date_received')
 
 
 class Weather_Station_Log_Serializer(serializers.HyperlinkedModelSerializer):

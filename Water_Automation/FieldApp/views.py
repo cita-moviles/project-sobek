@@ -16,8 +16,7 @@ from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Se
      Weather_Station_Log_Serializer, Valve_Log_Serializer, Sensor_Log_Serializer, Farm_Field_Log_Serializer, \
      Sensor_Agg_Serializer, Valve_Agg_Serializer, Crop_Area_Agg_Serializer, Weather_Station_Agg_Serializer, \
      Farm_Field_Agg_Serializer
-import time
-from Utils import FileWriter
+from datetime import datetime, timedelta
 
 
 class Crop_ViewSet (viewsets.ModelViewSet):
@@ -320,40 +319,11 @@ class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
 class Area_Log_View(views.APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = AreaLogFilter
-
     def get(self, request):
-        global serializer_time
-        global db_time
-
-        db_start = time.time()
-        area_log = list(Crop_Area_Log.objects.all())
-	print area_log
-        db_time = time.time() - db_start
-
-        serializer_start = time.time()
+        area_log = Crop_Area_Log.objects.filter(area_date_received__gte=(datetime.today() - timedelta(days=30)))
         serializer = Area_Log_Serializer(area_log)
         data = serializer.data
-        serializer_time = time.time() - serializer_start
-
-        print ("Database lookup               | %.4fs" % db_time)
-        print ("Serialization                 | %.4fs" % serializer_time)
         return Response(data)
-
-    def dispatch(self, request, *args, **kwargs):
-        global dispatch_time
-        global render_time
-
-        dispatch_start = time.time()
-        ret = super(views.APIView, self).dispatch(request, *args, **kwargs)
-
-        render_start = time.time()
-        ret.render()
-        render_time = time.time() - render_start
-
-        dispatch_time = time.time() - dispatch_start
-
-        print ("Response rendering            | %.4fs" % render_time)
-        return ret
 
 @api_view(('GET',))
 def api_root(request, format=None):

@@ -5427,5 +5427,6 @@ h1, h2, h3 {
 
 .graph {
     min-height: 40vh;
-
+    min-width: 100%;
+    padding: 0 10%;
 }

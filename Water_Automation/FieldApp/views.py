@@ -355,14 +355,9 @@ class Area_Log_View(views.APIView):
         started_time = time.time()
 
     def finished(sender, **kwargs):
-        total = time.time() - started_time
-        api_view_time = dispatch_time - (render_time + serializer_time + db_time)
-        request_response_time = total - dispatch_time
 
         print ("Database lookup               | %.4fs" % db_time)
         print ("Serialization                 | %.4fs" % serializer_time)
-        print ("Django request/response       | %.4fs" % request_response_time)
-        print ("API view                      | %.4fs" % api_view_time)
         print ("Response rendering            | %.4fs" % render_time)
 
     request_started.connect(started)

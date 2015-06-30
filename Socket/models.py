@@ -246,6 +246,7 @@ class Crop_Area:
                 local_area_cfg += chr(int(str(self.area_id)[1])) + chr(0)*6
                 #local_area_cfg += str(self.area_id)[1] + str(0)*6
             else:
+		print "Config changed"
                 data = result2['area_configuration']
                 global config_mode
                 config_mode = True
@@ -736,4 +737,4 @@ class MessageProcessor:
             return msg_areas
         else:
             print "No configuration pending"
-            return 'ROK'
+        return 'ROK'

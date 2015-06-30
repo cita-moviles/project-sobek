@@ -324,6 +324,7 @@ class Weather_Station:
         self.station_ev = float(message[12:14])"""
         msg = message.split('#')
         self.station_id = int(field_id+msg[0][1])
+        self.station_name = " "
         self.station_status = int(0)
         self.station_relative_humidity = float(msg[2])
         self.station_temperature = float(msg[3])
@@ -583,9 +584,9 @@ class MessageProcessor:
 
     def __init__(self):
         pass
+        self.changed = False
 
-    @staticmethod
-    def process_message(message):
+    def process_message(self,message):
         global currentDate
 
         if currentDate is None:
@@ -736,4 +737,3 @@ class MessageProcessor:
             return msg_areas
         else:
             print "No configuration pending"
-            return 'ROK'

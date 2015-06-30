@@ -583,9 +583,9 @@ class MessageProcessor:
 
     def __init__(self):
         pass
-        self.changed = False
 
-    def process_message(self,message):
+    @staticmethod
+    def process_message(message):
         global currentDate
 
         if currentDate is None:

@@ -132,10 +132,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'FieldApp',
     'rest_framework',
-    'debug_toolbar',
 )
-
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -171,10 +168,4 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',),
-}
-CACHES = {
-    'default': {
-        'BACKEND': 'redis_cache.RedisCache',
-        'LOCATION': '/var/run/redis/redis.sock',
-    },
 }

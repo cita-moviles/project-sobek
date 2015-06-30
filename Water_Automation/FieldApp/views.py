@@ -7,8 +7,6 @@ from rest_framework.reverse import reverse
 from rest_framework import viewsets
 from rest_framework.negotiation import BaseContentNegotiation
 from django.views.generic import TemplateView
-from rest_framework import views
-from django.core.cache import cache
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
      Crop_Area_Log, Sensor_Log, Weather_Station_Log, Valve_Log, Farm_Field_Log, Sensor_Agg, Valve_Agg, Crop_Area_Agg, \
      Weather_Station_Agg, Farm_Field_Agg
@@ -333,18 +331,6 @@ class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = FieldAggFilter
 
-class Area_Log_View(views.APIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    filter_class = AreaLogFilter
-    content_negotiation_class = IgnoreClientContentNegotiation
-    def get(self, request):
-        data = cache.get('areas')
-        if data is None:
-            area_log = Crop_Area_Log.objects.filter(area_date_received__gte=(datetime.today() - timedelta(days=30)))
-            serializer = Area_Log_Serializer(area_log)
-            data = serializer.data
-            cache.set('areas', data, 86400)
-        return Response(data)
 
 @api_view(('GET',))
 def api_root(request, format=None):

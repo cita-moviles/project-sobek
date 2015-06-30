@@ -736,3 +736,4 @@ class MessageProcessor:
             return msg_areas
         else:
             print "No configuration pending"
+	    return 'ROK'

@@ -266,11 +266,11 @@ class Crop_Area:
                     if '.' in min_data:
                         min_data_1, min_data_2 = int(min_data.split('.')[0], 16), int(min_data.split('.')[1], 16)
                     else:
-                        min_data_1, min_data_2 = min_data, ""
+                        min_data_1, min_data_2 = min_data, 0
                     if '.' in max_data:
                         max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
                     else:
-                        max_data_1, max_data_2 = max_data, ""
+                        max_data_1, max_data_2 = max_data, 0
                     local_area_cfg += hex(min_data_1) + hex(min_data_2) + hex(max_data_1) + hex(max_data_2)
                 elif str_mode == '3':
                     timer_data = data[5:]
@@ -730,14 +730,9 @@ class MessageProcessor:
             # if the area config has been changed, return it
         if config_mode:
             print "Sending configuration"
-	        msg_areas += chr(3) + chr(0)*6
-            msg_areas += chr(4) + chr(0)*6
-            msg_areas += chr(5) + chr(0)*6
-            msg_areas += chr(6) + chr(0)*6
-            msg_areas += chr(7) + chr(0)*6
-            msg_areas += chr(8) + chr(0)*6
-            msg_areas += chr(9) + chr(0)*6
-            msg_areas += chr(10) + chr(0)*6
+            for no_area in xrange(no_of_areas+1, 10):
+                print str(no_area)
+                msg_areas += chr(no_area) + chr(0)*6
             self.changed = True
             return msg_areas
         else:

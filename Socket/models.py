@@ -668,7 +668,7 @@ class MessageProcessor:
 
                     # First, build the configuration message
                     for char in field_id:
-                        msg_areas += str(int(char))
+                        msg_areas += chr(int(char))
 
                     # r_data -> Area
                     for index in xrange(int(no_of_areas)):
@@ -730,13 +730,13 @@ class MessageProcessor:
             # if the area config has been changed, return it
         if config_mode:
             print "Sending configuration"
-            msg_areas += str(4) + str(0)*6
-            msg_areas += str(5) + str(0)*6
-            msg_areas += str(6) + str(0)*6
-            msg_areas += str(7) + str(0)*6
-            msg_areas += str(8) + str(0)*6
-            msg_areas += str(9) + str(0)*6
-            msg_areas += str(10) + str(0)*6
+            msg_areas += chr(4) + chr(0)*6
+            msg_areas += chr(5) + chr(0)*6
+            msg_areas += chr(6) + chr(0)*6
+            msg_areas += chr(7) + chr(0)*6
+            msg_areas += chr(8) + chr(0)*6
+            msg_areas += chr(9) + chr(0)*6
+            msg_areas += chr(10) + chr(0)*6
             self.changed = True
             return msg_areas
         else:

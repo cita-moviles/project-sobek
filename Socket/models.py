@@ -246,7 +246,6 @@ class Crop_Area:
                 local_area_cfg += chr(int(str(self.area_id)[1])) + chr(0)*6
                 #local_area_cfg += str(self.area_id)[1] + str(0)*6
             else:
-                print "Changing config"
                 data = result2['area_configuration']
                 global config_mode
                 config_mode = True
@@ -258,15 +257,20 @@ class Crop_Area:
                 if str_mode == '1':
                     state = data[4]
                     local_area_cfg += chr(int(state))
-                    for char in data[5:]:
+                    for char in data[5:-1]:
                         local_area_cfg += chr(int(char))
                 elif str_mode == '2':
                     auto_data = data[4:]
                     min_data = auto_data.split('#')[0]
                     max_data = auto_data.split('#')[1]
-                    min_data_1, min_data_2 = int(min_data.split('.')[0], 16), int(min_data.split('.')[1], 16)
-                    max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
-                    print min_data_1, min_data_2, max_data_1, max_data_2
+                    if '.' in min_data:
+                        min_data_1, min_data_2 = int(min_data.split('.')[0], 16), int(min_data.split('.')[1], 16)
+                    else:
+                        min_data_1, min_data_2 = min_data, ""
+                    if '.' in max_data:
+                        max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
+                    else:
+                        max_data_1, max_data_2 = max_data, ""
                     local_area_cfg += hex(min_data_1) + hex(min_data_2) + hex(max_data_1) + hex(max_data_2)
                 elif str_mode == '3':
                     timer_data = data[5:]
@@ -664,7 +668,7 @@ class MessageProcessor:
 
                     # First, build the configuration message
                     for char in field_id:
-                        msg_areas += chr(int(char))
+                        msg_areas += str(int(char))
 
                     # r_data -> Area
                     for index in xrange(int(no_of_areas)):
@@ -726,14 +730,13 @@ class MessageProcessor:
             # if the area config has been changed, return it
         if config_mode:
             print "Sending configuration"
-            msg_areas += chr(3) + chr(0)*6
-            msg_areas += chr(4) + chr(0)*6
-            msg_areas += chr(5) + chr(0)*6
-            msg_areas += chr(6) + chr(0)*6
-            msg_areas += chr(7) + chr(0)*6
-            msg_areas += chr(8) + chr(0)*6
-            msg_areas += chr(9) + chr(0)*6
-            msg_areas += chr(10) + chr(0)*6
+            msg_areas += str(4) + str(0)*6
+            msg_areas += str(5) + str(0)*6
+            msg_areas += str(6) + str(0)*6
+            msg_areas += str(7) + str(0)*6
+            msg_areas += str(8) + str(0)*6
+            msg_areas += str(9) + str(0)*6
+            msg_areas += str(10) + str(0)*6
             self.changed = True
             return msg_areas
         else:

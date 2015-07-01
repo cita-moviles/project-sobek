@@ -730,7 +730,7 @@ class MessageProcessor:
             # if the area config has been changed, return it
         if config_mode:
             print "Sending configuration"
-	    msg_areas += chr(3) + chr(0)*6
+	        msg_areas += chr(3) + chr(0)*6
             msg_areas += chr(4) + chr(0)*6
             msg_areas += chr(5) + chr(0)*6
             msg_areas += chr(6) + chr(0)*6

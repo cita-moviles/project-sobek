@@ -271,7 +271,6 @@ class Crop_Area:
                         max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
                     else:
                         max_data_1, max_data_2 = int(max_data.split('.')[0], 16), 0
-                    print min_data_1, min_data_2, max_data_1, max_data_2
                     local_area_cfg += hex(min_data_1) + hex(min_data_2) + hex(max_data_1) + hex(max_data_2)
                 elif str_mode == '3':
                     timer_data = data[5:]

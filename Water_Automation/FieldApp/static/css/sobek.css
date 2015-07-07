@@ -5430,3 +5430,21 @@ h1, h2, h3 {
     min-width: 100%;
     padding: 0 10%;
 }
+#footer_img_cita {
+    background-image: url("../img/cita_logo.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-width: 5vw;
+    min-height: 10vh;
+    margin-top: -7vh;
+}
+#footer_img_tec {
+    background-image: url("../img/tec_logo.jpg");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-width: 5vw;
+    min-height: 5vh;
+    margin-top: -5vh;
+}

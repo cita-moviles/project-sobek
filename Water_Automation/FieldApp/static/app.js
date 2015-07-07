@@ -243,6 +243,7 @@ function getSensorLog(sensor_id, start_date, end_date,before_callback, success_c
 function displayLoading() {
     $('#progress').animate({width: 0});
     $('#progress_message').text("Loading");
+    //$('#spinner').css('display', 'inline-block');
 
 }
 
@@ -252,6 +253,7 @@ function displayLoading() {
 function hideLoading() {
     $('#progress_message').text("Done!");
     $('#progress').animate({width: 100});
+    //$('#spinner').css('display', 'none');
 }
 
 

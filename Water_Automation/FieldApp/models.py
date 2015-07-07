@@ -50,7 +50,6 @@ class Crop_Area(models.Model):
 class Area_Configuration(models.Model):
     area_id = models.ForeignKey('Crop_Area', primary_key=True)
     area_configuration = models.TextField(max_length=250, null=True, blank=True)
-    field_id = models.ForeignKey('Farm_Field')
 
     def __unicode__(self):
         return self.area_configuration
@@ -81,7 +80,6 @@ class Weather_Station(models.Model):
     station_temperature = models.FloatField(null=True, blank=True, default = 0)
     station_wind_speed = models.FloatField(null=True, blank=True, default = 0)
     station_solar_radiation = models.FloatField(null=True, blank=True, default = 0)
-    station_ev = models.FloatField(null=True, blank= True, default=0)
     station_date_received = models.DateTimeField(null=True, blank=True)
     station_user_define1 = models.TextField(max_length=250, null=True,
                                             blank=True)
@@ -175,7 +173,6 @@ class Weather_Station_Log(models.Model):
     station_id = models.ForeignKey('Weather_Station')
     station_status = models.SmallIntegerField(max_length=2)
     station_relative_humidity = models.FloatField()
-    station_ev = models.FloatField()
     station_temperature = models.FloatField()
     station_wind_speed = models.FloatField()
     station_solar_radiation = models.FloatField()
@@ -243,7 +240,6 @@ class Weather_Station_Agg(models.Model):
     station_id = models.ForeignKey('Weather_Station')
     station_relative_humidity = models.FloatField()
     station_temperature = models.FloatField()
-    station_ev = models.FloatField()
     station_wind_speed = models.FloatField()
     station_solar_radiation = models.FloatField()
     station_date_received = models.DateTimeField(db_index=True)

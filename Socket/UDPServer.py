@@ -38,8 +38,9 @@ def sobek_server(address):
         FileWriter.writeToFile(msg)
         return_value = msg_processor.process_message(msg)
         #Holds the value for future use
-        print return_value
-
+        print " *** LOGGING *** "
+        print " Received GOK -> ", received_gok
+        print " Changed -> ", msg_processor.changed
         #Will send the message processed if there's a config, until there's a GOK reply
         if received_gok == False and msg_processor.changed == True:
             sock.sendto(return_value,addr)

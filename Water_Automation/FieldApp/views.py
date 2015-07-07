@@ -5,9 +5,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
 from rest_framework import viewsets
+from rest_framework.negotiation import BaseContentNegotiation
 from django.views.generic import TemplateView
-from rest_framework import views
-from django.core.signals import request_finished, request_started
 from FieldApp.models import Crop, Farm_Field, Crop_Area, Valve, Area_Configuration, Weather_Station, Sensor, \
      Crop_Area_Log, Sensor_Log, Weather_Station_Log, Valve_Log, Farm_Field_Log, Sensor_Agg, Valve_Agg, Crop_Area_Agg, \
      Weather_Station_Agg, Farm_Field_Agg
@@ -18,6 +17,18 @@ from FieldApp.serializers import Crop_Serializer, Farm_Field_Serializer, Area_Se
      Farm_Field_Agg_Serializer
 from datetime import datetime, timedelta
 
+class IgnoreClientContentNegotiation(BaseContentNegotiation):
+    def select_parser(self, request, parsers):
+        """
+        Select the first parser in the `.parser_classes` list.
+        """
+        return parsers[0]
+
+    def select_renderer(self, request, renderers, format_suffix):
+        """
+        Select the first renderer in the `.renderer_classes` list.
+        """
+        return (renderers[0], renderers[0].media_type)
 
 class Crop_ViewSet (viewsets.ModelViewSet):
      queryset = Crop.objects.all ()
@@ -252,33 +263,37 @@ class Area_Log_ViewSet (generics.ListCreateAPIView):
      serializer_class = Area_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = AreaLogFilter
+     content_negotiation_class = IgnoreClientContentNegotiation
 
 class Station_Log_ViewSet (generics.ListCreateAPIView):
-     queryset = Weather_Station_Log.objects.all ()
+     queryset = Weather_Station_Log.objects.filter(station_date_received__gte=(datetime.today() - timedelta(days=30)))
      serializer_class = Weather_Station_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = StationLogFilter
-
+     content_negotiation_class = IgnoreClientContentNegotiation
 
 class Sensor_Log_ViewSet (generics.ListCreateAPIView):
-     queryset = Sensor_Log.objects.all ()
+     queryset = Sensor_Log.objects.filter(sensor_date_received__gte=(datetime.today() - timedelta(days=30)))
      serializer_class = Sensor_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = SensorLogFilter
+     content_negotiation_class = IgnoreClientContentNegotiation
 
 
 class Valve_Log_ViewSet (generics.ListCreateAPIView):
-     queryset = Valve_Log.objects.all ()
+     queryset = Valve_Log.objects.filter(valve_date_received__gte=(datetime.today() - timedelta(days=30)))
      serializer_class = Valve_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = ValveLogFilter
+     content_negotiation_class = IgnoreClientContentNegotiation
 
 
 class Farm_Field_Log_ViewSet (generics.ListCreateAPIView):
-     queryset = Farm_Field_Log.objects.all ()
+     queryset = Farm_Field_Log.objects.filter(field_date_received__gte=(datetime.today() - timedelta(days=30)))
      serializer_class = Farm_Field_Log_Serializer
      permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
      filter_class = FarmFieldLogFilter
+     content_negotiation_class = IgnoreClientContentNegotiation
 
 
 #AggViewSets
@@ -316,14 +331,6 @@ class Farm_Field_Agg_ViewSet(generics.ListCreateAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     filter_class = FieldAggFilter
 
-class Area_Log_View(views.APIView):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    filter_class = AreaLogFilter
-    def get(self, request):
-        area_log = Crop_Area_Log.objects.filter(area_date_received__gte=(datetime.today() - timedelta(days=30)))
-        serializer = Area_Log_Serializer(area_log)
-        data = serializer.data
-        return Response(data)
 
 @api_view(('GET',))
 def api_root(request, format=None):

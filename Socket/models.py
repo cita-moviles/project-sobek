@@ -257,15 +257,20 @@ class Crop_Area:
                 if str_mode == '1':
                     state = data[4]
                     local_area_cfg += chr(int(state))
-                    for char in data[5:]:
+                    for char in data[5:-1]:
                         local_area_cfg += chr(int(char))
                 elif str_mode == '2':
                     auto_data = data[4:]
                     min_data = auto_data.split('#')[0]
                     max_data = auto_data.split('#')[1]
-                    min_data_1, min_data_2 = int(min_data.split('.')[0], 16), int(min_data.split('.')[1], 16)
-                    max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
-                    print min_data_1, min_data_2, max_data_1, max_data_2
+                    if '.' in min_data:
+                        min_data_1, min_data_2 = int(min_data.split('.')[0], 16), int(min_data.split('.')[1], 16)
+                    else:
+                        min_data_1, min_data_2 = int(min_data.split('.')[0], 16), 0
+                    if '.' in max_data:
+                        max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
+                    else:
+                        max_data_1, max_data_2 = int(max_data.split('.')[0], 16), 0
                     local_area_cfg += hex(min_data_1) + hex(min_data_2) + hex(max_data_1) + hex(max_data_2)
                 elif str_mode == '3':
                     timer_data = data[5:]
@@ -324,6 +329,7 @@ class Weather_Station:
         self.station_ev = float(message[12:14])"""
         msg = message.split('#')
         self.station_id = int(field_id+msg[0][1])
+        self.station_name = " "
         self.station_status = int(0)
         self.station_relative_humidity = float(msg[2])
         self.station_temperature = float(msg[3])
@@ -724,15 +730,12 @@ class MessageProcessor:
             # if the area config has been changed, return it
         if config_mode:
             print "Sending configuration"
-            msg_areas += chr(3) + chr(0)*6
-            msg_areas += chr(4) + chr(0)*6
-            msg_areas += chr(5) + chr(0)*6
-            msg_areas += chr(6) + chr(0)*6
-            msg_areas += chr(7) + chr(0)*6
-            msg_areas += chr(8) + chr(0)*6
-            msg_areas += chr(9) + chr(0)*6
-            msg_areas += chr(10) + chr(0)*6
+            for no_area in xrange(int(no_of_areas)+1, 10):
+                print str(no_area)
+                msg_areas += chr(no_area) + chr(0)*6
             self.changed = True
+            print repr(msg_areas)
             return msg_areas
         else:
             print "No configuration pending"
+	return 'ROK'

@@ -1,0 +1,318 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Water Automation</title>
+    <script src="../static/js/vendor/modernizr.js"></script>
+    <script src="../static/js/vendor/jquery.js"></script>
+    <script src="../static/js/foundation/foundation.js"></script>
+    <script src="../static/js/foundation/foundation.topbar.js"></script>
+    <script src="../static/js/foundation/foundation.dropdown.js"></script>
+    <link rel="stylesheet" href="../static/css/foundation.css" />
+    <link rel="stylesheet" href="../static/css/main.css" />
+    <link rel="stylesheet" href="../static/css/responsive.css" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto|Roboto+Slab' rel='stylesheet'     type='text/css'>
+
+</head>
+ 
+<body>
+<!-----------------------
+    -NAVIGATION--
+------------------------->  
+    <div class="fixed">
+    <nav class="top-bar" data-topbar role="navigation">
+        <ul class="title-area">
+            <li class="name">
+                <h1><a id="titulo">Riego Automatizado</a></h1>
+            </li>
+             <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+            <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+
+        </ul>
+
+        <section class="top-bar-section">
+            
+            <!-- Right Nav Section -->
+            <ul class= "right">
+                <li class="active"><a href="#intro">Inicio</a></li>
+                <li class="active"><a href="#proy">Proyecto</a></li>
+                <li class="active"><a href="#equipo">Equipo</a></li>
+                <li class="active"><a href="#implementa">Implementación</a></li>
+                <li class="active"><a href="#resul">Resultados</a></li>
+                <li class="active"><a href="#publi">Publicaciones</a></li>
+                <li class="active"><a href="#contacto">Contacto</a></li>
+                <li class="active"><a href="#enlaces">Enlaces</a></li>
+            </ul>
+
+
+            <!-- Left Nav Section -->
+        </section>
+    </nav>
+    </div>
+<!--CONTENT---> 
+    <div class= "container" id= "title">
+      <div class= "title">
+        <h1 id="main_title">Riego Automatizado</h1> 
+        <h2>Automatización para Uso Eficiente del Agua en Sistemas de Riego Agrícola </h2>
+          <a href = "#intro"><img src = "../static/img/scrolldown.png" id=scrolldown></a>
+      </div>
+    </div>
+    <span class="anchor" id="intro"></span>
+    <div class= "row container">
+        <div class= "center">
+        <h3>Riego Automatizado</h3>
+        <div class="small-7 columns">
+        <p class="border small-text">
+            El concepto de <strong>uso eficiente de agua</strong> incluye cualquier medida que reduzca la cantidad que se utiliza por unidad de cualquier actividad, y que favorezca el mantenimiento o mejoramiento de la calidad del agua. Específicamente <strong>el sector agrícola representa el mayor consumidor de agua a nivel mundial,</strong> ya que se estima que requiere alrededor del 75% del agua disponible. Deficiencias en la extracción, conducción y uso del agua, son las mayores causantes del desperdicio de este vital líquido y de la insuficiencia de humedad en el suelo que reduce o nulifica el desarrollo vegetativo. </p>
+           <p class= "border"> Actualmente, los <strong>sistemas de irrigación automáticos</strong> ofrecidos por el mercado al sector agrícola, se basan en la definición de períodos de tiempo para el uso de agua de riego, sin embargo <strong>no se consideran otros factores</strong> como humedad de la tierra, salinidad del suelo, intensidad de la luz solar, temperatura ambiente, necesidad de agua por parte del cultivo, entre otros. Por la tanto la eficiencia  lograda  por  estos  sistemas  puede  ser  mejorada  al  considerar  todos  los  elementos críticos que conforman un proceso de irrigación. Se estima que el promedio mundial de eficiencia en el uso del agua, aún con estos sistemas, es de <strong>entre un 40% a un 50%.</strong>  
+            </p>
+        </div>
+        <div class="small-5 columns">
+            <h4>Beneficios</h4>
+            <p>Los principales beneficios que se obtendrán a partir de la implementación del proyecto son: </p>
+            <ul>
+                <li>Incrementar <strong>la eficiencia en el uso de agua</strong> en comparación con los sistemas actuales de riego agrícola. </li>
+                <li><strong>Reducir el consumo de energía eléctrica</strong> utilizado en los sistemas de riego actuales. </li>
+                <li><strong>Detectar oportunamente fugas</strong> de agua y fallas en general del sistema de riego, mediante un sistema de <strong>monitoreo</strong> y supervisión.</li>
+            </ul>
+        </div>
+        </div>
+    </div>
+    <span class="anchor" id="proy"></span>
+    <div class= "row container">
+        <div class= "center">
+            <h3>Proyecto</h3>
+            <div class= "small-4 columns">
+                <p class= "border small-text">Actualmente  en  el  Tec  de  Monterrey  Campus  Chihuahua,  se  desarrolla  el  proyecto <strong>Automatización  para  Uso  Eficiente  del  Agua  en  Sistemas  de  Riego  Agrícola</strong>  financiado  por  el Fondo  Mixto  de  Fomento  a  la  Investigación  Científica  y  Tecnológica  CONACyT  –  Gobierno  del Estado de Chihuahua (Referencia CHIH-2012-C03-194128). En este proyecto se está desarrollando un prototipo de sistema de riego agrícola automático basado en el control de <strong>humedad de suelo</strong> y considerando los <strong>factores climáticos</strong> y del cultivo (evapotranspiración) mediante la aplicación de técnicas de control avanzado, que permita utilizar <strong>solamente la cantidad de agua necesaria</strong>, en el momento adecuado y en el lugar correcto.</p>
+            </div>
+            <div class= "small-8 columns">
+                <h4>Soluciones</h4>
+                <p>Se propone <strong>el desarrollo de la plataforma</strong> a partir de una arquitectura basada en servicios, en donde  cada  servicio  es  una  representación  lógica  de  una  actividad  que  tiene  un  propósito específico. En forma general, la arquitectura de la plataforma propuesta debe considerar cuatro niveles de servicios: </p>
+                <ul>
+                    <li class= "light-border"><strong>Nivel  físico:</strong>  ofrece  servicios  de  mediciones  de  variables  físicas  (humedad  de  suelo, radiación solar, temperatura, lluvia, etc.), servicios de acceso y control a la infraestructura hidráulicas (activación de válvulas, manejo de pozos, control de cauces de agua, consumo de  energía,  etc.),  y  servicios  de  desarrollo  y  necesidades  de  cultivo  (cálculo  de evapotranspiración, consumo de agua por cultivo, etc.). </li>
+                    <li class= "light-border"><strong>Nivel de comunicación de datos:</strong> ofrece servicios de intercambio de información mediante redes inalámbricas de corto y de largo alcance. </li>
+                    <li class= "light-border"><strong>Nivel de control:</strong> ofrece servicios globales de planeación y control de riego, para optimizar el uso de agua y energía, garantizando el adecuado desarrollo vegetativo de cada una de las áreas de riego. Se consideran también el manejo de restricciones como disponibilidad de agua y la evaluación de factores ambientales. </li>
+                    <li class= "light-border"><strong>Nivel de supervisión y monitoreo:</strong> ofrece servicios de supervisión y monitoreo global del sistema en donde se puedan identificar fallas y alarmas del sistema. También en este nivel se configura la operación global del sistema. </li>
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+    <span class="anchor" id="equipo"></span>
+    <div class= "row container">
+        <div class= "center-wider">
+            <h3>Equipo</h3>
+            <div class= "small-6 columns half-view">
+                <div class= "small-3 columns equipo" id="teclogo"></div>
+                <div class= "small-9 columns equipo light-border v-center">
+                    <h5>Tec de Monterrey Campus CUU-Escuela de Ingenieria</h5>
+                    <p>Este equipo está constituido por el Dr. Camilo Lozoya, profesor e investigador de la escuela de Ingeniería, quien es el encargado del proyecto; también por alumnos egresados de la carrera de ingeniería en Mecatrónica y Electrónica.</p>
+                </div>
+                <div class= "small-3 columns equipo" id="citalogo"></div>
+                <div class= "small-9 columns equipo light-border v-center">
+                    <h5>CITA</h5>
+                    <p>Centro de investigación y Tecnología Aplicada consta de trabajadores y practicantes que colaboran en el proyecto, también nos proporcionan sus instalaciones de trabajo y asesorías. </p> 
+                </div>
+                <div class= "small-3 columns equipo" id = "inifaplogo"></div>
+                <div class= "small-9 columns equipo light-border v-center">
+                    <h5>INIFAP</h5>
+                    <p>El Instituto Nacional de Investigaciones Forestales, Agrícolas y Pecuarias nos proporciona su campo de investigación ubicado en la cd. De Delicias, Chihuahua. Campo donde implementamos el proyecto, además de que proporcionan asesorías en el ámbito agrícola. </p>
+                </div>
+                <div class= "small-3 columns equipo" id= "ostatelogo"></div>
+                <div class= "small-9 columns equipo light-border v-center">
+                    <h5>Oklahoma State University</h5>
+                    <p>Universidad en la cual que contamos con diferentes profesores enfocados en las áreas de control y agrícolas, contamos con la ayuda de ellos y sus recomendaciones, servicios y asesorías técnicas.</p>
+                </div>
+            </div>
+            <div class= "small-6 columns half-view">
+               <div class= "small-3 columns equipo" id= "kstatelogo"></div>
+                <div class= "small-9 columns equipo light-border v-center">
+                    <h5>Kansas State University </h5>
+                    <p>Al igual que la Oklahoma State University nos brinda ayuda de profesores especializados en el área de control agrícola y nos brinda servicios, asesoría técnica y recomendaciones para aplicarlos al proyecto. </p>
+                </div>
+                <div class= "small-3 columns equipo" id="coelogo"></div>
+                <div class= "small-9 columns equipo light-border v-center">
+                    <h5>COECYTECH</h5>
+                    <p>Insititución a través de la cual se aplico para lograr adquirir los fondos mixtos para el desarrollo del proyecto</p>
+                </div>
+                <div class= "small-3 columns equipo" id= "conalogo"></div>
+                <div class= "small-9 columns equipo light-border v-center">
+                    <h5>CONACyT</h5>
+                    <p>Financiado por el Fondo Mixto de Fomento a la Investigación Científica y Tecnológica CONACyT. Además de llevar un control del estado del proyecto y revisiones. 
+  </p>
+                </div>
+                <div class= "small-3 columns equipo" id= "goblogo"></div>
+                <div class= "small-9 columns equipo light-border v-center">
+                    <h5>Chihuahua-Gobierno del Estado</h5>
+                    <p>Financiado por el Fondo Mixto de Fomento a la Investigación Científica y Tecnológica CONACyT – Gobierno del Estado de Chihuahua (Referencia CHIH-2012-C03-194128).</p>
+                </div>
+            </div>
+             <div class="small-6 columns center">
+                    <h4>Equipo Actual</h4>
+                 <ul class="center" id="personas">
+                     <li>Carlos Mendoza Enríquez</li>
+                     <li>Jesús Valentin Torres Escobedo</li>
+                     <li>Miguel Grado Baylón</li>
+                     <li>Sergio Manuel Gallegos Espinoza</li>
+                     <li>Leonel Ramiro Terán Lozano</li>
+                     <li>Rafael Camilo Lozoya Gámez</li>
+                     <li>Carla Anabelle Prieto Chavez</li>
+                     <li>Alejandro Rodriguez Aragonez</li>
+                     <li>Ricardo Salas Ávila</li>
+                     <li>Maria del Sol Araiza</li>
+                 </ul>
+                </div>
+        </div>
+    </div>
+    <span class="anchor" id="implementa"></span>
+    <div class= "row container">
+        <div class= "center-wider">
+            <h3>Implementación</h3>
+            <div class= "small-4 columns half-view">
+                <h4>Campo Delicias</h4>
+                <p class= "light-border">Ubicado en el Instituto Nacional de Investigaciones Forestales, Agrícolas y Pecuarias (INIFAP) Delicias, Chihuahua. Se ha trabajado con cultivos de chile y trigo.</p>
+                <img src="https://www.dropbox.com/s/uhopm2kidx259oo/delicias.jpg?raw=1">
+            </div>
+            <div class= "small-4 columns half-view">
+                <h4>Campo Tec</h4>
+                <p class= "light-border">Ubicado en el Tec de Monterrey Campus Chihuahua, zona de Calidad Ambiental. Actualmente se está trabajando con maíz, y anteriormente se realizaron pruebas preliminares en césped. </p>
+                <img src= "https://www.dropbox.com/s/zweh8wnxhpesu9m/Tec.jpg?raw=1">
+            
+            </div>
+            <div class= "small-4 columns half-view">
+                <h4>Campo Granja Hogar</h4>
+                <p class= "light-border">Campo ubicado en la cd de Chihuahua, a 3 km del Tec de Montrerrey campus Chihuahua. Campo de tamaño de media hectárea con cultivo de nogales.</p>
+                <img src="https://www.dropbox.com/s/cd5ccef8r9c454f/Granjahogar.jpg?raw=1">
+            </div> 
+                <a href="http://riego.chi.itesm.mx/index.html" class="button" id="imple">Visita la página de monitoreo de los campos</a>
+        </div>
+    </div>
+    <span class="anchor" id="publi"></span>
+    <div class= "row container">
+        <div class= "center">
+            <h3>Publicaciones</h3>
+            <p>Camilo Lozoya, Carlos Mendoza, Valentín Torres, Sergio Gallegos, and Ramiro Terán, <strong> ‘A Scalable Design Approach for a Precision Irrigation Data Acquisition System”,</strong> Accepted in the 2015 ASABE (the American Society of Agricultural and Biological Engineers) Annual International Meeting, (New Orleans, USA), July 2015</p>
+            <p>Camilo Lozoya, Carlos Mendoza, Valentín Torres, Sergio Gallegos, Ramiro Terán and Miguel Grado,<strong>‘Diseño e implementación de un sistema modular de adquisición de datos para agricultura de precisión”,</strong>In XI Congreso Internacional Sobre Innovación y Desarrollo Tecnológico (CIINDET 2014), (Cuernavaca, México), Marzo 2015 </p>
+            <p>Camilo Lozoya, Gilberto Mendoza, Carlos Mendoza, Valentin Torres and Miguel Grado,<strong>“Experimental Evaluation of Data Aggregation Methods Applied to Soil Moisture Measurements”, </strong>In the IEEE Sensors 2014, (Valencia, Spain), November 3-5, 2014. </p>
+            <p>Jorge Salas, Humberto Vega, Julio Ortiz, Raime Bustos and Camilo Lozoya, <strong>“Implementation Analysis of GPRS Communication for Precision Agriculture”</strong>, In in the 40th Annual Conference of the IEEE Industrial Electronics Society (IECON2014), (Dallas, TX USA), October 29 to November 1, 2014.</p>
+        <p>Camilo Lozoya, Carlos Mendoza, Gilberto Mendoza, Leonardo Mejía, Jesús Quintana, Manuel Bustillos, Octavio Arras and Luis Solís, <strong>“Model Predictive Control for Closed-Loop Irrigation”,</strong> In the 19th World Congress of the International Federation of Automatic Control (IFAC2014), (Cape Town, South Africa), August 24-29, 2014. </p>
+        <p>Camilo Lozoya.<strong>“Modelo de control predictivo aplicado a sistemas de riego de precisión”, </strong> Revista de Investigación Multidisciplinaria, Tecnológico de Monterrey Campus Chihuahua, ISSN: 1665-790x, pp 90-100, May 2014. </p>
+            <p>Camilo Lozoya, Carlos Mendoza, Gilberto Mendoza and Miguel Grado, <strong>“Estrategia de control predictivo para uso eficiente del agua en sistemas de riego”,</strong> In XI Congreso Internacional Sobre Innovación y Desarrollo Tecnológico (CIINDET 2014), (Cuernavaca, México), April 2014</p>
+        </div>
+    </div>
+    <span class="anchor" id="resul"></span>
+    <div class= "row container">
+        <div class="center">
+        <h3>Resultados</h3>
+        <div class="small-7 columns">
+            <p class= "small-text light-border">El uso eficiente del agua y energía en sistemas agrícolas, específicamente en regiones afectadas por  escasez  de  agua  tiene  impactos  en  el  ámbito  científico,  tecnológico,  social  económico  y ambiental.</p>
+            <ul>
+                <li><strong>Impacto científico:</strong> la información obtenida a partir de la implementación del proyecto contribuye a un mejor entendimiento científico de la relación agua-tierra-cultivo, lo que puede servir como base para un mayor desarrollo científico aplicado al sector agrícola. </li>
+                <li><strong>Impacto tecnológico:</strong> con la implementación de este proyecto se incrementa el uso de la tecnología en el sector agrícola, los aspectos tecnológicos más relevantes del proyecto se ubican en las áreas de sistemas de información, comunicación de datos, tecnología de sensores y sistemas de control en tiempo real. </li>
+                <li><strong>Impacto social:</strong> la mejor utilización del sistema de producción agrícola genera ingresos que repercuten en la creación de empleos directos e indirectos, reduciendo además los flujos migratorios del campo a la ciudad. </li>
+                <li><strong>Impacto económico:</strong> el incremento de la productividad agrícola y la reducción de costos en los sistemas de riego incrementan la competitividad del campo.</li>
+                <li><strong>Impacto ambiental:</strong> la reducción del consumo de agua y del uso de energía eléctrica en los sistemas de riego fomentan el desarrollo de un sistema agrícola sustentable. </li>
+            </ul>
+        </div>
+        <div class="small-5 columns">
+            <p class= "small-text light-border">De acuerdo a su nivel de automatización, los sistemas de riego agrícola pueden clasificarse en cuatro  niveles:</p>
+            <ol>
+                <li><strong>Riego  Manual: </strong>  el  agricultor  decide  cuándo  y  cuánto  regar,  no  hay automatización.</li>
+                <li><strong>Riego Temporizado: </strong> la definición de períodos de tiempo para el uso de agua es programada por el agricultor en forma empírica.</li>
+                <li><strong>Riego Temporizado con Análisis Climático:</strong> la definición de períodos de tiempo para el uso de agua es programada de acuerdo a las condiciones climáticas  y  de  las  necesidades  específicas  del  cultivo.</li>
+                <li><strong>Riego  con  Control  de  Humedad: </strong> el control de riego se realiza en forma automática de acuerdo a los niveles de humedad de suelo en la raíz de la planta. </li>
+            </ol>
+        </div>
+        <div class= "small-6 columns">
+            <h4>Propuesta</h4>
+            <p class= "border">El proyecto de <strong>Automatización para el Uso eficiente del Agua en Sistemas de Riego Agrícola </strong>propone un nivel <strong>5</strong> de automatización,  en donde el riego se realiza en forma automática basado en el control de humedad de suelo y en la evaluación de los factores climáticos y del cultivo mediante la aplicación de un modelo de control predictivo en tiempo real, que permita utilizar solamente la cantidad de agua necesaria, en el momento adecuado y en el lugar correcto.</p>
+        </div>
+        <div class = "small-6 columns">
+            <p class= "small-text light-border">Actualmente, <strong>los sistemas de irrigación automáticos</strong> ofrecidos por el mercado al sector agrícola <strong>se basan</strong>  en  los  niveles <strong>2</strong> y <strong>3</strong> de  automatización.  El  nivel <strong>4</strong> es  utilizado  principalmente  en invernaderos. El prototipo fue implementado en sistemas de riego por aspersión y por goteo, y se realizó un análisis comparativo de su desempeño en comparación con los otros niveles.  Así, <strong>el método propuesto reduce el consumo de agua en un 40% </strong>  en comparación con el nivel <strong>3</strong>, y en <strong>un 15%</strong> en comparación con el nivel <strong>4</strong>, como se muestra en la siguiente gráfica. Además <strong>mejora la precisión del riego en un 37% y 21%</strong> en comparación con los niveles <strong>3</strong> y <strong>4 </strong>respectivamente. </p>
+        </div>
+    </div>
+</div>
+    <span class="anchor" id="enlaces"></span>
+    <div class= "row container">
+        <div class= "center">
+        <h3>Enlaces</h3>
+       <iframe src="https://www.youtube.com/embed/bNKKo23JE-k" frameborder="0" allowfullscreen></iframe>
+        <div class= "small-4 columns">
+             <a href="http://www.itesm.mx/wps/wcm/connect/Campus/CHI/Chihuahua" class="button v-center">Tec de Monterrey, Campus CUU</a>
+            </div>
+             <div class= "small-2 columns">
+             <a href="http://www.inifap.gob.mx/SitePages/default.aspx" class="button v-center">INIFAP</a>
+            </div>
+             <div class= "small-6 columns">
+             <a href="http://bae.okstate.edu" class="button v-center">Oklahoma State Univeristy; Biosystems and Agricultural Engineering </a>
+            </div>
+            <div class= "small-6 columns">
+             <a href="http://www.bae.ksu.edu" class="button v-center" >Kansas State Univeristy: Biological and Agricultural Engineering  </a>
+            </div>
+             <div class= "small-4 columns">
+             <a href="http://www.fao.org/docrep/x0490e/x0490e00.htm" class="button v-center">FAO Crop Evapotranspiration</a>
+            </div>
+              <div class= "small-2 columns">
+             <a href="http://www.fao.org/nr/water/aquastat/countries_regions/mex/indexesp.stm" class="button v-center" >FAO Aquastat</a>
+            </div>
+            
+        </div>
+    </div>
+    <span class="anchor" id="contacto"></span>
+    <div class= "row container">
+        <div class= "center">
+            <h3>Contacto</h3>
+            <p>Dr. Camilo Lozoya</p>
+            <p class= "small-text">Profesor Investigador Escuela de Ingeniería </p>
+            <p class= "small-text light-border">Tel: 52 (614) 459-5000, ext. 3171</p>
+            <form class= "row">
+                <label class= "small-6 columns">Nombre
+                    <input type="email" placeholder="Solicitante de información" id="emailInput">
+                </label>
+                <label class= "small-6 columns">Asunto
+                    <input type="text" placeholder="Información sobre el proyecto de riego agrícola" id="emailName">
+                </label>
+                <label class= "small-12 columns">Mensaje
+                    <textarea placeholder="Escriba su mensaje..."></textarea>
+                </label>
+                <input type="submit" id="submit" value= "Enviar" class= "small-12 columns button">
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        Riego Automatizado 2015 &copy;
+    </footer>
+</body>
+  <script>
+    $(document).foundation();
+  </script>
+<script>
+    $('#submit').click(function(event)
+{
+    event.preventDefault();
+    var email=$("#emailInput").val();
+    var name=$("#emailName").val();
+    var message=$("#emailMessage").val();
+    $.ajax({
+        url: "/php/send_form_email.php",
+        type:'POST',
+        data:
+        {
+            email: email,
+            name:name,
+            message: message
+        },
+        success: function(msg)
+        {
+            alert('Email Sent');
+        },
+        errro:function(msg)
+        {
+            alert("Email not sent");
+        }
+    });
+});</script>
+</html>

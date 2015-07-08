@@ -1,0 +1,271 @@
+/**********************************
+Generic
+**********************************/
+* {
+    box-sizing: border-box;
+}
+body {
+    overflow-x: hidden;
+    background-size: cover;
+    list-style: none;
+    font-family: 'Roboto', sans-serif;
+    color: #555;
+}
+img {
+    margin-top: 10px;
+}
+.container {
+    margin:0;
+    margin-bottom: 50px;
+}
+.full-view {
+    min-height: 100vh;
+    padding-top: 10%;
+    text-align: justify;
+}
+.half-view {
+    min-height: 50vh;
+    padding-top: 5%;
+    text-align: justify;
+}
+.center {
+    min-width: 80vw;
+    margin-left: 10vw;
+    margin-right: 10vw;
+}
+.anchor{
+   display:block;
+   height:4rem; /* this is the height of your header */
+   margin-top:-4rem; /* this is again negative value of the height of your header */
+   visibility:hidden;
+}
+strong {
+    font-family: 'Roboto Slab', serif;
+    color: #009688;
+    font-size: 1.1em;
+    margin: 0;
+    text-align: right;
+}
+p {
+    padding: 15px;
+    font-size: 1em;
+    text-indent: 35px;
+    margin: 0;
+    text-align: justify;
+}
+li {
+    text-align: justify;
+}
+h1 {
+    font-family: 'Roboto Slab', serif;
+    color: #FFF;
+    font-size: 1.7em;
+}
+h2 {
+    color: #FFF;
+    font-family: 'Roboto Slab', serif;
+}
+h3 {
+    text-align: center;
+    font-family: 'Roboto Slab', serif;
+    font-size: 4em;
+    color: #009688; 
+    border-right-style: solid;
+    border-right-color: #AAA;
+    border-right-width: 10px;
+    border-left-style: solid;
+    border-left-color: #AAA;
+    border-left-width: 10px;
+}
+h4 {
+    text-align: center;
+    font-size: 2em;
+    font-family: 'Roboto Slab', serif;
+    border-top-style: double;
+    border-top-color:#009688;
+    border-top-width: 10px;
+    color:#009688;
+}
+h5 {
+    font-family: 'Roboto Slab', serif;
+    color: #009688;
+    font-size: 1.1em;
+    margin: 0 0 -15px 0;
+    text-align: center;
+}
+.button {
+    background-color: #009688;
+    min-width: 100%;
+    min-height: 10vh;
+    padding: 5px;
+    
+}
+.button:hover {
+    background-color: #007466;
+}
+/**********************************
+Navigation Bar
+**********************************/
+.f-dropdown li {
+    width:100%;
+    text-align: center;
+}
+.top-bar {
+    width: 100%;
+    background-color: #009688;
+}
+.top-bar-section li.active:not(.has-form) a:not(.button) {
+    background-color: #009688;
+    text-align: center;
+    font-size: 1em;
+    width: 100%;
+    float: left;
+}
+
+.top-bar-section li.active:not(.has-form) a:not(.button):hover {
+    background-color: #007466;
+
+}
+#titulo{
+    font-family: 'Roboto Slab', serif;
+    text-align: left;
+    background-color: #009688;
+    width: 100%;
+}
+.menu {
+    float: right;
+}
+#scrolldown {
+    display: block;
+    max-width: 50px;
+    margin: auto;
+    margin-top: 10vh;
+}
+/**********************************
+Body
+**********************************/
+/*HOME & PRINCIPAL*/
+.title {
+    text-align: center;
+    padding-top: 20%;
+}
+#main_title {
+    font-size: 7em;
+}
+#title {
+     background-image: url("../img/delicias_alpha.jpg");
+    min-height: 100vh;
+}
+.border {
+    border-bottom-style: solid;
+    border-bottom-width: 5px;
+    border-bottom-color: #AAA;
+    
+}
+/*Proyecto*/
+.small-text {
+    color: #999;
+    font-size: .95em;
+    line-height: 21px;
+}
+.light-border {
+    border-bottom-style: solid;
+    border-bottom-width: 3px;
+    border-bottom-color: #CCC;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+/*Equipo*/
+#teclogo {
+    background-image: url("../img/tecdemty.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#citalogo {
+    background-image: url("../img/cita.png");
+    background-size: 100% 30%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#inifaplogo {
+    background-image: url("../img/inifap.png");
+    background-size: 115% 85%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#ostatelogo {
+    background-image: url("../img/ostateuni.png");
+    background-size: 100% 90%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#kstatelogo {
+    background-image: url("../img/kstate.png");
+    background-size: 100% 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#coelogo {
+    background-image: url("../img/coecytech.png");
+    background-size: 90% 90%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#conalogo {
+    background-image: url("../img/conacyt.png");
+    background-size: 110% 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#goblogo {
+    background-image: url("../img/gobchih.png");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+#personas li{
+      min-width: 100vw;
+    padding-left: 20vw;
+    padding-right: 20vw;
+    text-decoration: none;
+    list-style: none;
+}
+.equipo {
+    height:15vh;
+    text-align: justify;
+    padding: 0;
+    font-size: .8em;
+    display: flex;
+}
+.v-center {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+.center-wider {
+    min-width: 98vw;
+    margin-left: 1vw;
+    margin-right: 1vw;
+}
+/*Imple*/
+#imple{
+    min-height: 30px;
+    min-width: 40vw;
+    margin: 20px 30vw;
+}
+/*Contacto*/
+/*Enlaces*/
+iframe {
+    min-width: 60%;
+    margin: 0 20%;
+    min-height: 50vh;
+}
+/*FOOTER*/
+footer {
+    min-width: 100%;
+    margin: 0;
+    background-color: #FFF;
+    text-align: center;
+    padding-top: 5px;
+}

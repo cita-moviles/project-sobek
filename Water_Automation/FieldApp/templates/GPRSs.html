@@ -5,10 +5,24 @@
      {% include 'includeScripts.html' %}
     <style>
         #map_canvas{
-            width: 1000px;
+            width: 40vw;
             height: 400px;
-            background-color: greenyellow;
-            margin: 30px 10px 30px 130px;
+            margin: 40px 30px;
+            display: inline-block;
+        }
+        #field_img {
+             width: 40vw;
+            height: 40vh;
+            margin: 40px 30px;
+            float: left;
+            display: inline-block;
+        }
+        img {
+            width: 100%;
+            height: 100%;
+        }
+        h4 {
+            margin: 0 0 0 10px;
         }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
@@ -18,16 +32,19 @@
 {% include 'nav.html' %}
 <div class="row">
     <div class="medium-12 columns">
-        <h1>GPRS's</h1>
+        <h1>Crop Fields</h1>
     </div>
 </div>
 
 <div class="row">
         <h3>Current data</h3>
         <div id="current_field" class="clearfix"></div>
-        <div id="signal_chart" height="400" width="5000"></div>
 </div>
-<div id="map_canvas">
+<h4>Actual Image & Localization</h4>
+<div id="map_canvas"></div>
+<div id="field_img"></div>
+
+
 
 </div>
 {% include 'footer.html' %}
@@ -38,6 +55,11 @@
 <script>
 getFarmFields();
 google.load("visualization", "1", {packages: ["corechart"]});
+
+function showCrop() {
+
+
+}
 
 function graphLogs(clicked_id) {
         var field_id = clicked_id;
@@ -69,19 +91,22 @@ function graphLogs(clicked_id) {
     function showGoogleMaps(clicked_id) {
         console.log("Field id: "+ clicked_id);
         switch (clicked_id) {
-            case "1":
+            case "1": //tec
             {
                 initialize(28.675767, -106.081010);
+                $("#field_img").html("<img src= 'https://www.dropbox.com/s/zweh8wnxhpesu9m/Tec.jpg?raw=1'>");
                 break;
             }
-            case "2":
+            case "2": //Delicias
             {
                 initialize(28.180920, -105.494873);
+                $("#field_img").html("<img src='https://www.dropbox.com/s/uhopm2kidx259oo/delicias.jpg?raw=1'>");
                 break;
             }
-            case "3":
+            case "3": //Granja Hogar
             {
                 initialize(28.685563, -106.076992);
+                $("#field_img").html("<img src='https://www.dropbox.com/s/cd5ccef8r9c454f/Granjahogar.jpg?raw=1'>");
                 break;
             }
         }

@@ -271,7 +271,7 @@ class Crop_Area:
                         max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
                     else:
                         max_data_1, max_data_2 = int(max_data.split('.')[0], 16), 0
-                    local_area_cfg += hex(min_data_1) + hex(min_data_2) + hex(max_data_1) + hex(max_data_2)
+                    local_area_cfg += hex(min_data_1)[2:4] + hex(min_data_2)[2:4] + hex(max_data_1)[2:4] + hex(max_data_2)[2:4]
                 elif str_mode == '3':
                     timer_data = data[5:]
                     days = timer_data.split('#')[0]
@@ -589,7 +589,9 @@ class MessageProcessor:
 
     def __init__(self):
         pass
-        self.changed = False
+        self.changed_f1 = False
+        self.changed_f2 = False
+        self.changed_f3 = False
 
     def process_message(self,message):
         global currentDate
@@ -611,6 +613,9 @@ class MessageProcessor:
         global config_mode
         config_mode = False
 
+        self.changed_f1 = False
+        self.changed_f2 = False
+        self.changed_f3 = False
         for msg in msglist:
             try:
                 print("------" + msg + "-------")
@@ -649,6 +654,12 @@ class MessageProcessor:
                     field = Farm_Field(msg + "#")
                     # print field.to_json()
                     field.upload_to_server()
+                    if int(msg[3:7]) == 1:
+                        self.changed_f1 = True
+                    elif int(msg[3:7]) == 2:
+                        self.changed_f2 = True
+                    elif int(msg[3:7]) == 3:
+                        self.changed_f3 = True
 
                 elif msg[0] == "F":
 
@@ -733,9 +744,11 @@ class MessageProcessor:
             for no_area in xrange(int(no_of_areas)+1, 10):
                 print str(no_area)
                 msg_areas += chr(no_area) + chr(0)*6
-            self.changed = True
             print repr(msg_areas)
             return msg_areas
         else:
+            self.changed_f1 = False
+            self.changed_f2 = False
+            self.changed_f3 = False
             print "No configuration pending"
-	return 'ROK'
+        return 'ROK'

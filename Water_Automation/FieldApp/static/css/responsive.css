@@ -1,0 +1,68 @@
+@media (max-width:870px){
+    .center {
+        margin: auto;
+    } 
+    .half-view {
+        min-width: 100%;
+    }
+    iframe {
+        min-width: 100%;
+        margin: 0;
+    }
+    .equipo {
+        height: 20vh;
+    }
+    #main_title {
+        font-size: 5em;
+    }
+}
+@media (max-width:500px){
+    .columns {
+        min-width: 100vw;
+    }
+    #main_title {
+        font-size: 3em;
+    }
+    h2 {
+        font-size: 1.5em;
+    }
+    h3 {
+        font-size: 2.5em;
+    }
+    h4 {
+        font-size: 1.5em;
+    }
+    #scrolldown {
+        margin-top: 30vh;
+    }
+    #citalogo {
+        background-size:    70% 70%;
+    }
+    #inifaplogo {
+        background-size: 60% 90%;
+    }
+    #ostatelogo {
+        background-size: 40% 90%;
+    }
+    #kstatelogo {
+        background-size: 70% 90%;
+    }
+    #coelogo {
+        background-size: 25% 85%;
+    }
+    #conalogo {
+        background-size: 50% 90%;
+    }
+    #goblogo {
+        background-size: 30% 100%;
+    }
+    .equipo {
+        height: 15h;
+        margin: 0 5px;;
+        min-width: 90vw;
+        text-align: justify;
+        padding: 0;
+        font-size: .8em;
+        display: block;
+    }
+}

@@ -68,9 +68,25 @@ function getFarmFields(){
                 current_data += "<p>Imei: " + value.field_imei + "<br/>";
                 current_data += "Latitude: " + value.field_longitude + "<br/>";
                 current_data += "Longitude: " + value.field_latitude + "<br/>";
-                current_data += "Signal: " + value.field_signal + "</p><button id='"
-                                            +value.field_id+
-                                            "'class='button tiny' onclick='showGoogleMaps(this.id)'>Show In Map</button></div>";
+                current_data += "Signal: " + value.field_signal + "<br/>";
+                switch (value.field_id) {
+                    case 1:
+                    {
+                        current_data += "Crop: Maize";
+                        break;
+                    }
+                    case 2:
+                        {
+                        current_data += "Crop: Green Pepper";
+                        break;
+                    }
+                    case 3: {
+
+                        current_data += "Crop: Pecan";
+                        break;
+                    }
+                }
+                current_data += "</p><button id='" + value.field_id + "'class='button tiny' onclick='showGoogleMaps(this.id)'>Show In Map</button></div>";
                 $('#current_field').html(current_data);
 
             });

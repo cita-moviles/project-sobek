@@ -264,14 +264,18 @@ class Crop_Area:
                     min_data = auto_data.split('#')[0]
                     max_data = auto_data.split('#')[1]
                     if '.' in min_data:
-                        min_data_1, min_data_2 = int(min_data.split('.')[0], 16), int(min_data.split('.')[1], 16)
+                        min_data_1, min_data_2 = min_data.split('.')[0], min_data.split('.')[1]
                     else:
-                        min_data_1, min_data_2 = int(min_data.split('.')[0], 16), 0
+                        min_data_1, min_data_2 = min_data, '00'
                     if '.' in max_data:
-                        max_data_1, max_data_2 = int(max_data.split('.')[0], 16), int(max_data.split('.')[1], 16)
+                        max_data_1, max_data_2 = max_data.split('.')[0], max_data.split('.')[1]
                     else:
-                        max_data_1, max_data_2 = int(max_data.split('.')[0], 16), 0
-                    local_area_cfg += hex(min_data_1)[2:4] + hex(min_data_2)[2:4] + hex(max_data_1)[2:4] + hex(max_data_2)[2:4]
+                        max_data_1, max_data_2 = max_data, '00'
+                    if len(min_data_2) == 1:
+                        min_data_1 += '0'
+                    if len(max_data_2) == 1:
+                        max_data_2 += '0'
+                    local_area_cfg += min_data_1 + min_data_2 + max_data_1 + max_data_2
                 elif str_mode == '3':
                     timer_data = data[5:]
                     days = timer_data.split('#')[0]

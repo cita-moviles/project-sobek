@@ -276,6 +276,7 @@ class Crop_Area:
                     if len(max_data_2) == 1:
                         max_data_2 += '0'
                     local_area_cfg += chr(int(min_data_1,16)) + chr(int(min_data_2,16)) + chr(int(max_data_1,16)) + chr(int(max_data_2,16))
+                    local_area_cfg += chr(int('0',16))
                 elif str_mode == '3':
                     timer_data = data[5:]
                     days = timer_data.split('#')[0]

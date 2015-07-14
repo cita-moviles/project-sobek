@@ -8,7 +8,7 @@ import time
 PORT = 4580
 
 def sobek_server(address):
-    
+
     msg_processor = MessageProcessor()
     try:
         sock = socket(AF_INET, SOCK_DGRAM)
@@ -32,8 +32,6 @@ def sobek_server(address):
         start_time = time.time()
         print('Got message from', addr)
 
-        if msg == 'GOK':
-            received_gok = True
 
         FileWriter.writeToFile(msg)
         return_value = msg_processor.process_message(msg)
@@ -49,38 +47,55 @@ def sobek_server(address):
             h_f3 = return_value
 
         print "***LOGGING***"
-        print "H_F1 "+ h_f1 
-        print "H_F2 " + h_f2 
+        print "H_F1 "+ h_f1
+        print "H_F2 " + h_f2
         print "H_F3 " +h_f3
         print "Received -> ", received_gok
 
-        if len(h_f1) > 0 and received_gok == False:
-            print "Response: " + h_f1
-            sock.sendto(h_f1, addr)
-        elif len(h_f1) > 0 and received_gok == True:
-            h_f1 = ""
-            print "Response: ROK"
-            received_gok = False
-            sock.sendto('ROK', addr)
-        elif len(h_f2) > 0 and received_gok == False:
-            print "Response: " + h_f2
-            sock.sendto(h_f2, addr)
-        elif len(h_f2) > 0 and received_gok == True:
-            print "Response: ROK"
-            received_gok = False
-            h_f2 = ""
-            sock.sendto('ROK', addr)
-        elif len(h_f3) > 0 and received_gok == False:
-            print "Response: " + h_f3
-            sock.sendto(h_f3, addr)
-        elif len(h_f3) > 0 and received_gok == True:
-            received_gok = False
-            print "Response: ROK"
-            h_f3 = ""
-            sock.sendto('ROK', addr)
-        else:
-            print "Response: ROK"
-            sock.sendto('ROK', addr)
+        if msg == 'GOK':
+            received_gok = True
+
+        try:
+            f_id = int(msg[3:7])
+        except ValueError:
+            f_id = 0
+
+        if  f_id == 1 or msg == 'GOK':
+            if len(h_f1) > 0 and received_gok == False:
+                print "1-Response: " + repr(h_f1)
+                sock.sendto(h_f1, addr)
+            elif len(h_f1) > 0 and received_gok == True:
+                h_f1 = ""
+                print "1-Response: ROK"
+                received_gok = False
+                sock.sendto('ROK', addr)
+            else:
+                print "ROK-Response: ROK"
+                sock.sendto('ROK', addr)
+        elif f_id == 2 or msg == 'GOK':
+            if len(h_f2) > 0 and received_gok == False:
+                print "2-Response: " + h_f2
+                sock.sendto(h_f2, addr)
+            elif len(h_f2) > 0 and received_gok == True:
+                print "2-Response: ROK"
+                received_gok = False
+                h_f2 = ""
+                sock.sendto('ROK', addr)
+            else:
+                print "ROK-Response: ROK"
+                sock.sendto('ROK', addr)
+        elif f_id == 3 or msg == 'GOK':
+            if len(h_f3) > 0 and received_gok == False:
+                print "3-Response: " + h_f3
+                sock.sendto(h_f3, addr)
+            elif len(h_f3) > 0 and received_gok == True:
+                received_gok = False
+                print "3-Response: ROK"
+                h_f3 = ""
+                sock.sendto('ROK', addr)
+            else:
+                print "ROK-Response: ROK"
+                sock.sendto('ROK', addr)
 
         print("--- %s seconds ---" % (time.time() - start_time))
 
